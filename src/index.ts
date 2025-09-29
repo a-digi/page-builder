@@ -1,7 +1,8 @@
 // path: src/index.ts
 // --- Components ---
 import PageBuilder from './PageBuilder';
-export { PageBuilder };
+import TextColorPicker from './components/editor/toolbar/TextColorPicker';
+export { PageBuilder, TextColorPicker };
 
 // --- Main Types ---
 export type { PageBuilderHandle, Props as PageBuilderProps, Data } from './PageBuilder';
@@ -45,4 +46,5 @@ export type {
 // --- Context Providers (Optional, for advanced usage) ---
 export { ImageUploadProvider } from './components/blocks/Image/ImageUploadContext';
 export type { IImageUploadContext } from './components/blocks/Image/ImageUploadContext';
-export { columnComponentId } from './components/blocks/Column/ColumnBlock';
+export { columnComponentId, overlayBlockDefinition } from './components/blocks/Column/ColumnBlock';
+export { useComponentContext } from './hooks/useComponentContext';
