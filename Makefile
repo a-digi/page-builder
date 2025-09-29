@@ -67,7 +67,7 @@ login:
 		exit 1; \
 	fi
 	@echo "--> Authenticating with GitHub Packages..."
-	@npm config set //npm.pkg.github.com/:_authToken $${GITHUB_TOKEN}
+	@npm config set //npm.pkg.github.com/:_authToken ${GITHUB_TOKEN}
 	@echo "--> Verifying authentication..."
 	@# The whoami command will fail if authentication is incorrect.
 	@npm whoami --registry=https://npm.pkg.github.com
