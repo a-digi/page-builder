@@ -1,6 +1,5 @@
 // path: src/index.ts
 // --- Components ---
-import { columnComponentId } from './components/blocks/Column/ColumnBlock';
 import PageBuilder from './PageBuilder';
 export { PageBuilder };
 
