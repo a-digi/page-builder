@@ -43,7 +43,6 @@ export type {
 
 } from './types/components';
 
-// --- Context Providers (Optional, for advanced usage) ---
 export { ImageUploadProvider } from './components/blocks/Image/ImageUploadContext';
 export type { IImageUploadContext } from './components/blocks/Image/ImageUploadContext';
 export { columnComponentId, overlayBlockDefinition } from './components/blocks/Column/ColumnBlock';

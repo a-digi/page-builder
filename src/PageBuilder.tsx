@@ -48,9 +48,6 @@ function HandleBinder<C extends PageComponent<any, any>>({ ref }: { ref?: React.
   return null;
 }
 
-// --- NEW ---
-// This new inner component allows us to use context (for `isDragging`)
-// while also having access to the main container div via a ref.
 const PageBuilderLayout = <C extends PageComponent<any, any>>({
   onSave,
   saveButtonClickable,
@@ -65,14 +62,12 @@ const PageBuilderLayout = <C extends PageComponent<any, any>>({
   const wasEditorMenuOpenRef = useRef(false);
 
   useEffect(() => {
-    // a settings panel is being opened
     if (activeSettingsComponentId !== null) {
       if (isEditorMenuOpen) {
         wasEditorMenuOpenRef.current = true;
         setIsEditorMenuOpen(false);
       }
     }
-    // all settings panels are closed
     else {
       if (wasEditorMenuOpenRef.current) {
         setIsEditorMenuOpen(true);
@@ -81,15 +76,12 @@ const PageBuilderLayout = <C extends PageComponent<any, any>>({
     }
   }, [activeSettingsComponentId, isEditorMenuOpen]);
 
-
-  // Activate the auto-scroll hook, passing it the dragging state and the container ref.
   useDragAutoScroll({
     isDragging,
     scrollContainerRef: mainContainerRef
   });
 
   return (
-    // The ref is attached to the top-level container.
     <div ref={mainContainerRef} data-pb-id={generateIdString()} className="w-full relative min-h-screen h-full font-sans bg-white text-gray-800">
       <main className="flex-1 min-h-screen h-full flex flex-col">
         <ComponentPageEditor
