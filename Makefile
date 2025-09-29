@@ -20,7 +20,7 @@ endif
 # --- Targets ---
 
 # This ensures that 'make' does not confuse these commands with actual files
-.PHONY: all build-plugin build-image run stop clean publish login release-patch release-minor release-major
+.PHONY: all build-plugin build-image run stop clean publish release-patch release-minor release-major
 
 # Default target runs when you just type 'make'
 all: build-plugin
@@ -53,7 +53,7 @@ release-major: ## Creates a major release (e.g., 0.2.0 -> 1.0.0)
 # Publish the package. This is now the main command to use.
 # It automatically handles login, building, and publishing.
 # This is called by the 'release-*' targets.
-publish: login build-plugin
+publish: build-plugin
 	@echo "--> Publishing to GitHub Packages..."
 	@npm publish
 	@echo "--> Package published successfully."
