@@ -66,7 +66,7 @@ login:
 		echo "   Ensure you have a .env file with your GITHUB_TOKEN set."; \
 		exit 1; \
 	fi
-	@echo "--> Authenticating with GitHub Packages..."
+	@echo "--> Authenticating with GitHub Packages... $${GITHUB_TOKEN}"
 	@npm config set //npm.pkg.github.com/:_authToken $${GITHUB_TOKEN}
 	@echo "--> Verifying authentication..."
 	@# The whoami command will fail if authentication is incorrect.
