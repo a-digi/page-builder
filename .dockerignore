@@ -1,0 +1,10 @@
+# path: ./.dockerignore
+# Ignore dependencies, build artifacts, and local configurations
+node_modules
+dist
+.env
+npm-debug.log
+.idea
+.vscode
+Makefile
+Dockerfile
