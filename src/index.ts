@@ -1,5 +1,6 @@
 // path: src/index.ts
 // --- Components ---
+import { columnComponentId } from './components/blocks/Column/ColumnBlock';
 import PageBuilder from './PageBuilder';
 export { PageBuilder };
 
@@ -45,3 +46,4 @@ export type {
 // --- Context Providers (Optional, for advanced usage) ---
 export { ImageUploadProvider } from './components/blocks/Image/ImageUploadContext';
 export type { IImageUploadContext } from './components/blocks/Image/ImageUploadContext';
+export { columnComponentId } from './components/blocks/Column/ColumnBlock';
