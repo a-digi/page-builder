@@ -26,14 +26,15 @@
         "dist"
     ],
     "main": "./dist/react-page-builder.umd.cjs",
-    "module": "./dist/react-page-builder.js",
+    "module": "./dist/react-page-builder.es.js",
     "types": "./dist/index.d.ts",
     "exports": {
         ".": {
-            "import": "./dist/react-page-builder.js",
+            "import": "./dist/react-page-builder.es.js",
             "require": "./dist/react-page-builder.umd.cjs",
             "types": "./dist/index.d.ts"
-        }
+        },
+        "./dist/style.css": "./dist/style.css"
     },
     "scripts": {
         "dev": "vite",
