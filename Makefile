@@ -84,7 +84,7 @@ build-image:
 run:
 	@echo "--> Starting interactive shell in development container..."
 	@docker run -it --rm --name $(DEV_CONTAINER_NAME) \
-		-v "$(shell pwd):/pb/app" \
+		-v ${PWD}:/pb/app:delegated \
 		$(IMAGE_NAME):$(TAG) /bin/sh
 .PHONY: run
 

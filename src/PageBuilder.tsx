@@ -60,7 +60,7 @@ const PageBuilderLayout = <C extends PageComponent<any, any>>({
   const { isDragging, isPreviewing, activeSettingsComponentId } = useComponentContext();
   const [isEditorMenuOpen, setIsEditorMenuOpen] = useState(false);
   const wasEditorMenuOpenRef = useRef(false);
-
+  alert('Worked');
   useEffect(() => {
     if (activeSettingsComponentId !== null) {
       if (isEditorMenuOpen) {
