@@ -4,7 +4,7 @@ import PageBuilder from './PageBuilder';
 export { PageBuilder };
 
 // --- Main Types ---
-export type { PageBuilderHandle, Props as PageBuilderProps, Data as PageBuilderData } from './PageBuilder';
+export type { PageBuilderHandle, Props as PageBuilderProps, Data } from './PageBuilder';
 
 // --- Component Types ---
 export type {
