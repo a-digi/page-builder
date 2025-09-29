@@ -20,13 +20,39 @@ endif
 # --- Targets ---
 
 # This ensures that 'make' does not confuse these commands with actual files
-.PHONY: all build-plugin build-image run stop clean publish login
+.PHONY: all build-plugin build-image run stop clean publish login release-patch release-minor release-major
 
 # Default target runs when you just type 'make'
 all: build-plugin
 
+# --- Release & Publish Targets ---
+
+# Use these commands to create a new versioned release.
+
+release-patch:  ## Creates a patch release (e.g., 0.1.0 -> 0.1.1)
+	@echo "--> Creating a new PATCH release..."
+	@npm version patch
+	@git push && git push --tags
+	@$(MAKE) publish
+
+release-minor: ## Creates a minor release (e.g., 0.1.1 -> 0.2.0)
+	@echo "--> Creating a new MINOR release..."
+	@npm version minor
+	@git push && git push --tags
+	@$(MAKE) publish
+
+release-major: ## Creates a major release (e.g., 0.2.0 -> 1.0.0)
+	@echo "--> Creating a new MAJOR release..."
+	@npm version major
+	@git push && git push --tags
+	@$(MAKE) publish
+
+
+# --- Core Commands (used by release targets) ---
+
 # Publish the package. This is now the main command to use.
 # It automatically handles login, building, and publishing.
+# This is called by the 'release-*' targets.
 publish: login build-plugin
 	@echo "--> Publishing to GitHub Packages..."
 	@npm publish
@@ -45,6 +71,8 @@ login:
 	@echo "--> Verifying authentication..."
 	@# The whoami command will fail if authentication is incorrect.
 	@npm whoami --registry=https://npm.pkg.github.com
+
+# --- Build & Development Commands ---
 
 # Build the plugin: builds the Docker image and exports the 'dist' folder
 build-plugin: build-image
