@@ -58,17 +58,20 @@ publish: login build-plugin
 	@npm publish
 	@echo "--> Package published successfully."
 
-# Login to the GitHub NPM registry non-interactively using the GITHUB_TOKEN.
-# This command configures the local ~/.npmrc file for the current user.
+# Login: Creates a project-local .npmrc file for authentication.
+# This is a safer and more reliable method than modifying the global ~/.npmrc.
 login:
 	@if [ -z "$${GITHUB_TOKEN}" ]; then \
 		echo "!! ABORTED: GITHUB_TOKEN not found."; \
 		echo "   Ensure you have a .env file with your GITHUB_TOKEN set."; \
 		exit 1; \
 	fi
-	@echo "--> Authenticating with GitHub Packages... $${GITHUB_TOKEN}"
-	@npm config set //npm.pkg.github.com/:_authToken $${GITHUB_TOKEN}
-	@echo "--> Verifying authentication..."
+	@echo "--> Creating local .npmrc for authentication..."
+	@# The first line scopes your package to the GitHub registry.
+	@# The second line provides the auth token for that registry.
+	@echo "@a-digi:registry=https://npm.pkg.github.com/" > ./.npmrc
+	@echo "//npm.pkg.github.com/:_authToken=$${GITHUB_TOKEN}" >> ./.npmrc
+	@echo "--> Verifying authentication using local .npmrc..."
 	@# The whoami command will fail if authentication is incorrect.
 	@npm whoami --registry=https://npm.pkg.github.com
 
@@ -110,7 +113,7 @@ stop:
 # Clean up build artifacts and any leftover containers
 clean:
 	@echo "--> Cleaning up build artifacts and containers..."
-	@rm -rf ./dist
+	@rm -rf ./dist ./.npmrc
 	@docker rm -f $(CONTAINER_NAME) >/dev/null 2>&1 || true
 	@docker rm -f $(DEV_CONTAINER_NAME) >/dev/null 2>&1 || true
 	@echo "--> Cleanup complete."
