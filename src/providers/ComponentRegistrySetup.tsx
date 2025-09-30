@@ -24,7 +24,7 @@ const allBuiltInDefinitions: ComponentDefinition<any>[] = [
 
 type Props<C extends PageComponent<any, any>> = {
   children: React.ReactNode;
-  additionalComponents?: ComponentDefinition<C>[];
+  additionalComponents?: ComponentDefinition<any>[];
   excludedComponents?: (BuiltInComponentType | C['type'])[];
 };
 

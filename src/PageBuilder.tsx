@@ -16,7 +16,7 @@ export type Props<C extends PageComponent<any, any>> = {
   displaySaveButton: boolean;
   className?: string;
   data: Data<C>;
-  additionalComponents?: ComponentDefinition<C>[];
+  additionalComponents?: ComponentDefinition<any>[];
   excludedComponents?: (BuiltInComponentType | C['type'])[];
   customToolbarButtons?: CustomButton<C>[];
   customSettingsButtons?: CustomButton<C>[];
@@ -60,7 +60,6 @@ const PageBuilderLayout = <C extends PageComponent<any, any>>({
   const { isDragging, isPreviewing, activeSettingsComponentId } = useComponentContext();
   const [isEditorMenuOpen, setIsEditorMenuOpen] = useState(false);
   const wasEditorMenuOpenRef = useRef(false);
-  alert('Worked');
   useEffect(() => {
     if (activeSettingsComponentId !== null) {
       if (isEditorMenuOpen) {
