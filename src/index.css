@@ -1,3 +1,8 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.pb-drop-zone {
+    min-height: 24rem;
+    height: 24rem;
+}
