@@ -5,7 +5,7 @@ import type { CustomButton, PageComponent } from '../../types/components';
 import { ComponentRenderer } from './ComponentRenderer';
 import { BlockWrapper } from '../BlockWrapper';
 import { SettingsPanelProvider } from '../../contexts/SettingsPanelContext';
-import './Editor.css';
+import styles from './Editor.module.css';
 
 type ComponentPageEditorProps<C extends PageComponent<any, any>> = {
   customToolbarButtons?: CustomButton<C>[];
@@ -110,7 +110,7 @@ function ComponentPageEditor<C extends PageComponent<any, any>>({
         >
           {components.length === 0 ? (
             // Case 1: Editor is empty
-            <div className={`transition-colors duration-200 pb-drop-zone w-full border-2 border-dashed rounded-lg flex items-center justify-center ${isDragging && dragOverIndex === 0
+            <div className={`transition-colors duration-200 ${styles.pbDropZone} w-full border-2 border-dashed rounded-lg flex items-center justify-center ${isDragging && dragOverIndex === 0
               ? 'border-blue-500 bg-blue-50'
               : 'border-gray-300'
               }`}>
