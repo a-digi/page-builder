@@ -5,6 +5,7 @@ import type { CustomButton, PageComponent } from '../../types/components';
 import { ComponentRenderer } from './ComponentRenderer';
 import { BlockWrapper } from '../BlockWrapper';
 import { SettingsPanelProvider } from '../../contexts/SettingsPanelContext';
+import './Editor.css';
 
 type ComponentPageEditorProps<C extends PageComponent<any, any>> = {
   customToolbarButtons?: CustomButton<C>[];
