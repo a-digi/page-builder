@@ -110,7 +110,7 @@ function ComponentPageEditor<C extends PageComponent<any, any>>({
         >
           {components.length === 0 ? (
             // Case 1: Editor is empty
-            <div className={`transition-colors duration-200 ${styles.pbDropZone} w-full border-2 border-dashed rounded-lg flex items-center justify-center ${isDragging && dragOverIndex === 0
+            <div style={{ height: '24rem' }} className={`transition-colors duration-200 w-full border-2 border-dashed rounded-lg flex items-center justify-center ${isDragging && dragOverIndex === 0
               ? 'border-blue-500 bg-blue-50'
               : 'border-gray-300'
               }`}>
