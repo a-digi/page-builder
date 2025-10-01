@@ -1,11 +1,17 @@
-// path: ./tailwind.config.js
-/** @type {import('tailwindcss').Config} */
 export default {
-    content: [
-        "./src/**/*.{js,ts,jsx,tsx}",
-    ],
+    content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
     theme: {
-        extend: {},
+        extend: {
+            keyframes: {
+                'nudge-right': {
+                    '0%, 100%': { transform: 'translateX(0)' },
+                    '50%': { transform: 'translateX(10px)' },
+                }
+            },
+            animation: {
+                'nudge-right': 'nudge-right 4s ease-in-out infinite',
+            }
+        },
     },
     plugins: [],
-}
+};
