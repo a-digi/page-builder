@@ -1,4 +1,7 @@
 // path: src/index.ts
+
+import './index.css';
+
 // --- Components ---
 import PageBuilder from './PageBuilder';
 import TextColorPicker from './components/editor/toolbar/TextColorPicker';
