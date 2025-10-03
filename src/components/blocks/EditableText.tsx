@@ -1,4 +1,4 @@
-// path: src/components/blocks/EditableText.tsx
+// path: src/components/page-builder/components/blocks/EditableText.tsx
 import React, { useState, useRef, useEffect, useCallback, memo } from 'react';
 import { createPortal } from 'react-dom';
 import type { TextComponent, HeaderComponent, TextProps } from '../../types/components';
@@ -27,13 +27,13 @@ export const HeadingIcon = (
 
 const effects: Record<string, { name: string; classes: string }> = {
   'none': { name: 'None', classes: '' },
-  'fade-in': { name: 'Fade In', classes: 'opacity-0' },
-  'fade-in-up': { name: 'Fade In Up', classes: 'opacity-0 translate-y-5' },
-  'fade-in-down': { name: 'Fade In Down', classes: 'opacity-0 -translate-y-5' },
-  'fade-in-left': { name: 'Fade In Left', classes: 'opacity-0 -translate-x-5' },
-  'fade-in-right': { name: 'Fade In Right', classes: 'opacity-0 translate-x-5' },
-  'zoom-in': { name: 'Zoom In', classes: 'opacity-0 scale-90' },
-  'zoom-out': { name: 'Zoom Out', classes: 'opacity-0 scale-110' },
+  'fade-in': { name: 'Fade In', classes: 'pb-opacity-0' },
+  'fade-in-up': { name: 'Fade In Up', classes: 'pb-opacity-0 pb-translate-y-5' },
+  'fade-in-down': { name: 'Fade In Down', classes: 'pb-opacity-0 pb--translate-y-5' },
+  'fade-in-left': { name: 'Fade In Left', classes: 'pb-opacity-0 pb--translate-x-5' },
+  'fade-in-right': { name: 'Fade In Right', classes: 'pb-opacity-0 pb-translate-x-5' },
+  'zoom-in': { name: 'Zoom In', classes: 'pb-opacity-0 pb-scale-90' },
+  'zoom-out': { name: 'Zoom Out', classes: 'pb-opacity-0 pb-scale-110' },
 };
 
 const useIntersectionObserver = (
@@ -124,8 +124,8 @@ const EditableText = memo(({ component }: EditableTextProps) => {
       const effect = props.textEffect;
       if (effect && effect !== 'none') {
         const initialClasses = effects[effect].classes;
-        const finalClasses = 'opacity-100 translate-y-0 translate-x-0 scale-100';
-        const transition = 'transition-all duration-1000 ease-out';
+        const finalClasses = 'pb-opacity-100 pb-translate-y-0 pb-translate-x-0 pb-scale-100';
+        const transition = 'pb-transition-all pb-duration-1000 pb-ease-out';
 
         setAnimationClasses(isVisibleOnScroll ? `${transition} ${finalClasses}` : initialClasses);
       } else {
@@ -139,8 +139,8 @@ const EditableText = memo(({ component }: EditableTextProps) => {
       const effect = props.textEffect;
       if (effect && effect !== 'none') {
         const initialClasses = effects[effect].classes;
-        const finalClasses = 'opacity-100 translate-y-0 translate-x-0 scale-100';
-        const transition = 'transition-all duration-1000 ease-out';
+        const finalClasses = 'pb-opacity-100 pb-translate-y-0 pb-translate-x-0 pb-scale-100';
+        const transition = 'pb-transition-all pb-duration-1000 pb-ease-out';
 
         setAnimationClasses(initialClasses);
 
@@ -190,7 +190,7 @@ const EditableText = memo(({ component }: EditableTextProps) => {
   };
 
   return (
-    <div ref={wrapperRef} className={`relative ${animationClasses}`}>
+    <div ref={wrapperRef} className={`pb-relative ${animationClasses}`}>
       {showToolbar && createPortal(
         <div className="editor-toolbar-portal" style={{ position: 'absolute', top: `${toolbarPosition.top}px`, left: `${toolbarPosition.left}px`, transform: manualPosition || showLinkInput ? '' : 'translateX(-50%)', zIndex: 1000 }} onMouseDown={(e) => { if (!(e.target as HTMLElement).closest('select, input')) e.preventDefault(); }}>
           <EditorToolbar
@@ -207,7 +207,7 @@ const EditableText = memo(({ component }: EditableTextProps) => {
       <Element
         ref={contentRef} contentEditable suppressContentEditableWarning onInput={handleInput} onFocus={handleFocus}
         onBlur={handleBlur} onMouseUp={handleMouseUp} style={style}
-        className="min-h-[1.5rem] w-full border border-dashed border-transparent focus:border-gray-300 focus:outline-none"
+        className="pb-min-h-[1.5rem] pb-w-full pb-border pb-border-dashed pb-border-transparent pb-focus:border-gray-300 pb-focus:outline-none"
       />
     </div>
   );
@@ -220,15 +220,15 @@ const renderSettings = ({ component, updateComponent }: { component: TextCompone
   };
 
   return (
-    <div className="p-4">
-      <label htmlFor={`text-effect-${id}`} className="block text-sm font-medium text-gray-700 mb-1">
+    <div className="pb-p-4">
+      <label htmlFor={`text-effect-${id}`} className="pb-block pb-text-sm pb-font-medium pb-text-gray-700 pb-mb-1">
         Entrance Effect
       </label>
       <select
         id={`text-effect-${id}`}
         value={props.textEffect || 'none'}
         onChange={e => handleUpdate('textEffect', e.target.value)}
-        className="w-full p-2 border rounded-md text-sm"
+        className="pb-w-full pb-p-2 pb-border pb-rounded-md pb-text-sm"
       >
         {Object.entries(effects).map(([key, { name }]) => (
           <option key={key} value={key}>{name}</option>

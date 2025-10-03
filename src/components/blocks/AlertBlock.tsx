@@ -1,4 +1,4 @@
-// path: src/components/blocks/AlertBlock.tsx
+// path: src/components/page-builder/components/blocks/AlertBlock.tsx
 import React, { memo } from 'react';
 import { useComponentContext } from '../../hooks/useComponentContext';
 import type { AlertComponent } from '../../types/components';
@@ -33,9 +33,9 @@ const AlertBlock = memo(({ component }: { component: AlertComponent }) => {
   };
 
   return (
-    <div className="p-4 bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700">
+    <div className="pb-p-4 pb-bg-yellow-100 pb-border-l-4 pb-border-yellow-500 pb-text-yellow-700">
       <p
-        className="font-bold"
+        className="pb-font-bold"
         contentEditable
         suppressContentEditableWarning
         onBlur={handleBlur('title')}

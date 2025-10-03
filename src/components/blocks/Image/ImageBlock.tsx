@@ -1,4 +1,4 @@
-// path: src/components/blocks/Image/ImageBlock.tsx
+// path: src/components/page-builder/components/blocks/Image/ImageBlock.tsx
 import React, { useState, useCallback, memo, useEffect, useRef } from 'react';
 import { useComponentContext } from '../../../hooks/useComponentContext';
 import { type ComponentDefinition, type ImageComponent, type ImageComponentProps } from '../../../types/components';
@@ -101,7 +101,7 @@ const ImageBlock = memo(({ component }: { component: ImageComponent }) => {
   const handleDrop = useCallback((e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault();
     e.stopPropagation();
-    e.currentTarget.classList.remove('bg-gray-100');
+    e.currentTarget.classList.remove('pb-bg-gray-100');
     const file = e.dataTransfer.files[0];
     if (file) processFile(file);
   }, [processFile]);
@@ -208,10 +208,10 @@ const ImageBlock = memo(({ component }: { component: ImageComponent }) => {
   return (
     <div
       ref={containerRef}
-      className={`transition-colors duration-200 ${displayUrl ? 'group cursor-grab active:cursor-grabbing' : ''}`}
+      className={`pb-transition-colors pb-duration-200 ${displayUrl ? 'pb-group pb-cursor-grab pb-active:cursor-grabbing' : ''}`}
       style={!displayUrl ? { position: 'relative' } : containerStyles}
-      onDragOver={(e) => { e.preventDefault(); e.currentTarget.classList.add('bg-gray-100'); }}
-      onDragLeave={(e) => e.currentTarget.classList.remove('bg-gray-100')}
+      onDragOver={(e) => { e.preventDefault(); e.currentTarget.classList.add('pb-bg-gray-100'); }}
+      onDragLeave={(e) => e.currentTarget.classList.remove('pb-bg-gray-100')}
       onDrop={handleDrop}
       onMouseDown={displayUrl ? handleDragMouseDown : undefined}
     >
@@ -220,38 +220,38 @@ const ImageBlock = memo(({ component }: { component: ImageComponent }) => {
           <img src={displayUrl} alt={props.alt || ''} style={imageStyles} />
           <div
             onMouseDown={handleResizeMouseDown}
-            className={`absolute bottom-0 right-0 z-10 cursor-nwse-resize p-2 opacity-0 transition-opacity group-hover:opacity-100 ${props.shape === 'circle' ? 'hidden' : ''}`}
+            className={`pb-absolute pb-bottom-0 pb-right-0 pb-z-10 pb-cursor-nwse-resize pb-p-2 pb-opacity-0 pb-transition-opacity pb-group-hover:opacity-100 ${props.shape === 'circle' ? 'pb-hidden' : ''}`}
             title="Resize Image"
           >
-            <div className="flex h-5 w-5 items-center justify-center rounded-full bg-blue-500 border-2 border-white shadow-md">
-              <svg className="h-3 w-3 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="4">
+            <div className="pb-flex pb-h-5 pb-w-5 pb-items-center pb-justify-center pb-rounded-full pb-bg-blue-500 pb-border-2 pb-border-white pb-shadow-md">
+              <svg className="pb-h-3 pb-w-3 pb-text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="4">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 19.5l15-15m-6 0h6v6" />
               </svg>
             </div>
           </div>
         </>
       ) : (
-        <div className="text-center text-gray-500 p-4 h-full flex flex-col justify-center items-center">
+        <div className="pb-text-center pb-text-gray-500 pb-p-4 pb-h-full pb-flex pb-flex-col pb-justify-center pb-items-center">
           {isUploading ? (<p>Uploading...</p>) : (
             <>
-              <p className="text-sm font-semibold">Drag & drop an image here</p>
-              <p className="text-xs my-1">or</p>
-              <label className="bg-blue-500 text-white rounded-md px-3 py-1.5 text-sm font-semibold cursor-pointer hover:bg-blue-600">
+              <p className="pb-text-sm pb-font-semibold">Drag & drop an image here</p>
+              <p className="pb-text-xs pb-my-1">or</p>
+              <label className="pb-bg-blue-500 pb-text-white pb-rounded-md pb-px-3 pb-py-1.5 pb-text-sm pb-font-semibold pb-cursor-pointer pb-hover:bg-blue-600">
                 Browse
-                <input id={inputId} type="file" onChange={handleFileChange} accept="image/*" className="hidden" />
+                <input id={inputId} type="file" onChange={handleFileChange} accept="image/*" className="pb-hidden" />
               </label>
-              <div className="w-full text-center mt-4">
-                <p className="text-xs text-gray-400 mb-1">Or paste an image URL:</p>
-                <div className="flex items-center">
+              <div className="pb-w-full pb-text-center pb-mt-4">
+                <p className="pb-text-xs pb-text-gray-400 pb-mb-1">Or paste an image URL:</p>
+                <div className="pb-flex pb-items-center">
                   <input
                     type="text"
                     value={manualUrl}
                     onChange={(e) => setManualUrl(e.target.value)}
                     onKeyDown={(e) => e.key === 'Enter' && handleSetManualUrl()}
                     placeholder="https://..."
-                    className="text-xs p-1.5 border rounded-l-md w-full focus:ring-1 focus:ring-blue-500 focus:outline-none"
+                    className="pb-text-xs pb-p-1.5 pb-border pb-rounded-l-md pb-w-full pb-focus:ring-1 pb-focus:ring-blue-500 pb-focus:outline-none"
                   />
-                  <button onClick={handleSetManualUrl} className="bg-gray-200 hover:bg-gray-300 text-xs font-semibold p-[7px] rounded-r-md border border-l-0">
+                  <button onClick={handleSetManualUrl} className="pb-bg-gray-200 pb-hover:bg-gray-300 pb-text-xs pb-font-semibold pb-p-[7px] pb-rounded-r-md pb-border pb-border-l-0">
                     Set
                   </button>
                 </div>

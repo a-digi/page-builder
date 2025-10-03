@@ -1,4 +1,4 @@
-// path: src/components/BlockWrapper.tsx
+// path: src/components/page-builder/components/BlockWrapper.tsx
 import React, { useState, useMemo, useRef, useEffect, useLayoutEffect, useCallback } from 'react';
 import { createPortal } from 'react-dom';
 import { type PageComponent, type CustomButton } from '../types/components';
@@ -245,42 +245,47 @@ export function BlockWrapper<C extends PageComponent<any, any>>({
     if (visibleButtons.length === 0) return null;
 
     const defaultButtonClass = isSettingsOpen
-      ? 'text-white hover:bg-gray-700'
-      : 'text-gray-500 hover:bg-gray-100 hover:text-blue-600';
+      ? 'pb-text-white pb-hover:bg-gray-700'
+      : 'pb-text-gray-500 pb-hover:bg-gray-100 pb-hover:text-blue-600';
 
     return visibleButtons.map((button) => (
-      <button key={button.id} onClick={() => button.onClick(component)} className={`p-1.5 rounded-md ${button.className || defaultButtonClass}`} title={button.tooltip}>
+      <button key={button.id} onClick={() => button.onClick(component)} className={`pb-p-1.5 pb-rounded-md ${button.className || defaultButtonClass}`} title={button.tooltip}>
         {button.icon}
       </button>
     ));
   }, [customToolbarButtons, component, isSettingsOpen]);
 
   const combinedClasses = [
+    'pb-w-full pb-h-full pb-relative',
+    readOnly && 'pb-read-only-wrapper',
     component.props.containerClasses,
-    component.props.fullHeight ? 'h-full' : '',
+    component.props.fullHeight ? 'pb-h-full' : '',
   ]
     .filter(Boolean)
     .join(' ')
     .trim();
 
-  const activeToolbarButtonClasses = 'text-white hover:bg-gray-700';
+  const activeToolbarButtonClasses = 'pb-text-white pb-hover:bg-gray-700';
 
-  const dragHandleClasses = isSettingsOpen ? activeToolbarButtonClasses : 'text-gray-400 hover:bg-gray-100 hover:text-gray-700';
-  const settingsButtonClasses = isSettingsOpen ? activeToolbarButtonClasses : 'text-gray-500 hover:bg-gray-100 hover:text-blue-600';
-  const deleteButtonClasses = isSettingsOpen ? activeToolbarButtonClasses : 'text-red-500 hover:bg-red-100 hover:text-red-600';
+  const dragHandleClasses = isSettingsOpen ? activeToolbarButtonClasses : 'pb-text-gray-400 pb-hover:bg-gray-100 pb-hover:text-gray-700';
+  const settingsButtonClasses = isSettingsOpen ? activeToolbarButtonClasses : 'pb-text-gray-500 pb-hover:bg-gray-100 pb-hover:text-blue-600';
+  const deleteButtonClasses = isSettingsOpen ? activeToolbarButtonClasses : 'pb-text-red-500 pb-hover:bg-red-100 pb-hover:text-red-600';
 
+  const separatorClasses = isSettingsOpen ? 'pb-bg-gray-600' : 'pb-bg-gray-200';
   const Separator = isVerticalLayout
-    ? <div className={`h-px w-full my-1 ${isSettingsOpen ? 'bg-gray-600' : 'bg-gray-200'}`}></div>
-    : <div className={`w-px h-5 mx-1 ${isSettingsOpen ? 'bg-gray-600' : 'bg-gray-200'}`}></div>;
+    ? <div className={`pb-h-px pb-w-full pb-my-1 ${separatorClasses}`}></div>
+    : <div className={`pb-w-px pb-h-5 pb-mx-1 ${separatorClasses}`}></div>;
+
+  const toolbarContainerClasses = [
+    'pb-flex', 'pb-items-center', 'pb-rounded-lg', 'pb-shadow-md', 'pb-p-1', 'pb-transition-colors', 'pb-duration-200',
+    isSettingsOpen ? 'pb-bg-gray-800' : 'pb-bg-white',
+    isVerticalLayout ? 'pb-flex-col pb-space-y-0.5' : 'pb-space-x-0.5'
+  ].join(' ');
+
 
   const ToolbarControls = (
-    <div ref={settingsRef} className="relative w-max">
-      <div className={`flex items-center rounded-lg shadow-md p-1 transition-colors duration-200 ${isSettingsOpen ? 'bg-gray-800' : 'bg-white'
-        } ${isVerticalLayout
-          ? 'flex-col space-y-0.5'
-          : 'space-x-0.5'
-        }`}
-      >
+    <div ref={settingsRef} className="pb-relative pb-w-max">
+      <div className={toolbarContainerClasses}>
         {!hideDragHandle && <DragHandle onDragStart={onDragStart} onDragEnd={handleDragEnd} className={dragHandleClasses} />}
 
         {renderedCustomToolbarButtons && (
@@ -292,7 +297,7 @@ export function BlockWrapper<C extends PageComponent<any, any>>({
 
         {showSettings && (
           definition?.settingsIcon ? (
-            <button onClick={toggleSettings} className={`p-1.5 rounded-md cursor-pointer ${settingsButtonClasses}`} title="Settings">
+            <button onClick={toggleSettings} className={`pb-p-1.5 pb-rounded-md pb-cursor-pointer ${settingsButtonClasses}`} title="Settings">
               {definition.settingsIcon}
             </button>
           ) : (<SettingsButton onClick={toggleSettings} className={settingsButtonClasses} />)
@@ -317,7 +322,7 @@ export function BlockWrapper<C extends PageComponent<any, any>>({
     <div
       ref={wrapperRef}
       data-block-id={component.id}
-      className={`w-full h-full relative ${readOnly ? 'pointer-events-none [&_*]:pointer-events-none' : ''}`}
+      className={combinedClasses}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
     >
@@ -328,7 +333,7 @@ export function BlockWrapper<C extends PageComponent<any, any>>({
         document.body
       )}
 
-      <div className={`${combinedClasses} w-full h-full`} style={containerStyle}>
+      <div className={`pb-w-full pb-h-full`} style={containerStyle}>
         {children}
       </div>
       {!isEditingDisabled && isSettingsOpen && renderPanel}

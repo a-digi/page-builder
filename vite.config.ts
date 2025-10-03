@@ -20,7 +20,7 @@ export default defineConfig({
         lib: {
             // This is the entry point for your library's API.
             // All modules you want to export publicly MUST be exported from this file.
-            entry: resolve(__dirname, 'src/index.ts'),
+            entry: resolve('src/index.ts'),
 
             // The global variable name for the UMD build
             name: 'ReactPageBuilder',
@@ -40,13 +40,12 @@ export default defineConfig({
         },
         rollupOptions: {
             // These are peer dependencies. We shouldn't bundle them with our library.
-            external: ['react', 'react-dom', 'tailwindcss'],
+            external: ['react', 'react-dom'],
             output: {
                 // Defines global variables for the external dependencies in the UMD build.
                 globals: {
                     react: 'React',
                     'react-dom': 'ReactDOM',
-                    tailwindcss: 'tailwindcss',
                 },
             },
         },

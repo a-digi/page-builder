@@ -1,4 +1,4 @@
-// path: src/components/blocks/Column/ColumnBlock.tsx
+// path: src/components/page-builder/components/blocks/Column/ColumnBlock.tsx
 import React, { useState, useCallback, memo, Suspense, useRef, useEffect, useMemo, useContext, useLayoutEffect } from 'react';
 import type { ColumnComponent as ColumnComponent, PageComponent } from '../../../types/components';
 import { useComponentContext } from '../../../hooks/useComponentContext';
@@ -22,7 +22,7 @@ export const columnComponentId = 'column';
 const RESIZER_HANDLE_WIDTH = 16;
 const ColumnResizer = ({ onMouseDown, style, isResizing }: { onMouseDown: (e: React.MouseEvent) => void, style: React.CSSProperties, isResizing: boolean }) => (
   <div
-    className="absolute top-0 bottom-0 flex items-center justify-center cursor-col-resize group z-30"
+    className="pb-absolute pb-top-0 pb-bottom-0 pb-flex pb-items-center pb-justify-center pb-cursor-col-resize pb-group pb-z-30"
     style={{
       width: `${RESIZER_HANDLE_WIDTH}px`,
       transform: `translateX(-${RESIZER_HANDLE_WIDTH / 2}px)`,
@@ -30,7 +30,7 @@ const ColumnResizer = ({ onMouseDown, style, isResizing }: { onMouseDown: (e: Re
     }}
     onMouseDown={onMouseDown}
   >
-    <div className={`w-0.5 h-full bg-transparent transition-colors ${!isResizing ? 'group-hover:bg-blue-500' : ''}`} />
+    <div className={`pb-w-0.5 pb-h-full pb-bg-transparent pb-transition-colors ${!isResizing ? 'pb-group-hover:bg-blue-500' : ''}`} />
   </div>
 );
 
@@ -44,146 +44,6 @@ type ResizingState = {
   liveTemplate: string;
 };
 
-// Props for the new sub-component
-type ColumnCellProps = {
-  parentComponentId: number;
-  cellIndex: number;
-  colIndex: number;
-  contents: PageComponent<any, any>[];
-  allColumnProps: ColumnComponent['props'];
-  dragOverState: { cellIndex: number; itemIndex: number } | null;
-  readOnly: boolean;
-
-  // functions
-  updateParentComponent: (id: number, props: Partial<ColumnComponent['props']>) => void;
-  handleDragOver: (e: React.DragEvent, cellIndex: number, itemIndex: number) => void;
-  handleDragLeave: () => void;
-  handleDrop: (e: React.DragEvent, destCellIndex: number, destItemIndexParam: number) => void;
-  handleDragStartInternal: (e: React.DragEvent, sourceCellIndex: number, component: PageComponent<any, any>) => void;
-
-  // misc
-  itemRefs: React.MutableRefObject<Map<number, React.RefObject<HTMLDivElement>>>;
-  customToolbarButtons: any;
-};
-
-// The new sub-component
-const ColumnCell: React.FC<ColumnCellProps> = ({
-  parentComponentId,
-  cellIndex,
-  colIndex,
-  contents,
-  allColumnProps,
-  dragOverState,
-  readOnly,
-  updateParentComponent,
-  handleDragOver,
-  handleDragLeave,
-  handleDrop,
-  handleDragStartInternal,
-  itemRefs,
-  customToolbarButtons
-}) => {
-  const parentContext = useComponentContext();
-  const isCellDragOverTarget = dragOverState?.cellIndex === cellIndex;
-
-  const {
-    colPaddings, colMargins, colFullHeight, colTextColors,
-    colStyles, colClasses, colColors, gridContents,
-  } = allColumnProps;
-
-  // Calculate styles and classes for this specific cell
-  const colPadding = colPaddings?.[colIndex] || {};
-  const colMargin = colMargins?.[colIndex] || {};
-  const isColFullHeight = colFullHeight?.[colIndex] || false;
-  const colTextColor = colTextColors?.[colIndex];
-
-  const columnStyle: React.CSSProperties = {
-    ...parseStyles(colStyles?.[colIndex] || ''),
-    backgroundColor: colColors?.[colIndex] || 'transparent',
-    position: 'relative'
-  };
-
-  const columnClasses = [colClasses?.[colIndex] || ''];
-
-  if (isColFullHeight) columnClasses.push('h-full');
-  if (colTextColor) columnStyle.color = colTextColor;
-  if (colPadding.paddingTop) columnStyle.paddingTop = `${colPadding.paddingTop}rem`;
-  if (colPadding.paddingRight) columnStyle.paddingRight = `${colPadding.paddingRight}rem`;
-  if (colPadding.paddingBottom) columnStyle.paddingBottom = `${colPadding.paddingBottom}rem`;
-  if (colPadding.paddingLeft) columnStyle.paddingLeft = `${colPadding.paddingLeft}rem`;
-  if (colMargin.marginTop) columnStyle.marginTop = `${colMargin.marginTop}rem`;
-  if (colMargin.marginRight) columnStyle.marginRight = `${colMargin.marginRight}rem`;
-  if (colMargin.marginBottom) columnStyle.marginBottom = `${colMargin.marginBottom}rem`;
-  if (colMargin.marginLeft) columnStyle.marginLeft = `${colMargin.marginLeft}rem`;
-
-  // The useMemo hook is now at the top level of this new component, which is valid.
-  const scopedContextValue = useMemo(() => {
-    const scopedUpdateComponent = (componentId: number, newProps: Partial<PageComponent<any, any>['props']>) => {
-      const newGridContents = { ...gridContents };
-      const cellContents = [...(newGridContents[cellIndex] || [])];
-      const compIndex = cellContents.findIndex(c => c.id === componentId);
-      if (compIndex !== -1) {
-        cellContents[compIndex] = { ...cellContents[compIndex], props: { ...cellContents[compIndex].props, ...newProps } };
-        newGridContents[cellIndex] = cellContents;
-        updateParentComponent(parentComponentId, { gridContents: newGridContents });
-      }
-    };
-
-    const scopedDeleteComponent = (componentId: number) => {
-      const newGridContents = { ...gridContents };
-      const cellContents = newGridContents[cellIndex] || [];
-      newGridContents[cellIndex] = cellContents.filter(c => c.id !== componentId);
-      updateParentComponent(parentComponentId, { gridContents: newGridContents });
-    };
-
-    return { ...parentContext, updateComponent: scopedUpdateComponent, deleteComponent: scopedDeleteComponent, isNested: true };
-  }, [parentContext, cellIndex, gridContents, updateParentComponent, parentComponentId]);
-
-  return (
-    <div
-      data-column-index={colIndex}
-      className={`relative items-stretch flex flex-col ${columnClasses.join(' ')}`}
-      style={columnStyle}
-    >
-      <ComponentContext.Provider value={scopedContextValue}>
-        {contents.length > 0 ? (
-          <div className="column-content space-y-2 group/item-list" onDragLeave={!readOnly ? handleDragLeave : undefined}>
-            {contents.map((comp, itemIndex) => {
-              if (!itemRefs.current.has(comp.id)) {
-                itemRefs.current.set(comp.id, React.createRef<HTMLDivElement>());
-              }
-              const itemRef = itemRefs.current.get(comp.id)!;
-              return (
-                <DraggableItem
-                  key={comp.id}
-                  itemRef={itemRef}
-                  component={comp}
-                  cellIndex={cellIndex}
-                  itemIndex={itemIndex}
-                  onDragStart={!readOnly ? handleDragStartInternal : () => { }}
-                  onDragOver={!readOnly ? (e) => handleDragOver(e, cellIndex, itemIndex) : () => { }}
-                  onDrop={!readOnly ? (e) => handleDrop(e, cellIndex, itemIndex) : () => { }}
-                  isDragOver={!readOnly && isCellDragOverTarget && dragOverState?.itemIndex === itemIndex}
-                  customToolbarButtons={customToolbarButtons}
-                />
-              );
-            })}
-            {!readOnly && <div className={`w-full relative ${isCellDragOverTarget && dragOverState?.itemIndex === contents.length ? 'min-h-[4rem]' : 'min-h-[8px]'}`} onDragOver={e => handleDragOver(e, cellIndex, contents.length)} onDrop={e => handleDrop(e, cellIndex, contents.length)}>
-              {isCellDragOverTarget && dragOverState?.itemIndex === contents.length && <div className="border-t-2 border-blue-500 h-1 animate-pulse" />}
-            </div>}
-          </div>
-        ) : (
-          !readOnly ? (
-            <div onDragOver={e => handleDragOver(e, cellIndex, 0)} onDragLeave={handleDragLeave} onDrop={e => handleDrop(e, cellIndex, 0)} className={`h-full min-h-[50px] rounded-md border border-dashed flex items-center justify-center text-xs text-gray-400 transition-colors ${isCellDragOverTarget ? 'bg-blue-100/50 border-blue-400' : 'bg-transparent border-gray-300/70'}`}>
-              Drop here
-            </div>
-          ) : <div className="h-full min-h-[50px]"></div>
-        )}
-      </ComponentContext.Provider>
-    </div>
-  );
-};
-
 const ColumnBlock = memo(({ component }: { component: ColumnComponent }) => {
   const parentContext = useComponentContext();
   const { createComponent } = useComponentRegistry();
@@ -195,7 +55,7 @@ const ColumnBlock = memo(({ component }: { component: ColumnComponent }) => {
   const [isHovered, setIsHovered] = useState(false);
   const [dragOverState, setDragOverState] = useState<{ cellIndex: number; itemIndex: number } | null>(null);
   const gridRefs = useRef<(HTMLDivElement | null)[]>([]);
-  const itemRefs = useRef(new Map<number, React.RefObject<HTMLDivElement>>());
+  const itemRefs = useRef(new Map<number, React.RefObject<HTMLDivElement | null>>());
   const [resizing, setResizing] = useState<ResizingState | null>(null);
   const [resizerPositions, setResizerPositions] = useState<number[]>([]);
 
@@ -465,36 +325,125 @@ const ColumnBlock = memo(({ component }: { component: ColumnComponent }) => {
 
   return (
     <div
-      className={`relative items-stretch ${props.containerClasses || ''} ${readOnly ? 'group-read-only' : ''}`}
+      className={`pb-relative pb-items-stretch ${props.containerClasses || ''} ${readOnly ? 'pb-group-read-only' : ''}`}
       style={containerStyle}
       onMouseEnter={!readOnly ? () => setIsHovered(true) : undefined}
       onMouseLeave={!readOnly ? () => setIsHovered(false) : undefined}
     >
-      <Suspense fallback={<div className="text-center text-sm text-gray-500">Loading...</div>}>
+      <Suspense fallback={<div className="pb-text-center pb-text-sm pb-text-gray-500">Loading...</div>}>
         {Array.from({ length: props.numRows }).map((_, rowIndex) => (
-          <div key={rowIndex} ref={el => { gridRefs.current[rowIndex] = el; }} className="grid relative items-stretch" style={gridStyle}>
+          <div key={rowIndex} ref={el => { gridRefs.current[rowIndex] = el; }} className="pb-grid pb-relative pb-items-stretch" style={gridStyle}>
             {Array.from({ length: props.numCols }).map((_, colIndex) => {
               const cellIndex = rowIndex * props.numCols + colIndex;
               const contents = (props.gridContents as Record<number, PageComponent<any, any>[]>)[cellIndex] || [];
+              const isCellDragOverTarget = dragOverState?.cellIndex === cellIndex;
+
+              const colPadding = props.colPaddings?.[colIndex] || {};
+              const colMargin = props.colMargins?.[colIndex] || {};
+
+              const isColFullHeight = props.colFullHeight?.[colIndex] || false;
+              const colTextColor = props.colTextColors?.[colIndex];
+
+              const columnStyle: React.CSSProperties = {
+                ...parseStyles(props.colStyles?.[colIndex] || ''),
+                backgroundColor: props.colColors?.[colIndex] || 'transparent',
+                position: 'relative'
+              };
+
+              const columnClasses = ['pb-relative', 'pb-items-stretch', 'pb-flex', 'pb-flex-col', props.colClasses?.[colIndex] || ''];
+
+              if (isColFullHeight) {
+                columnClasses.push('pb-h-full');
+              }
+              if (colTextColor) {
+                columnStyle.color = colTextColor;
+              }
+              if (colPadding.paddingTop) columnStyle.paddingTop = `${colPadding.paddingTop}rem`;
+              if (colPadding.paddingRight) columnStyle.paddingRight = `${colPadding.paddingRight}rem`;
+              if (colPadding.paddingBottom) columnStyle.paddingBottom = `${colPadding.paddingBottom}rem`;
+              if (colPadding.paddingLeft) columnStyle.paddingLeft = `${colPadding.paddingLeft}rem`;
+              if (colMargin.marginTop) columnStyle.marginTop = `${colMargin.marginTop}rem`;
+              if (colMargin.marginRight) columnStyle.marginRight = `${colMargin.marginRight}rem`;
+              if (colMargin.marginBottom) columnStyle.marginBottom = `${colMargin.marginBottom}rem`;
+              if (colMargin.marginLeft) columnStyle.marginLeft = `${colMargin.marginLeft}rem`;
+
+
+              // Create a scoped context for components within this column cell
+              const scopedContextValue = useMemo(() => {
+                const scopedUpdateComponent = (componentId: number, newProps: Partial<PageComponent<any, any>['props']>) => {
+                  const newGridContents = { ...props.gridContents };
+                  const cellContents = [...(newGridContents[cellIndex] || [])];
+                  const compIndex = cellContents.findIndex(c => c.id === componentId);
+                  if (compIndex !== -1) {
+                    cellContents[compIndex] = {
+                      ...cellContents[compIndex],
+                      props: { ...cellContents[compIndex].props, ...newProps }
+                    };
+                    newGridContents[cellIndex] = cellContents;
+                    updateComponent(id, { gridContents: newGridContents });
+                  }
+                };
+
+                const scopedDeleteComponent = (componentId: number) => {
+                  const newGridContents = { ...props.gridContents };
+                  const cellContents = newGridContents[cellIndex] || [];
+                  newGridContents[cellIndex] = cellContents.filter(c => c.id !== componentId);
+                  updateComponent(id, { gridContents: newGridContents });
+                };
+
+                return {
+                  ...parentContext,
+                  updateComponent: scopedUpdateComponent,
+                  deleteComponent: scopedDeleteComponent,
+                  isNested: true,
+                };
+
+              }, [parentContext, cellIndex, props.gridContents, updateComponent, id]);
+
 
               return (
-                <ColumnCell
-                  key={cellIndex}
-                  parentComponentId={id}
-                  cellIndex={cellIndex}
-                  colIndex={colIndex}
-                  contents={contents}
-                  allColumnProps={props}
-                  dragOverState={dragOverState}
-                  readOnly={readOnly}
-                  updateParentComponent={updateComponent}
-                  handleDragOver={handleDragOver}
-                  handleDragLeave={handleDragLeave}
-                  handleDrop={handleDrop}
-                  handleDragStartInternal={handleDragStartInternal}
-                  itemRefs={itemRefs}
-                  customToolbarButtons={customToolbarButtons}
-                />
+                <div
+                  key={`col-${cellIndex}`}
+                  data-column-index={colIndex}
+                  className={columnClasses.join(' ')}
+                  style={columnStyle}
+                >
+                  <ComponentContext.Provider value={scopedContextValue}>
+                    {contents.length > 0 ? (
+                      <div className="column-content pb-space-y-2 pb-group/item-list" onDragLeave={!readOnly ? handleDragLeave : undefined}>
+                        {contents.map((comp, itemIndex) => {
+                          if (!itemRefs.current.has(comp.id)) {
+                            itemRefs.current.set(comp.id, React.createRef<HTMLDivElement>());
+                          }
+                          const itemRef = itemRefs.current.get(comp.id)!;
+                          return (
+                            <DraggableItem
+                              key={comp.id}
+                              itemRef={itemRef}
+                              component={comp}
+                              cellIndex={cellIndex}
+                              itemIndex={itemIndex}
+                              onDragStart={!readOnly ? handleDragStartInternal : () => { }}
+                              onDragOver={!readOnly ? (e) => handleDragOver(e, cellIndex, itemIndex) : () => { }}
+                              onDrop={!readOnly ? (e) => handleDrop(e, cellIndex, itemIndex) : () => { }}
+                              isDragOver={!readOnly && isCellDragOverTarget && dragOverState?.itemIndex === itemIndex}
+                              customToolbarButtons={customToolbarButtons}
+                            />
+                          );
+                        })}
+                        {!readOnly && <div className={`pb-w-full pb-relative ${isCellDragOverTarget && dragOverState?.itemIndex === contents.length ? 'pb-min-h-[4rem]' : 'pb-min-h-[8px]'}`} onDragOver={e => handleDragOver(e, cellIndex, contents.length)} onDrop={e => handleDrop(e, cellIndex, contents.length)}>
+                          {isCellDragOverTarget && dragOverState?.itemIndex === contents.length && <div className="pb-border-t-2 pb-border-blue-500 pb-h-1 pb-animate-pulse" />}
+                        </div>}
+                      </div>
+                    ) : (
+                      !readOnly ? (
+                        <div onDragOver={e => handleDragOver(e, cellIndex, 0)} onDragLeave={handleDragLeave} onDrop={e => handleDrop(e, cellIndex, 0)} className={`pb-h-full pb-min-h-[50px] pb-rounded-md pb-border pb-border-dashed pb-flex pb-items-center pb-justify-center pb-text-xs pb-text-gray-400 pb-transition-colors ${isCellDragOverTarget ? 'pb-bg-blue-100/50 pb-border-blue-400' : 'pb-bg-transparent pb-border-gray-300/70'}`}>
+                          Drop here
+                        </div>
+                      ) : <div className="pb-h-full pb-min-h-[50px]"></div>
+                    )}
+                  </ComponentContext.Provider>
+                </div>
               );
             })}
 

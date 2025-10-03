@@ -1,4 +1,4 @@
-// path: src/components/editor/toolbar/TextColorPicker.tsx
+// path: src/components/page-builder/components/editor/toolbar/TextColorPicker.tsx
 import React, { useState, useRef, useCallback, useEffect, type RefObject } from 'react';
 import { PREDEFINED_COLORS } from './model/colors';
 
@@ -46,35 +46,46 @@ const TextColorPicker: React.FC<TextColorPickerProps> = ({ currentColor, onColor
   const normalizedColor = safeColor.startsWith('rgb') ? rgbToHex(safeColor) : safeColor;
   const displayColor = normalizedColor || '#000000';
 
+  const popoverClasses = [
+    'pb-absolute', 'pb-z-20', 'pb-top-full', 'pb-mt-2', 'pb-p-2', 'pb-bg-gray-800',
+    'pb-border', 'pb-border-gray-600', 'pb-rounded-md', 'pb-shadow-lg', 'pb-w-60',
+    'pb-left-1/2', 'pb-translate-x--50%'
+  ].join(' ');
+
   return (
-    <div className="relative">
+    <div className="pb-relative">
       <button
         type="button"
         onMouseDown={(e) => e.preventDefault()}
         onClick={() => setIsOpen(!isOpen)}
-        className="flex items-center p-2 rounded-md transition-colors duration-150 text-gray-300 hover:bg-gray-600 hover:text-white"
+        className="pb-flex pb-items-center pb-p-2 pb-rounded-md pb-transition-colors pb-duration-150 pb-text-gray-300 pb-hover:bg-gray-600 pb-hover:text-white"
         title="Text Color"
       >
-        <div className="w-5 h-5 rounded-sm border border-gray-400" style={{ backgroundColor: displayColor }} />
+        <div className="pb-w-5 pb-h-5 pb-rounded-sm pb-border pb-border-gray-400" style={{ backgroundColor: displayColor }} />
       </button>
 
       {isOpen && (
-        <div
-          ref={popoverRef}
-          className="absolute z-20 top-full mt-2 p-2 bg-gray-800 border border-gray-600 rounded-md shadow-lg w-60 left-1/2 -translate-x-1/2"
-        >
-          <div className="grid grid-cols-8 gap-1">
-            {PREDEFINED_COLORS.map((color) => (
-              <button
-                key={color}
-                type="button"
-                onMouseDown={(e) => e.preventDefault()}
-                onClick={() => handleColorSelect(color)}
-                className={`w-6 h-6 rounded-sm transition-transform duration-100 hover:scale-110 focus:outline-none focus:ring-2 ${displayColor.toLowerCase() === color.toLowerCase() ? 'ring-blue-500' : 'focus:ring-blue-500'}`}
-                aria-label={`Set color to ${color}`}
-                style={{ backgroundColor: color }}
-              />
-            ))}
+        <div ref={popoverRef} className={popoverClasses}>
+          <div className="pb-grid pb-grid-cols-8 pb-gap-1">
+            {PREDEFINED_COLORS.map((color) => {
+              const colorButtonClasses = [
+                'pb-w-6', 'pb-h-6', 'pb-rounded-sm', 'pb-transition-transform', 'pb-duration-100', 'pb-hover:scale-110',
+                'pb-focus:outline-none', 'pb-focus:ring-2',
+                displayColor.toLowerCase() === color.toLowerCase() ? 'pb-ring-blue-500' : 'pb-focus:ring-blue-500'
+              ].join(' ');
+
+              return (
+                <button
+                  key={color}
+                  type="button"
+                  onMouseDown={(e) => e.preventDefault()}
+                  onClick={() => handleColorSelect(color)}
+                  className={colorButtonClasses}
+                  aria-label={`Set color to ${color}`}
+                  style={{ backgroundColor: color }}
+                />
+              )
+            })}
           </div>
         </div>
       )}

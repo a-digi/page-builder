@@ -1,4 +1,4 @@
-// path: src/components/blocks/ColumnBlock/model/styles.ts
+// path: src/components/page-builder/components/blocks/ColumnBlock/model/styles.ts
 import type { ColumnComponentProps } from "../../../../types/components";
 
 export const parseStyles = (styleString: string): React.CSSProperties => {

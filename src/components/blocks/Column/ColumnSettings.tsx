@@ -1,4 +1,4 @@
-// path: src/components/blocks/Column/ColumnSettings.tsx
+// path: src/components/page-builder/components/blocks/Column/ColumnSettings.tsx
 import React, { useState, useMemo, useCallback } from 'react';
 import type { BaseComponentProps, ColumnComponent, ColumnComponentProps, PaddingProps, MarginProps, PageComponent } from '../../../types/components';
 import { SettingsPanel } from '../../controls/SettingsPanel';
@@ -95,14 +95,15 @@ const ColumnBlockSettings: React.FC<{
 
   const TabButton: React.FC<{ index: number | null, children: React.ReactNode }> = ({ index, children }) => {
     const isActive = activeColumnIndex === index;
+    const buttonClasses = `pb-px-3 pb-py-2 pb-text-sm pb-font-medium pb-focus:outline-none ${isActive
+      ? 'pb-bg-gray-200 pb-text-gray-900'
+      : 'pb-text-gray-800 pb-cursor-pointer pb-hover:text-gray-700 pb-hover:bg-gray-200'
+      }`;
     return (
       <button
         type="button"
         onClick={() => setActiveColumnIndex(index)}
-        className={`px-3 py-2 text-sm font-medium focus:outline-none ${isActive
-          ? 'bg-gray-200 text-gray-900'
-          : 'text-gray-800 cursor-pointer hover:text-gray-700 hover:bg-gray-200'
-          }`}
+        className={buttonClasses}
       >
         {children}
       </button>
@@ -110,9 +111,9 @@ const ColumnBlockSettings: React.FC<{
   };
 
   return (
-    <div className="flex flex-col relative">
+    <div className="pb-flex pb-flex-col pb-relative">
       <div>
-        <nav className="flex justify-start px-6 py-2 top-10" aria-label="Tabs">
+        <nav className="pb-flex pb-justify-start pb-px-6 pb-py-2 pb-top-10" aria-label="Tabs">
           <ButtonGroup>
             <TabButton index={null}>Main</TabButton>
             {Array.from({ length: component.props.numCols }).map((_, i) => (
@@ -124,10 +125,10 @@ const ColumnBlockSettings: React.FC<{
         </nav>
       </div>
 
-      <div className='pb-4'>
+      <div className='pb-pb-4'>
         {activeColumnIndex === null ? (
-          <div className="mt-4 pt-4 px-8">
-            <h4 className="text-base font-medium text-gray-800 mb-4">Number of Columns</h4>
+          <div className="pb-mt-4 pb-pt-4 pb-px-8">
+            <h4 className="pb-text-base pb-font-medium pb-text-gray-800 pb-mb-4">Number of Columns</h4>
             <ColumnSelector
               value={component.props.numCols}
               onChange={(numCols) => updateComponent(component.id, { numCols })}

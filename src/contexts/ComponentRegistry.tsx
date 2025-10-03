@@ -1,4 +1,4 @@
-// path: src/contexts/ComponentRegistry.tsx
+// path: src/components/page-builder/contexts/ComponentRegistry.tsx
 import React, { createContext, useContext, useMemo } from 'react';
 import type { PageComponent, BuiltInComponents } from '../types/components';
 

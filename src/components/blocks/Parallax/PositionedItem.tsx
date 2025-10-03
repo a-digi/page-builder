@@ -1,4 +1,4 @@
-// path: src/components/blocks/Parallax/PositionedItem.tsx
+// path: src/components/page-builder/components/blocks/Parallax/PositionedItem.tsx
 import React, { useState, useCallback, useEffect, useRef } from 'react';
 import { useComponentContext } from '../../../hooks/useComponentContext';
 import type { PageComponent } from '../../../types/components';
@@ -46,9 +46,9 @@ export const PositionedItem: React.FC<PositionedItemProps> = ({ component, onPos
       style={{ top: y, left: x, width, height, position: 'absolute', zIndex }}
       onMouseEnter={() => !isEditingDisabled && isInteractive && setIsHovered(true)}
       onMouseLeave={() => !isEditingDisabled && isInteractive && setIsHovered(false)}
-      className="group/item"
+      className="pb-group/item"
     >
-      <div className={`relative w-full h-full border-2 transition-shadow duration-200 ${showBorder ? 'border-blue-500 shadow-lg' : 'border-transparent'}`} >
+      <div className={`pb-relative pb-w-full pb-h-full pb-border-2 pb-transition-shadow pb-duration-200 ${showBorder ? 'pb-border-blue-500 pb-shadow-lg' : 'pb-border-transparent'}`} >
         <BlockWrapper
           component={component}
           onDragStart={() => { }}
@@ -61,16 +61,16 @@ export const PositionedItem: React.FC<PositionedItemProps> = ({ component, onPos
       </div>
       {!isEditingDisabled && isInteractive && (isHovered || isInteracting) && (
         <>
-          <div onMouseDown={handleDragMouseDown} className="absolute -top-2 -left-2 z-30 p-1.5 rounded-full bg-blue-500 border-2 border-white shadow-md cursor-grab active:cursor-grabbing text-white" title="Move">
-            <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20"><path d="M10 4a1 1 0 011 1v1.586l1.707-1.707a1 1 0 011.414 1.414L12.414 8h1.586a1 1 0 110 2h-1.586l1.707 1.707a1 1 0 01-1.414 1.414L11 11.586V13a1 1 0 11-2 0v-1.414l-1.707 1.707a1 1 0 01-1.414-1.414L7.586 10H6a1 1 0 110-2h1.586L5.879 6.293a1 1 0 011.414-1.414L9 6.586V5a1 1 0 011-1z" /></svg>
+          <div onMouseDown={handleDragMouseDown} className="pb-absolute pb--top-2 pb--left-2 pb-z-30 pb-p-1.5 pb-rounded-full pb-bg-blue-500 pb-border-2 pb-border-white pb-shadow-md pb-cursor-grab pb-active:cursor-grabbing pb-text-white" title="Move">
+            <svg className="pb-w-3 pb-h-3" fill="currentColor" viewBox="0 0 20 20"><path d="M10 4a1 1 0 011 1v1.586l1.707-1.707a1 1 0 011.414 1.414L12.414 8h1.586a1 1 0 110 2h-1.586l1.707 1.707a1 1 0 01-1.414 1.414L11 11.586V13a1 1 0 11-2 0v-1.414l-1.707 1.707a1 1 0 01-1.414-1.414L7.586 10H6a1 1 0 110-2h1.586L5.879 6.293a1 1 0 011.414-1.414L9 6.586V5a1 1 0 011-1z" /></svg>
           </div>
 
-          <div onMouseDown={handleResizeMouseDown} className="absolute -bottom-2 -right-2 z-30 w-5 h-5 rounded-full bg-blue-500 border-2 border-white shadow-md cursor-nwse-resize" title="Resize" />
+          <div onMouseDown={handleResizeMouseDown} className="pb-absolute pb--bottom-2 pb--right-2 pb-z-30 pb-w-5 pb-h-5 pb-rounded-full pb-bg-blue-500 pb-border-2 pb-border-white pb-shadow-md pb-cursor-nwse-resize" title="Resize" />
 
           {isHovered && !isInteracting && (
-            <div className="absolute -bottom-2 -left-2 z-30 flex bg-white rounded-full shadow-md">
-              <button onClick={() => onLayerChange('back')} title="Send to Back" className="p-1.5 hover:bg-gray-100 rounded-l-full text-gray-600"><svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" /></svg></button>
-              <button onClick={() => onLayerChange('front')} title="Bring to Front" className="p-1.5 hover:bg-gray-100 rounded-r-full text-gray-600"><svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 15l7-7 7 7" /></svg></button>
+            <div className="pb-absolute pb--bottom-2 pb--left-2 pb-z-30 pb-flex pb-bg-white pb-rounded-full pb-shadow-md">
+              <button onClick={() => onLayerChange('back')} title="Send to Back" className="pb-p-1.5 pb-hover:bg-gray-100 pb-rounded-l-full pb-text-gray-600"><svg className="pb-w-4 pb-h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" /></svg></button>
+              <button onClick={() => onLayerChange('front')} title="Bring to Front" className="pb-p-1.5 pb-hover:bg-gray-100 pb-rounded-r-full pb-text-gray-600"><svg className="pb-w-4 pb-h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 15l7-7 7 7" /></svg></button>
             </div>
           )}
         </>

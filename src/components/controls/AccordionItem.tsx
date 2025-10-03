@@ -1,4 +1,4 @@
-// path: src/components/controls/AccordionItem.tsx
+// path: src/components/page-builder/components/controls/AccordionItem.tsx
 import React from 'react';
 
 const AccordionItem: React.FC<{
@@ -8,20 +8,20 @@ const AccordionItem: React.FC<{
   summary?: React.ReactNode;
   children: React.ReactNode;
 }> = ({ title, isOpen, onClick, summary, children }) => (
-  <div className="border-b border-gray-200 bg-white">
+  <div className="pb-border-b pb-border-gray-200 pb-bg-white">
     <button
       onClick={onClick}
-      className="flex items-center cursor-pointer justify-between w-full px-4 py-3 text-left hover:bg-gray-50 focus:outline-none"
+      className="pb-flex pb-items-center pb-cursor-pointer pb-justify-between pb-w-full pb-px-4 pb-py-3 pb-text-left pb-hover:bg-gray-50 pb-focus:outline-none"
     >
-      <div className="flex flex-col">
-        <span className="text-sm font-medium text-gray-800">{title}</span>
+      <div className="pb-flex pb-flex-col">
+        <span className="pb-text-sm pb-font-medium pb-text-gray-800">{title}</span>
         {!isOpen && summary && (
-          <div className="text-xs text-gray-500 mt-0.5">{summary}</div>
+          <div className="pb-text-xs pb-text-gray-500 pb-mt-0.5">{summary}</div>
         )}
       </div>
       <svg
         xmlns="http://www.w3.org/2000/svg"
-        className={`h-5 w-5 text-gray-500 transform transition-transform duration-200 ${isOpen ? 'rotate-180' : 'rotate-0'}`}
+        className={`pb-h-5 pb-w-5 pb-text-gray-500 pb-transform pb-transition-transform pb-duration-200 ${isOpen ? 'pb-rotate-180' : 'pb-rotate-0'}`}
         viewBox="0 0 20 20"
         fill="currentColor"
       >
@@ -33,9 +33,9 @@ const AccordionItem: React.FC<{
       </svg>
     </button>
     <div
-      className={`overflow-hidden transition-all duration-300 ease-in-out ${isOpen ? 'max-h-[30rem]' : 'max-h-0'}`}
+      className={`pb-overflow-hidden pb-transition-all pb-duration-300 pb-ease-in-out ${isOpen ? 'pb-max-h-[30rem]' : 'pb-max-h-0'}`}
     >
-      <div className="px-4 py-4 bg-gray-50/50 border-t border-gray-200">{children}</div>
+      <div className="pb-px-4 pb-py-4 pb-bg-gray-50/50 pb-border-t pb-border-gray-200">{children}</div>
     </div>
   </div>
 );

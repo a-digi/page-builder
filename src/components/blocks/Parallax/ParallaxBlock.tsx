@@ -1,4 +1,4 @@
-// path: src/components/blocks/Parallax/ParallaxBlock.tsx
+// path: src/components/page-builder/components/blocks/Parallax/ParallaxBlock.tsx
 import React, { useCallback, useMemo, useRef } from 'react';
 import type { CSSProperties } from 'react';
 import { useComponentContext } from '../../../contexts/ComponentContext';
@@ -79,7 +79,7 @@ const ParallaxBlock: React.FC<{ component: ParallaxComponent }> = ({ component }
   }, [layers, parallaxId, props, currentComponent, setLiveComponent, context]);
 
   return (
-    <div ref={containerRef} className="w-full border-y border-dashed border-gray-400 bg-gray-100" style={{ height: `${containerHeight}${containerHeightUnit}`, overflowX: 'hidden', overflowY: 'auto', perspective: showParallaxEffect ? `${perspective}px` : 'none', }}>
+    <div ref={containerRef} className="pb-w-full pb-border-y pb-border-dashed pb-border-gray-400 pb-bg-gray-100" style={{ height: `${containerHeight}${containerHeightUnit}`, overflowX: 'hidden', overflowY: 'auto', perspective: showParallaxEffect ? `${perspective}px` : 'none', }}>
       <div style={{ height: '100%', width: '100%', position: 'relative', transformStyle: showParallaxEffect ? 'preserve-3d' : 'flat' }}>
         {layers.map((layer: ParallaxPage, layerIndex: number) => {
           const isInteractive = !isEditing || editingLayerId === layer.id;
@@ -120,7 +120,7 @@ const ParallaxBlock: React.FC<{ component: ParallaxComponent }> = ({ component }
                 {layer.components.map((posComp: PositionedComponent) => <PositionedItem key={posComp.id} component={posComp} isInteractive={isInteractive} onPositionChange={({ x, y }) => updatePositionedComponentProps(layerIndex, posComp.id, { x, y })} onSizeChange={({ width, height }) => updatePositionedComponentProps(layerIndex, posComp.id, { width, height })} onLayerChange={dir => { const currentZ = posComp.props.zIndex || 1; const newZ = dir === 'front' ? currentZ + 1 : Math.max(1, currentZ - 1); updatePositionedComponentProps(layerIndex, posComp.id, { zIndex: newZ }); }} />)}
 
                 {layer.components.length === 0 && !context.isPreviewing && !layer.backgroundImageUrl && !layer.backgroundColor && (
-                  <div className="absolute inset-0 flex items-center justify-center text-gray-400 font-bold uppercase pointer-events-none text-2xl opacity-50">
+                  <div className="pb-absolute pb-inset-0 pb-flex pb-items-center pb-justify-center pb-text-gray-400 pb-font-bold pb-uppercase pb-pointer-events-none pb-text-2xl pb-opacity-50">
                     Layer {layerIndex + 1}
                   </div>
                 )}

@@ -1,4 +1,4 @@
-// path: src/components/blocks/Image/CropModal.tsx
+// path: src/components/page-builder/components/blocks/Image/CropModal.tsx
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { createPortal } from 'react-dom';
 
@@ -166,7 +166,7 @@ export const CropModal = ({ imageUrl, onClose, onCrop, initialShape = 'rect' }: 
     <div
       data-resize-handle={handle}
       onMouseDown={(e) => handleResizeMouseDown(e, handle)}
-      className={`absolute w-4 h-4 bg-white border-2 border-blue-500 rounded-full ${cursor}`}
+      className={`pb-absolute pb-w-4 pb-h-4 pb-bg-white pb-border-2 pb-border-blue-500 pb-rounded-full ${cursor}`}
       style={{
         ...handle.includes('top') && { top: '-8px' },
         ...handle.includes('bottom') && { bottom: '-8px' },
@@ -177,17 +177,17 @@ export const CropModal = ({ imageUrl, onClose, onCrop, initialShape = 'rect' }: 
   );
 
   const modalContent = (
-    <div className="fixed inset-0 z-[1000] flex items-center justify-center bg-black bg-opacity-75" onMouseDown={onClose}>
+    <div className="pb-fixed pb-inset-0 pb-z-[1000] pb-flex pb-items-center pb-justify-center pb-bg-black pb-bg-opacity-75" onMouseDown={onClose}>
       <div
-        className="bg-white rounded-lg flex flex-col max-w-4xl w-full max-h-[90vh] shadow-2xl"
+        className="pb-bg-white pb-rounded-lg pb-flex pb-flex-col pb-max-w-4xl pb-w-full pb-max-h-[90vh] pb-shadow-2xl"
         onMouseDown={(e) => e.stopPropagation()}
       >
-        <h2 className="text-xl font-semibold p-4 border-b">Crop Image</h2>
-        <div className="flex-grow p-4 flex justify-center items-center overflow-auto">
-          <div className="relative inline-block">
-            <img ref={imageRef} src={imageUrl} alt="Crop preview" className="max-w-full max-h-[65vh] block select-none" />
+        <h2 className="pb-text-xl pb-font-semibold pb-p-4 pb-border-b">Crop Image</h2>
+        <div className="pb-flex-grow pb-p-4 pb-flex pb-justify-center pb-items-center pb-overflow-auto">
+          <div className="pb-relative pb-inline-block">
+            <img ref={imageRef} src={imageUrl} alt="Crop preview" className="pb-max-w-full pb-max-h-[65vh] pb-block pb-select-none" />
             <div
-              className="absolute border-2 border-dashed border-white cursor-move"
+              className="pb-absolute pb-border-2 pb-border-dashed pb-border-white pb-cursor-move"
               style={{
                 left: `${crop.x}%`,
                 top: `${crop.y}%`,
@@ -198,40 +198,40 @@ export const CropModal = ({ imageUrl, onClose, onCrop, initialShape = 'rect' }: 
               }}
               onMouseDown={handleDragMouseDown}
             >
-              <ResizeHandle handle="topLeft" cursor="cursor-nwse-resize" />
-              <ResizeHandle handle="topRight" cursor="cursor-nesw-resize" />
-              <ResizeHandle handle="bottomLeft" cursor="cursor-nesw-resize" />
-              <ResizeHandle handle="bottomRight" cursor="cursor-nwse-resize" />
+              <ResizeHandle handle="topLeft" cursor="pb-cursor-nwse-resize" />
+              <ResizeHandle handle="topRight" cursor="pb-cursor-nesw-resize" />
+              <ResizeHandle handle="bottomLeft" cursor="pb-cursor-nesw-resize" />
+              <ResizeHandle handle="bottomRight" cursor="pb-cursor-nwse-resize" />
             </div>
           </div>
         </div>
-        <canvas ref={canvasRef} className="hidden" />
-        <div className="p-4 flex justify-between items-center space-x-4 border-t bg-gray-50 rounded-b-lg">
-          <div className="flex items-center p-1 bg-gray-200 rounded-lg">
+        <canvas ref={canvasRef} className="pb-hidden" />
+        <div className="pb-p-4 pb-flex pb-justify-between pb-items-center pb-space-x-4 pb-border-t pb-bg-gray-50 pb-rounded-b-lg">
+          <div className="pb-flex pb-items-center pb-p-1 pb-bg-gray-200 pb-rounded-lg">
             <button
               onClick={() => setCropShape('rect')}
-              className={`px-3 py-1 text-sm font-semibold rounded-md transition-colors ${cropShape === 'rect'
-                ? 'bg-white text-gray-800 shadow-sm'
-                : 'bg-transparent text-gray-500 hover:text-gray-700'
+              className={`pb-px-3 pb-py-1 pb-text-sm pb-font-semibold pb-rounded-md pb-transition-colors ${cropShape === 'rect'
+                ? 'pb-bg-white pb-text-gray-800 pb-shadow-sm'
+                : 'pb-bg-transparent pb-text-gray-500 pb-hover:text-gray-700'
                 }`}
             >
               Rectangle
             </button>
             <button
               onClick={() => setCropShape('circle')}
-              className={`px-3 py-1 text-sm font-semibold rounded-md transition-colors ${cropShape === 'circle'
-                ? 'bg-white text-gray-800 shadow-sm'
-                : 'bg-transparent text-gray-500 hover:text-gray-700'
+              className={`pb-px-3 pb-py-1 pb-text-sm pb-font-semibold pb-rounded-md pb-transition-colors ${cropShape === 'circle'
+                ? 'pb-bg-white pb-text-gray-800 pb-shadow-sm'
+                : 'pb-bg-transparent pb-text-gray-500 pb-hover:text-gray-700'
                 }`}
             >
               Circle
             </button>
           </div>
-          <div className="flex space-x-4">
-            <button onClick={onClose} className="px-5 py-2 rounded-md bg-gray-200 text-gray-800 font-semibold hover:bg-gray-300">
+          <div className="pb-flex pb-space-x-4">
+            <button onClick={onClose} className="pb-px-5 pb-py-2 pb-rounded-md pb-bg-gray-200 pb-text-gray-800 pb-font-semibold pb-hover:bg-gray-300">
               Cancel
             </button>
-            <button onClick={handleApplyCrop} className="px-5 py-2 rounded-md bg-blue-500 text-white font-semibold hover:bg-blue-600">
+            <button onClick={handleApplyCrop} className="pb-px-5 pb-py-2 pb-rounded-md pb-bg-blue-500 pb-text-white pb-font-semibold pb-hover:bg-blue-600">
               Apply Crop
             </button>
           </div>

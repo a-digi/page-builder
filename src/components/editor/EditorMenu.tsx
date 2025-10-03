@@ -1,4 +1,4 @@
-// path: src/components/editor/EditorMenu.tsx
+// path: src/components/page-builder/components/editor/EditorMenu.tsx
 import React, { useEffect, useMemo, useState } from 'react';
 import { useComponentRegistry } from '../../contexts/ComponentRegistry';
 import { useComponentContext } from '../../hooks/useComponentContext';
@@ -11,7 +11,7 @@ const Caret: React.FC<{ dir?: 'left' | 'right'; className?: string }> = ({ dir =
     width="18"
     height="18"
     viewBox="0 0 24 24"
-    className={`${className || ''} transition-transform ${dir === 'left' ? 'rotate-180' : ''}`}
+    className={`${className || ''} pb-transition-transform ${dir === 'left' ? 'pb-rotate-180' : ''}`}
     fill="currentColor"
     aria-hidden="true"
   >
@@ -44,18 +44,17 @@ type Props = {
   onSave: (data: any) => void;
   saveButtonClickable: boolean;
   displaySaveButton: boolean;
-  data: Data<BuiltInComponents>;
-  open: boolean;
-  setOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  data: Data<BuiltInComponents>
 }
 
-const EditorMenu: React.FC<Props> = ({ onSave, saveButtonClickable, data, displaySaveButton, open, setOpen }) => {
+const EditorMenu: React.FC<Props> = ({ onSave, saveButtonClickable, data, displaySaveButton }) => {
 
   const { listDefinitions } = useComponentRegistry();
   const definitions = listDefinitions();
   const ctx: any = useComponentContext();
   const { readOnly, setIsDragging } = useComponentContext();
 
+  const [open, setOpen] = useState(false);
   const [hoveredDef, setHoveredDef] = useState<ComponentDefinition | null>(null);
 
   const components = readComponentsFromContext(ctx);
@@ -141,12 +140,12 @@ const EditorMenu: React.FC<Props> = ({ onSave, saveButtonClickable, data, displa
   }
 
   return (
-    <div className="fixed inset-y-0 right-0 z-40 pointer-events-none">
+    <div className="pb-fixed pb-inset-y-0 pb-right-0 pb-z-40 pb-pointer-events-none">
       <button
         type="button"
         onClick={() => setOpen(o => !o)}
         style={{ right: open ? PANEL_WIDTH : 0, transform: 'translateY(-50%)' }}
-        className="pointer-events-auto fixed top-1/2 bg-white border border-gray-200 shadow-lg rounded-l-md px-2 py-2 text-gray-600 hover:text-blue-600 hover:border-blue-400"
+        className="pb-pointer-events-auto pb-fixed pb-top-1/2 pb-bg-white pb-border pb-border-gray-200 pb-shadow-lg pb-rounded-l-md pb-px-2 pb-py-2 pb-text-gray-600 pb-hover:text-blue-600 pb-hover:border-blue-400"
         aria-expanded={open}
         aria-label={open ? 'Close editor menu' : 'Open editor menu'}
         title={open ? 'Close menu' : 'Open menu'}
@@ -154,14 +153,14 @@ const EditorMenu: React.FC<Props> = ({ onSave, saveButtonClickable, data, displa
         <Caret dir={open ? 'right' : 'left'} />
       </button>
       {open && (
-        <div className="pointer-events-auto fixed right-0 top-0 h-screen" style={{ width: PANEL_WIDTH }}>
-          <aside className="h-screen w-full bg-white border-l border-gray-200 shadow-2xl flex flex-col overflow-y-auto">
-            <div className="px-4 py-3 border-b border-gray-100 flex items-center justify-between shrink-0 sticky top-0 bg-white z-10">
-              <div className="text-sm font-semibold text-gray-700">Editor Menu</div>
+        <div className="pb-pointer-events-auto pb-fixed pb-right-0 pb-top-0 pb-h-screen" style={{ width: PANEL_WIDTH }}>
+          <aside className="pb-h-screen pb-w-full pb-bg-white pb-border-l pb-border-gray-200 pb-shadow-2xl pb-flex pb-flex-col pb-overflow-y-auto">
+            <div className="pb-px-4 pb-py-3 pb-border-b pb-border-gray-100 pb-flex pb-items-center pb-justify-between pb-shrink-0 pb-sticky pb-top-0 pb-bg-white pb-z-10">
+              <div className="pb-text-sm pb-font-semibold pb-text-gray-700">Editor Menu</div>
               <button
                 type="button"
                 onClick={() => setOpen(false)}
-                className="p-2 text-gray-500 hover:text-blue-600"
+                className="pb-p-2 pb-text-gray-500 pb-hover:text-blue-600"
                 title="Close"
                 aria-label="Close"
               >
@@ -169,25 +168,25 @@ const EditorMenu: React.FC<Props> = ({ onSave, saveButtonClickable, data, displa
               </button>
             </div>
 
-            <div className="flex-1 p-4 space-y-5">
+            <div className="pb-flex-1 pb-p-4 pb-space-y-5">
               <section>
-                <div className="text-xs font-semibold text-gray-500 mb-2">Components</div>
-                <div className={`flex flex-wrap gap-2`}>
+                <div className="pb-text-xs pb-font-semibold pb-text-gray-500 pb-mb-2">Components</div>
+                <div className={`pb-flex pb-flex-wrap pb-gap-2`}>
                   {definitions.map((def, index) => {
                     const label = def.label || String(def.type);
                     const desc = `Drag to add a ${label.toLowerCase()} block.`;
 
-                    let tooltipPositionClasses = 'left-1/2 -translate-x-1/2';
+                    let tooltipPositionClasses = 'pb-left-1/2 -pb-translate-x-50%';
                     if (index % GRID_COLUMNS === 0) {
-                      tooltipPositionClasses = 'left-0';
+                      tooltipPositionClasses = 'pb-left-0';
                     } else if (index % GRID_COLUMNS === GRID_COLUMNS - 1) {
-                      tooltipPositionClasses = 'right-0';
+                      tooltipPositionClasses = 'pb-right-0';
                     }
 
                     return (
                       <div
                         key={String(def.type)}
-                        className="relative"
+                        className="pb-relative"
                         onMouseEnter={() => setHoveredDef(def)}
                         onMouseLeave={() => setHoveredDef(null)}
                       >
@@ -195,19 +194,19 @@ const EditorMenu: React.FC<Props> = ({ onSave, saveButtonClickable, data, displa
                           draggable
                           onDragStart={(e) => handleDragStart(e, String(def.type))}
                           onDragEnd={() => setIsDragging(false)}
-                          className="w-16 h-16 rounded border text-gray-700 flex items-center justify-center transition-colors cursor-pointer border-gray-200 hover:border-blue-400 hover:bg-blue-50"
+                          className="pb-w-16 pb-h-16 pb-rounded pb-border pb-text-gray-700 pb-flex pb-items-center pb-justify-center pb-transition-colors pb-cursor-pointer pb-border-gray-200 pb-hover:border-blue-400 pb-hover:bg-blue-50"
                           title={label}
                           aria-label={label}
                         >
                           {def.icon && React.cloneElement(def.icon, {
-                            className: 'w-8 h-8 text-gray-600'
+                            className: 'pb-w-8 pb-h-8 pb-text-gray-600'
                           })}
-                          <span className="sr-only">{label}</span>
+                          <span className="pb-sr-only">{label}</span>
                         </button>
 
                         {hoveredDef && hoveredDef.type === def.type && (
-                          <div className={`absolute bottom-full mb-2 w-max max-w-xs bg-gray-800 text-white text-xs rounded-md shadow-lg p-2 z-20 pointer-events-none ${tooltipPositionClasses}`}>
-                            <div className="font-bold">{label}</div>
+                          <div className={`pb-absolute pb-bottom-full pb-mb-2 pb-w-max pb-max-w-xs pb-bg-gray-800 pb-text-white pb-text-xs pb-rounded-md pb-shadow-lg pb-p-2 pb-z-20 pb-pointer-events-none ${tooltipPositionClasses}`}>
+                            <div className="pb-font-bold">{label}</div>
                             <div>{desc}</div>
                           </div>
                         )}
@@ -216,14 +215,14 @@ const EditorMenu: React.FC<Props> = ({ onSave, saveButtonClickable, data, displa
                   })}
                 </div>
               </section>
-              <section className="grid grid-cols-1 gap-3">
+              <section className="pb-grid pb-grid-cols-1 pb-gap-3">
                 {displaySaveButton &&
                   <div>
-                    <div className="flex items-center justify-between mb-1">
+                    <div className="pb-flex pb-items-center pb-justify-between pb-mb-1">
                       {saveButtonClickable &&
                         <button
                           onClick={handleCopy}
-                          className="mt-10 w-full px-2 py-1.5 text-md rounded border border-gray-200 bg-gray-900 color-white cursor-pointer"
+                          className="pb-mt-10 pb-w-full pb-px-2 pb-py-1.5 pb-text-md pb-rounded pb-border pb-border-gray-200 pb-bg-gray-900 pb-color-white pb-cursor-pointer"
                           title="Copy to clipboard"
                         >
                           Save
@@ -234,7 +233,7 @@ const EditorMenu: React.FC<Props> = ({ onSave, saveButtonClickable, data, displa
                         <button
                           disabled
                           onClick={handleCopy}
-                          className="mt-10 w-full px-2 py-1.5 text-md rounded border border-gray-200 bg-gray-900 color-white cursor-pointer"
+                          className="pb-mt-10 pb-w-full pb-px-2 pb-py-1.5 pb-text-md pb-rounded pb-border pb-border-gray-200 pb-bg-gray-900 pb-color-white pb-cursor-pointer"
                           title="Copy to clipboard"
                         >
                           Save

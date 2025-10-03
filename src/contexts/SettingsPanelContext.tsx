@@ -1,4 +1,4 @@
-// path: src/contexts/SettingsPanelContext.tsx
+// path: src/components/page-builder/contexts/SettingsPanelContext.tsx
 import React, { createContext, useContext, useState } from 'react';
 
 type DockedPosition = 'left' | 'right' | null;

@@ -1,4 +1,4 @@
-// path: src/components/controls/ButtonGroup.tsx
+// path: src/components/page-builder/components/controls/ButtonGroup.tsx
 import React, { Children, cloneElement, isValidElement, type ReactNode } from 'react';
 
 interface ButtonGroupProps {
@@ -15,8 +15,8 @@ export const ButtonGroup: React.FC<ButtonGroupProps> = ({
   const childArray = Children.toArray(children);
 
   const containerClasses = [
-    'items-center rounded-md shadow-sm',
-    fullWidth ? 'flex w-full' : 'inline-flex',
+    'pb-items-center', 'pb-rounded-md', 'pb-shadow-sm',
+    fullWidth ? 'pb-flex pb-w-full' : 'pb-inline-flex',
     className,
   ]
     .filter(Boolean)
@@ -30,16 +30,16 @@ export const ButtonGroup: React.FC<ButtonGroupProps> = ({
         }
 
         const classesToAdd: string[] = [
-          'rounded-none',
-          'hover:z-10 focus:z-10',
+          'pb-rounded-none',
+          'pb-hover:z-10', 'pb-focus:z-10',
         ];
-        if (index === 0) classesToAdd.push('rounded-l-md');
-        if (index === childArray.length - 1) classesToAdd.push('rounded-r-md');
+        if (index === 0) classesToAdd.push('pb-rounded-l-md');
+        if (index === childArray.length - 1) classesToAdd.push('pb-rounded-r-md');
 
-        if (index > 0) classesToAdd.push('-ml-px');
+        if (index > 0) classesToAdd.push('pb--ml-px');
 
         if (fullWidth) {
-          classesToAdd.push('grow basis-0 justify-center');
+          classesToAdd.push('pb-grow pb-basis-0 pb-justify-center');
         }
 
         const element = child as React.ReactElement<{ className?: string }>;

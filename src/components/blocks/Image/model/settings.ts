@@ -1,4 +1,4 @@
-// path: src/components/blocks/Image/model/settings.ts
+// path: src/components/page-builder/components/blocks/Image/model/settings.ts
 
 export const filterOptions = [
   { name: 'None', value: 'none' },

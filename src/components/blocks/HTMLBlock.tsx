@@ -1,4 +1,4 @@
-// path: src/components/blocks/HTMLBlock.tsx
+// path: src/components/page-builder/components/blocks/HTMLBlock.tsx
 import React, { useState, useCallback, memo } from 'react';
 import { type HTMLComponent } from '../../types/components';
 import { useComponentContext } from '../../hooks/useComponentContext';
@@ -21,25 +21,32 @@ const HTMLBlock = memo(({ component }: { component: HTMLComponent }) => {
     updateComponent(id, { code: e.target.value });
   }, [id, updateComponent]);
 
+  const getTabClass = (tabName: 'code' | 'preview') => {
+    const baseClass = "pb-px-4 pb-py-2 pb-text-sm";
+    return tab === tabName
+      ? `${baseClass} pb-border-b-2 pb-border-blue-500 pb-text-blue-600`
+      : `${baseClass} pb-text-gray-500`;
+  }
+
   return (
-    <div className="relative group p-4 border-2 border-dashed border-gray-300 rounded-md">
-      <div className="flex space-x-2 mb-4 border-b">
-        <button onClick={() => setTab('code')} className={`px-4 py-2 text-sm ${tab === 'code' ? 'border-b-2 border-blue-500 text-blue-600' : 'text-gray-500'}`}>Code</button>
-        <button onClick={() => setTab('preview')} className={`px-4 py-2 text-sm ${tab === 'preview' ? 'border-b-2 border-blue-500 text-blue-600' : 'text-gray-500'}`}>Preview</button>
+    <div className="pb-relative pb-group pb-p-4 pb-border-2 pb-border-dashed pb-border-gray-300 pb-rounded-md">
+      <div className="pb-flex pb-space-x-2 pb-mb-4 pb-border-b">
+        <button onClick={() => setTab('code')} className={getTabClass('code')}>Code</button>
+        <button onClick={() => setTab('preview')} className={getTabClass('preview')}>Preview</button>
       </div>
       <div>
         {tab === 'code' && (
           <textarea
             value={props.code}
             onChange={handleCodeChange}
-            className="w-full h-40 bg-gray-50 font-mono text-sm p-2 rounded focus:outline-none"
+            className="pb-w-full pb-h-40 pb-bg-gray-50 pb-font-mono pb-text-sm pb-p-2 pb-rounded pb-focus:outline-none"
           />
         )}
         {tab === 'preview' && (
           <iframe
             title="HTML Preview"
             srcDoc={props.code}
-            className="w-full h-40 border rounded bg-white"
+            className="pb-w-full pb-h-40 pb-border pb-rounded pb-bg-white"
             sandbox="allow-scripts"
           />
         )}

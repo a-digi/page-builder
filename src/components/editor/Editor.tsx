@@ -1,4 +1,4 @@
-// path: src/components/editor/Editor.tsx
+// path: src/components/page-builder/components/editor/Editor.tsx
 import React, { useState, useCallback, createContext } from 'react';
 import { useComponentContext } from '../../hooks/useComponentContext';
 import type { CustomButton, PageComponent } from '../../types/components';
@@ -71,21 +71,31 @@ function ComponentPageEditor<C extends PageComponent<any, any>>({
     }
   }, [components, setComponents, addComponent, setIsDragging, moveComponentToRoot]);
 
+  // Empty state classes
+  const emptyDropZoneBaseClasses = "pb-transition-colors pb-duration-200 pb-h-96 pb-w-full pb-border-2 pb-border-dashed pb-rounded-lg pb-flex pb-items-center pb-justify-center";
+  const emptyDropZoneActiveClasses = "pb-border-blue-500 pb-bg-blue-50";
+  const emptyDropZoneInactiveClasses = "pb-border-gray-300";
+
+  const emptyTextBaseClasses = "pb-font-medium pb-transition-colors";
+  const emptyTextActiveClasses = "pb-text-blue-600";
+  const emptyTextInactiveClasses = "pb-text-gray-500";
+
+
   return (
     <SettingsPanelProvider>
-      <div className="flex-1 w-full max-w-4xl mx-auto space-y-4">
+      <div className="pb-flex-1 pb-w-full pb-max-w-4xl pb-mx-auto pb-space-y-4">
         <CustomButtonsContext.Provider value={{ customToolbarButtons: customToolbarButtons as any }}>
           {components.map((component, index) => {
             return (
               <div
                 key={component.id}
-                className="relative"
+                className="pb-relative"
                 onDragOver={e => handleDragOver(e, index)}
                 onDrop={e => handleDrop(e, index)}
                 onDragLeave={handleDragLeave}
               >
                 {dragOverIndex === index && (
-                  <div className="absolute inset-x-0 top-0 h-1 bg-blue-500 -mt-2 animate-pulse z-30" />
+                  <div className="pb-absolute pb-inset-x-0 pb-top-0 pb-h-1 pb-bg-blue-500 pb--mt-2 pb-animate-pulse pb-z-30" />
                 )}
 
                 <BlockWrapper<C>
@@ -102,31 +112,31 @@ function ComponentPageEditor<C extends PageComponent<any, any>>({
         </CustomButtonsContext.Provider>
 
         <div
-          className="w-full relative"
+          className="pb-w-full pb-relative"
           onDragOver={e => handleDragOver(e, components.length)}
           onDrop={e => handleDrop(e, components.length)}
           onDragLeave={handleDragLeave}
         >
           {components.length === 0 ? (
             // Case 1: Editor is empty
-            <div style={{ height: '24rem', minHeight: '24rem' }} className={`transition-colors duration-200 w-full border-2 border-dashed rounded-lg flex items-center justify-center ${isDragging && dragOverIndex === 0
-              ? 'border-blue-500 bg-blue-50'
-              : 'border-gray-300'
+            <div className={`${emptyDropZoneBaseClasses} ${isDragging && dragOverIndex === 0
+              ? emptyDropZoneActiveClasses
+              : emptyDropZoneInactiveClasses
               }`}>
-              <p className={`font-medium transition-colors ${isDragging && dragOverIndex === 0
-                ? 'text-blue-600'
-                : 'text-gray-500'
+              <p className={`${emptyTextBaseClasses} ${isDragging && dragOverIndex === 0
+                ? emptyTextActiveClasses
+                : emptyTextInactiveClasses
                 }`}>
                 Drag components here to start building your page.
               </p>
             </div>
           ) : (
             // Case 2: Editor has components, show an expanding drop zone at the end
-            <div className={`relative w-full transition-all duration-300 ease-in-out ${isDragging && dragOverIndex === components.length ? 'h-40' : 'h-10'
+            <div className={`pb-relative pb-w-full pb-transition-all pb-duration-300 pb-ease-in-out ${isDragging && dragOverIndex === components.length ? 'pb-h-40' : 'pb-h-10'
               }`}>
               {isDragging && dragOverIndex === components.length && (
-                <div className="absolute inset-2 border-2 border-dashed border-blue-500 rounded-lg bg-blue-50 flex items-center justify-center">
-                  <p className="font-medium text-blue-600">Drop here</p>
+                <div className="pb-absolute pb-inset-2 pb-border-2 pb-border-dashed pb-border-blue-500 pb-rounded-lg pb-bg-blue-50 pb-flex pb-items-center pb-justify-center">
+                  <p className="pb-font-medium pb-text-blue-600">Drop here</p>
                 </div>
               )}
             </div>

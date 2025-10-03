@@ -1,4 +1,4 @@
-// path: src/components/blocks/Image/ImageUploadContext.tsx
+// path: src/components/page-builder/components/blocks/Image/ImageUploadContext.tsx
 import { createContext, useContext, type ReactNode } from 'react';
 
 export interface IImageUploadContext {

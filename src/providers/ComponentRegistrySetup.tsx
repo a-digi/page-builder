@@ -1,4 +1,4 @@
-// path: src/providers/ComponentRegistrySetup.tsx
+// path: src/components/page-builder/providers/ComponentRegistrySetup.tsx
 import React, { useMemo } from 'react';
 import { ComponentRegistryProvider, type ComponentDefinition } from '../contexts/ComponentRegistry';
 import type { PageComponent, BuiltInComponents, BuiltInComponentType } from '../types/components';
@@ -24,7 +24,7 @@ const allBuiltInDefinitions: ComponentDefinition<any>[] = [
 
 type Props<C extends PageComponent<any, any>> = {
   children: React.ReactNode;
-  additionalComponents?: ComponentDefinition<any>[];
+  additionalComponents?: ComponentDefinition<C>[];
   excludedComponents?: (BuiltInComponentType | C['type'])[];
 };
 

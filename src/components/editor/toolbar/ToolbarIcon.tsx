@@ -1,5 +1,4 @@
-// path: src/components/editor/toolbar/ToolbarIcon.tsx
-
+// path: src/components/page-builder/components/editor/toolbar/ToolbarIcon.tsx
 import React from 'react';
 
 type IconName = 'text-left' | 'text-center' | 'text-right' | 'text-justify';
@@ -16,7 +15,7 @@ interface ToolbarIconProps {
   className?: string;
 }
 
-export const ToolbarIcon: React.FC<ToolbarIconProps> = ({ icon, className = 'w-5 h-5' }) => {
+export const ToolbarIcon: React.FC<ToolbarIconProps> = ({ icon, className = 'pb-w-5 pb-h-5' }) => {
   return (
     <svg
       className={className}

@@ -1,4 +1,4 @@
-// path: src/contexts/ComponentContext.tsx
+// path: src/components/page-builder/contexts/ComponentContext.tsx
 import React, { useState, useCallback, createContext, type ReactNode, useContext } from 'react';
 import { type PageComponent, type BuiltInComponents, type ParallaxPage } from '../types/components';
 import { useComponentRegistry } from './ComponentRegistry';

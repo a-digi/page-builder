@@ -1,4 +1,4 @@
-// path: src/components/blocks/Image/Accordion.tsx
+// path: src/components/page-builder/components/blocks/Image/Accordion.tsx
 import React from 'react';
 
 interface AccordionProps {
@@ -12,19 +12,19 @@ interface AccordionProps {
 
 export const Accordion = ({ title, isOpen, onClick, children, summary, icon }: AccordionProps) => {
   return (
-    <div className="border-b border-gray-200">
+    <div className="pb-border-b pb-border-gray-200">
       <button
         onClick={onClick}
-        className="flex w-full items-center justify-between p-4 text-left text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none"
+        className="pb-flex pb-w-full pb-items-center pb-justify-between pb-p-4 pb-text-left pb-text-sm pb-font-medium pb-text-gray-700 pb-hover:bg-gray-50 pb-focus:outline-none"
       >
-        <div className="flex items-center space-x-3">
+        <div className="pb-flex pb-items-center pb-space-x-3">
           {icon}
-          <span className="flex-1">{title}</span>
+          <span className="pb-flex-1">{title}</span>
         </div>
-        <div className="flex items-center space-x-3">
-          {summary && !isOpen && <span className="text-sm font-normal text-gray-500 truncate max-w-[100px]">{summary}</span>}
+        <div className="pb-flex pb-items-center pb-space-x-3">
+          {summary && !isOpen && <span className="pb-text-sm pb-font-normal pb-text-gray-500 pb-truncate pb-max-w-[100px]">{summary}</span>}
           <svg
-            className={`h-5 w-5 flex-shrink-0 text-gray-400 transform transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`}
+            className={`pb-h-5 pb-w-5 pb-flex-shrink-0 pb-text-gray-400 pb-transform pb-transition-transform pb-duration-200 ${isOpen ? 'pb-rotate-180' : ''}`}
             viewBox="0 0 20 20"
             fill="currentColor"
           >
@@ -36,7 +36,7 @@ export const Accordion = ({ title, isOpen, onClick, children, summary, icon }: A
           </svg>
         </div>
       </button>
-      {isOpen && <div className="p-4 bg-gray-50/50">{children}</div>}
+      {isOpen && <div className="pb-p-4 pb-bg-gray-50/50">{children}</div>}
     </div>
   );
 };

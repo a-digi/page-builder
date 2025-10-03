@@ -1,5 +1,5 @@
-// path: src/PageBuilder.tsx
-import React, { useImperativeHandle, useState, useRef, useEffect } from 'react';
+// path: src/components/page-builder/PageBuilder.tsx
+import React, { forwardRef, useImperativeHandle, useState, useRef } from 'react';
 import { ComponentProvider } from './contexts/ComponentContext';
 import ComponentPageEditor from './components/editor/Editor';
 import EditorMenu from './components/editor/EditorMenu';
@@ -9,6 +9,7 @@ import type { PageComponent, BuiltInComponents, BuiltInComponentType, CustomButt
 import { type ComponentDefinition } from './contexts/ComponentRegistry';
 import { generateIdString } from './generator/id';
 import { useDragAutoScroll } from './hooks/useDragAutoScroll';
+import './styles.css';
 
 export type Props<C extends PageComponent<any, any>> = {
   onSave: (data: string) => void;
@@ -16,7 +17,7 @@ export type Props<C extends PageComponent<any, any>> = {
   displaySaveButton: boolean;
   className?: string;
   data: Data<C>;
-  additionalComponents?: ComponentDefinition<any>[];
+  additionalComponents?: ComponentDefinition<C>[];
   excludedComponents?: (BuiltInComponentType | C['type'])[];
   customToolbarButtons?: CustomButton<C>[];
   customSettingsButtons?: CustomButton<C>[];
@@ -35,54 +36,49 @@ export type PageBuilderHandle<C extends PageComponent<any, any>> = {
   getComponents: () => C[];
 };
 
-function HandleBinder<C extends PageComponent<any, any>>({ ref }: { ref?: React.ForwardedRef<PageBuilderHandle<C>> }) {
+const HandleBinder = forwardRef<PageBuilderHandle<any>>((_, ref) => {
   const { components } = useComponentContext();
   useImperativeHandle(
     ref,
     () => ({
-      exportJSON: () => ({ components: components as C[] }),
-      getComponents: () => components as C[],
+      exportJSON: () => ({ components }),
+      getComponents: () => components,
     }),
     [components]
   );
   return null;
-}
+});
 
+// --- NEW ---
+// This new inner component allows us to use context (for `isDragging`)
+// while also having access to the main container div via a ref.
 const PageBuilderLayout = <C extends PageComponent<any, any>>({
   onSave,
   saveButtonClickable,
   displaySaveButton,
   data,
   customToolbarButtons,
-  customSettingsButtons
+  customSettingsButtons,
+  className
 }: Props<C>) => {
   const mainContainerRef = useRef<HTMLDivElement>(null);
-  const { isDragging, isPreviewing, activeSettingsComponentId } = useComponentContext();
-  const [isEditorMenuOpen, setIsEditorMenuOpen] = useState(false);
-  const wasEditorMenuOpenRef = useRef(false);
-  useEffect(() => {
-    if (activeSettingsComponentId !== null) {
-      if (isEditorMenuOpen) {
-        wasEditorMenuOpenRef.current = true;
-        setIsEditorMenuOpen(false);
-      }
-    }
-    else {
-      if (wasEditorMenuOpenRef.current) {
-        setIsEditorMenuOpen(true);
-        wasEditorMenuOpenRef.current = false;
-      }
-    }
-  }, [activeSettingsComponentId, isEditorMenuOpen]);
+  const { isDragging, isPreviewing } = useComponentContext();
 
+  // Activate the auto-scroll hook, passing it the dragging state and the container ref.
   useDragAutoScroll({
     isDragging,
     scrollContainerRef: mainContainerRef
   });
 
+  const combinedClassName = [
+    'pb-w-full', 'pb-relative', 'pb-min-h-screen', 'pb-h-full', 'pb-font-sans', 'pb-bg-white', 'pb-text-gray-800',
+    className
+  ].filter(Boolean).join(' ');
+
   return (
-    <div ref={mainContainerRef} data-pb-id={generateIdString()} className="w-full relative min-h-screen h-full font-sans bg-white text-gray-800">
-      <main className="flex-1 min-h-screen h-full flex flex-col">
+    // The ref is attached to the top-level container.
+    <div ref={mainContainerRef} data-pb-id={generateIdString()} className={combinedClassName}>
+      <main className="pb-flex-1 pb-min-h-screen pb-h-full pb-flex pb-flex-col">
         <ComponentPageEditor
           customToolbarButtons={customToolbarButtons}
           customSettingsButtons={customSettingsButtons}
@@ -95,18 +91,17 @@ const PageBuilderLayout = <C extends PageComponent<any, any>>({
           data={data as Data<BuiltInComponents>}
           onSave={onSave}
           saveButtonClickable={saveButtonClickable}
-          open={isEditorMenuOpen}
-          setOpen={setIsEditorMenuOpen}
         />
       )}
     </div>
   )
 }
 
-function PageBuilder<C extends PageComponent<any, any> = BuiltInComponents>(
-  props: Props<C> & { ref?: React.ForwardedRef<PageBuilderHandle<C>> }
+function PageBuilderComponent<C extends PageComponent<any, any> = BuiltInComponents>(
+  props: Props<C>,
+  ref: React.ForwardedRef<PageBuilderHandle<C>>
 ) {
-  const { data, additionalComponents, excludedComponents, readOnly, allowComponentToBeAdded, ref } = props;
+  const { data, additionalComponents, excludedComponents, readOnly, allowComponentToBeAdded } = props;
   const [isPreviewing, setIsPreviewing] = useState(false);
 
   return (
@@ -128,5 +123,7 @@ function PageBuilder<C extends PageComponent<any, any> = BuiltInComponents>(
     </ComponentRegistrySetup>
   );
 }
+
+const PageBuilder = forwardRef(PageBuilderComponent);
 
 export default PageBuilder;

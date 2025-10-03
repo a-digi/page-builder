@@ -1,4 +1,4 @@
-// path: src/components/blocks/DividerBlock.tsx
+// path: src/components/page-builder/components/blocks/DividerBlock.tsx
 import { memo } from 'react';
 import type { DividerComponent } from '../../types/components';
 import { type ComponentDefinition } from '../../contexts/ComponentRegistry';
@@ -11,8 +11,8 @@ export const icon = (
 
 const DividerBlock = memo(({ }: { component: DividerComponent }) => {
   return (
-    <div className="relative group py-4">
-      <div className="w-full border-t border-gray-300"></div>
+    <div className="pb-relative pb-group pb-py-4">
+      <div className="pb-w-full pb-border-t pb-border-gray-300"></div>
     </div>
   );
 });

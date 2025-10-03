@@ -1,4 +1,4 @@
-// path: src/components/blocks/Image/ImageSettings.tsx
+// path: src/components/page-builder/components/blocks/Image/ImageSettings.tsx
 import { useState, useCallback } from 'react';
 import { useComponentContext } from '../../../hooks/useComponentContext';
 import { Accordion } from './Accordion';
@@ -8,7 +8,7 @@ import type { ImageComponent, ImageComponentProps } from '../../../types/compone
 
 export const settingsIcon = (
   <svg
-    className="w-6 h-6 flex-shrink-0 text-gray-700"
+    className="pb-w-6 pb-h-6 pb-flex-shrink-0 pb-text-gray-700"
     viewBox="0 0 24 24"
     fill="none"
     stroke="currentColor"
@@ -24,12 +24,12 @@ export const settingsIcon = (
 
 
 // Icons for the accordion menus
-const sourceIcon = (<svg className="w-5 h-5 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899A4 4 0 0010.172 13.83l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" /></svg>);
-const cropIcon = (<svg className="w-5 h-5 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 1H3a2 2 0 0 0-2 2v4m14-6h4a2 2 0 0 1 2 2v4m0 8v4a2 2 0 0 1-2 2h-4M7 23H3a2 2 0 0 1-2-2v-4" /></svg>);
-const propertiesIcon = (<svg className="w-5 h-5 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 0 1 0 2.828l-5 5a2 2 0 0 1-2.828 0l-7-7A2 2 0 0 1 3 8V3z" /></svg>);
-const shapeIcon = (<svg className="w-5 h-5 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 15.024a8.976 8.976 0 0 1-8.976 8.976A8.976 8.976 0 0 1 3 15.024m18 0V3H3v12.024" /></svg>);
-const filtersIcon = (<svg className="w-5 h-5 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="m21.74,11.74-8-8a2,2,0,0,0-2.83,0l-8,8a2,2,0,0,0,0,2.83l8,8a2,2,0,0,0,2.83,0l8-8a2,2,0,0,0,0-2.83Z" /><line x1="12" x2="12" y1="3" y2="21" /></svg>);
-const customAdjustmentsIcon = (<svg className="w-5 h-5 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6V4m0 16v-2m8-8h2M4 12H2m15.364 6.364l1.414 1.414M4.222 4.222l1.414 1.414M19.778 4.222l-1.414 1.414M8.636 15.364l-1.414 1.414M12 16a4 4 0 110-8 4 4 0 010 8z"></path></svg>);
+const sourceIcon = (<svg className="pb-w-5 pb-h-5 pb-text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899A4 4 0 0010.172 13.83l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" /></svg>);
+const cropIcon = (<svg className="pb-w-5 pb-h-5 pb-text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 1H3a2 2 0 0 0-2 2v4m14-6h4a2 2 0 0 1 2 2v4m0 8v4a2 2 0 0 1-2 2h-4M7 23H3a2 2 0 0 1-2-2v-4" /></svg>);
+const propertiesIcon = (<svg className="pb-w-5 pb-h-5 pb-text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 0 1 0 2.828l-5 5a2 2 0 0 1-2.828 0l-7-7A2 2 0 0 1 3 8V3z" /></svg>);
+const shapeIcon = (<svg className="pb-w-5 pb-h-5 pb-text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 15.024a8.976 8.976 0 0 1-8.976 8.976A8.976 8.976 0 0 1 3 15.024m18 0V3H3v12.024" /></svg>);
+const filtersIcon = (<svg className="pb-w-5 pb-h-5 pb-text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="m21.74,11.74-8-8a2,2,0,0,0-2.83,0l-8,8a2,2,0,0,0,0,2.83l8,8a2,2,0,0,0,2.83,0l8-8a2,2,0,0,0,0-2.83Z" /><line x1="12" x2="12" y1="3" y2="21" /></svg>);
+const customAdjustmentsIcon = (<svg className="pb-w-5 pb-h-5 pb-text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6V4m0 16v-2m8-8h2M4 12H2m15.364 6.364l1.414 1.414M4.222 4.222l1.414 1.414M19.778 4.222l-1.414 1.414M8.636 15.364l-1.414 1.414M12 16a4 4 0 110-8 4 4 0 010 8z"></path></svg>);
 
 
 export const ImageSettings = ({ component }: { component: ImageComponent }) => {
@@ -107,7 +107,7 @@ export const ImageSettings = ({ component }: { component: ImageComponent }) => {
 
   return (
     <>
-      <div className="border-t border-gray-200">
+      <div className="pb-border-t pb-border-gray-200">
         <Accordion
           title="Image Source"
           isOpen={openAccordion === 'Image Source'}
@@ -115,20 +115,20 @@ export const ImageSettings = ({ component }: { component: ImageComponent }) => {
           summary={<span>{sourceSummary}</span>}
           icon={sourceIcon}
         >
-          <label className="block text-sm font-medium text-gray-700 mb-1">Image URL</label>
-          <div className="flex items-center">
+          <label className="pb-block pb-text-sm pb-font-medium pb-text-gray-700 pb-mb-1">Image URL</label>
+          <div className="pb-flex pb-items-center">
             <input
               type="text"
               value={props.externalImageUrl || ''}
               onChange={handleUrlChange}
               placeholder="https://example.com/image.png"
-              className="mt-1 p-1.5 border rounded-l-md w-full text-sm"
+              className="pb-mt-1 pb-p-1.5 pb-border pb-rounded-l-md pb-w-full pb-text-sm"
             />
-            <button onClick={clearUrl} title="Clear URL and stored image" className="mt-1 bg-gray-200 hover:bg-gray-300 text-xs font-semibold p-[9px] rounded-r-md border border-l-0">
+            <button onClick={clearUrl} title="Clear URL and stored image" className="pb-mt-1 pb-bg-gray-200 pb-hover:bg-gray-300 pb-text-xs pb-font-semibold pb-p-[9px] pb-rounded-r-md pb-border pb-border-l-0">
               Clear
             </button>
           </div>
-          <p className="text-xs text-gray-500 mt-1">
+          <p className="pb-text-xs pb-text-gray-500 pb-mt-1">
             {props.url ? 'An uploaded (base64) image is also stored. Setting a URL will override it.' : 'Enter an external image URL.'}
           </p>
         </Accordion>
@@ -142,11 +142,11 @@ export const ImageSettings = ({ component }: { component: ImageComponent }) => {
           >
             <button
               onClick={() => setIsCropping(true)}
-              className="w-full bg-blue-500 text-white rounded-md px-3 py-2 text-sm font-semibold hover:bg-blue-600"
+              className="pb-w-full pb-bg-blue-500 pb-text-white pb-rounded-md pb-px-3 pb-py-2 pb-text-sm pb-font-semibold pb-hover:bg-blue-600"
             >
               Crop Image
             </button>
-            <p className="text-xs text-gray-500 mt-2">Cropping is only available for uploaded images, not external URLs.</p>
+            <p className="pb-text-xs pb-text-gray-500 pb-mt-2">Cropping is only available for uploaded images, not external URLs.</p>
           </Accordion>
         )}
 
@@ -157,13 +157,13 @@ export const ImageSettings = ({ component }: { component: ImageComponent }) => {
           summary={<span>{altSummary}</span>}
           icon={propertiesIcon}
         >
-          <label className="flex flex-col text-sm font-medium text-gray-700">
+          <label className="pb-flex pb-flex-col pb-text-sm pb-font-medium pb-text-gray-700">
             Alt Text
             <input
               type="text"
               value={props.alt || ''}
               onChange={(e) => handlePropChange('alt', e.target.value)}
-              className="mt-1 p-1.5 border rounded-md w-full"
+              className="pb-mt-1 pb-p-1.5 pb-border pb-rounded-md pb-w-full"
             />
           </label>
         </Accordion>
@@ -172,31 +172,31 @@ export const ImageSettings = ({ component }: { component: ImageComponent }) => {
           title="Shape"
           isOpen={openAccordion === 'Shape'}
           onClick={() => handleAccordionClick('Shape')}
-          summary={<span className="capitalize">{shapeSummary}</span>}
+          summary={<span className="pb-capitalize">{shapeSummary}</span>}
           icon={shapeIcon}
         >
           <div>
-            <div className="flex items-center space-x-2">
+            <div className="pb-flex pb-items-center pb-space-x-2">
               <button
                 type="button"
                 onClick={() => handlePropChange('shape', 'rect')}
-                className={`flex h-10 w-10 items-center justify-center rounded-md border-2 transition-colors ${(props.shape === 'rect' || !props.shape)
-                  ? 'border-blue-500 bg-blue-50'
-                  : 'border-gray-300 hover:border-gray-400'
+                className={`pb-flex pb-h-10 pb-w-10 pb-items-center pb-justify-center pb-rounded-md pb-border-2 pb-transition-colors ${(props.shape === 'rect' || !props.shape)
+                  ? 'pb-border-blue-500 pb-bg-blue-50'
+                  : 'pb-border-gray-300 pb-hover:border-gray-400'
                   }`}
                 aria-label="Rectangle Shape"
                 title="Rectangle"
-              ><svg className="w-5 h-5 text-gray-600" viewBox="0 0 20 20"><rect x="2" y="4" width="16" height="12" rx="1" fill="currentColor" /></svg></button>
+              ><svg className="pb-w-5 pb-h-5 pb-text-gray-600" viewBox="0 0 20 20"><rect x="2" y="4" width="16" height="12" rx="1" fill="currentColor" /></svg></button>
               <button
                 type="button"
                 onClick={() => handlePropChange('shape', 'circle')}
-                className={`flex h-10 w-10 items-center justify-center rounded-full border-2 transition-colors ${props.shape === 'circle'
-                  ? 'border-blue-500 bg-blue-50'
-                  : 'border-gray-300 hover:border-gray-400'
+                className={`pb-flex pb-h-10 pb-w-10 pb-items-center pb-justify-center pb-rounded-full pb-border-2 pb-transition-colors ${props.shape === 'circle'
+                  ? 'pb-border-blue-500 pb-bg-blue-50'
+                  : 'pb-border-gray-300 pb-hover:border-gray-400'
                   }`}
                 aria-label="Circle Shape"
                 title="Circle"
-              ><svg className="w-5 h-5 text-gray-600" viewBox="0 0 20 20"><circle cx="10" cy="10" r="7" fill="currentColor" /></svg></button>
+              ><svg className="pb-w-5 pb-h-5 pb-text-gray-600" viewBox="0 0 20 20"><circle cx="10" cy="10" r="7" fill="currentColor" /></svg></button>
             </div>
           </div>
         </Accordion>
@@ -208,25 +208,25 @@ export const ImageSettings = ({ component }: { component: ImageComponent }) => {
           summary={<span>{getFilterName(props.filter)}</span>}
           icon={filtersIcon}
         >
-          <div className="grid grid-cols-3 gap-2">
+          <div className="pb-grid pb-grid-cols-3 pb-gap-2">
             {filterOptions.map((filter) => (
               <button
                 key={filter.value}
                 type="button"
                 onClick={() => handlePropChange('filter', filter.value as ImageComponentProps['filter'])}
-                className={`flex flex-col items-center justify-start p-1 rounded-md border-2 transition-colors
+                className={`pb-flex pb-flex-col pb-items-center pb-justify-start pb-p-1 pb-rounded-md pb-border-2 pb-transition-colors
                     ${(props.filter || 'none') === filter.value
-                    ? 'border-blue-500 bg-blue-50'
-                    : 'border-transparent hover:bg-gray-100 hover:border-gray-200'
+                    ? 'pb-border-blue-500 pb-bg-blue-50'
+                    : 'pb-border-transparent pb-hover:bg-gray-100 pb-hover:border-gray-200'
                   }`}
               >
-                <div className="w-full h-12 mb-1 overflow-hidden rounded border border-gray-200">
+                <div className="pb-w-full pb-h-12 pb-mb-1 pb-overflow-hidden pb-rounded pb-border pb-border-gray-200">
                   <div
-                    className="h-full w-full bg-gradient-to-br from-blue-400 via-pink-400 to-yellow-400"
+                    className="pb-h-full pb-w-full pb-bg-gradient-to-br pb-from-blue-400 pb-via-pink-400 pb-to-yellow-400"
                     style={{ filter: filter.value === 'custom' ? '' : filterStyles[filter.value] }}
                   />
                 </div>
-                <span className="text-xs text-center text-gray-700">{filter.name}</span>
+                <span className="pb-text-xs pb-text-center pb-text-gray-700">{filter.name}</span>
               </button>
             ))}
           </div>
@@ -237,12 +237,12 @@ export const ImageSettings = ({ component }: { component: ImageComponent }) => {
           onClick={() => handleAccordionClick('Custom Adjustments')}
           icon={customAdjustmentsIcon}
         >
-          <div className='space-y-4'>
+          <div className='pb-space-y-4'>
             {customFilterOptions.map(option => (
-              <div key={option.prop} className="flex flex-col">
-                <label htmlFor={option.prop} className="flex justify-between items-center mb-1 text-sm font-medium text-gray-700">
+              <div key={option.prop} className="pb-flex pb-flex-col">
+                <label htmlFor={option.prop} className="pb-flex pb-justify-between pb-items-center pb-mb-1 pb-text-sm pb-font-medium pb-text-gray-700">
                   <span>{option.name}</span>
-                  <span className='text-gray-500 font-normal'>{(props.customFilters?.[option.prop] ?? option.defaultValue).toFixed(2)}</span>
+                  <span className='pb-text-gray-500 pb-font-normal'>{(props.customFilters?.[option.prop] ?? option.defaultValue).toFixed(2)}</span>
                 </label>
                 <input
                   id={option.prop}
@@ -252,13 +252,13 @@ export const ImageSettings = ({ component }: { component: ImageComponent }) => {
                   step={option.step}
                   value={props.customFilters?.[option.prop] ?? option.defaultValue}
                   onChange={(e) => handleCustomFilterChange(option.prop, parseFloat(e.target.value))}
-                  className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer"
+                  className="pb-w-full pb-h-2 pb-bg-gray-200 pb-rounded-lg pb-appearance-none pb-cursor-pointer"
                 />
               </div>
             ))}
             <button
               onClick={handleResetCustomFilters}
-              className="w-full mt-4 bg-gray-200 text-gray-700 rounded-md px-3 py-2 text-sm font-semibold hover:bg-gray-300"
+              className="pb-w-full pb-mt-4 pb-bg-gray-200 pb-text-gray-700 pb-rounded-md pb-px-3 pb-py-2 pb-text-sm pb-font-semibold pb-hover:bg-gray-300"
             >
               Reset Adjustments
             </button>

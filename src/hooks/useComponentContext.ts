@@ -1,4 +1,4 @@
-// path: src/hooks/useComponentContext.ts
+// path: src/components/page-builder/hooks/useComponentContext.ts
 import { useContext } from 'react';
 import { ComponentContext, type ComponentContextType } from '../contexts/ComponentContext';
 import { type PageComponent, type BuiltInComponents } from '../types/components';
