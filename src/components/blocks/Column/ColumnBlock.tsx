@@ -419,7 +419,7 @@ const ColumnBlock = memo(({ component }: { component: ColumnComponent }) => {
                           return (
                             <DraggableItem
                               key={comp.id}
-                              itemRef={itemRef}
+                              itemRef={itemRef as React.RefObject<HTMLDivElement>}
                               component={comp}
                               cellIndex={cellIndex}
                               itemIndex={itemIndex}
