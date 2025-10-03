@@ -6,7 +6,7 @@ import EditorMenu from './components/editor/EditorMenu';
 import { ComponentRegistrySetup } from './providers/ComponentRegistrySetup';
 import { useComponentContext } from './hooks/useComponentContext';
 import type { PageComponent, BuiltInComponents, BuiltInComponentType, CustomButton } from './types/components';
-import { type ComponentDefinition } from './contexts/ComponentRegistry';
+import { ComponentDefinition } from './contexts/ComponentRegistry';
 import { generateIdString } from './generator/id';
 import { useDragAutoScroll } from './hooks/useDragAutoScroll';
 import './styles.css';
@@ -36,22 +36,31 @@ export type PageBuilderHandle<C extends PageComponent<any, any>> = {
   getComponents: () => C[];
 };
 
-const HandleBinder = forwardRef<PageBuilderHandle<any>>((_, ref) => {
+// --- MODIFIED ---
+// This component is now generic (`<C>`) and receives the `data` prop to correctly
+// construct the full data object on export, including `className` and `style`.
+function HandleBinderFn<C extends PageComponent<any, any>>(
+  props: { data: Data<C> },
+  ref: React.Ref<PageBuilderHandle<C>>
+) {
   const { components } = useComponentContext();
   useImperativeHandle(
     ref,
     () => ({
-      exportJSON: () => ({ components }),
-      getComponents: () => components,
+      exportJSON: () => ({
+        className: props.data.className,
+        style: props.data.style,
+        components: components as C[],
+      }),
+      getComponents: () => components as C[],
     }),
-    [components]
+    [components, props.data.className, props.data.style]
   );
   return null;
-});
+}
+const HandleBinder = forwardRef(HandleBinderFn);
 
-// --- NEW ---
-// This new inner component allows us to use context (for `isDragging`)
-// while also having access to the main container div via a ref.
+
 const PageBuilderLayout = <C extends PageComponent<any, any>>({
   onSave,
   saveButtonClickable,
@@ -86,9 +95,13 @@ const PageBuilderLayout = <C extends PageComponent<any, any>>({
       </main>
 
       {!isPreviewing && (
+        // --- MODIFIED ---
+        // The cast `as Data<BuiltInComponents>` has been removed. This makes the
+        // component truly generic. The EditorMenu component must now
+        // also be generic to accept `Data<C>`.
         <EditorMenu
           displaySaveButton={displaySaveButton}
-          data={data as Data<BuiltInComponents>}
+          data={data}
           onSave={onSave}
           saveButtonClickable={saveButtonClickable}
         />
@@ -116,14 +129,17 @@ function PageBuilderComponent<C extends PageComponent<any, any> = BuiltInCompone
         setIsPreviewing={setIsPreviewing}
         allowComponentToBeAdded={allowComponentToBeAdded}
       >
-        <HandleBinder ref={ref} />
-        {/* Render the new layout component inside the provider */}
+        {/* --- MODIFIED --- Pass `props.data` to the HandleBinder */}
+        <HandleBinder data={props.data} ref={ref} />
         <PageBuilderLayout {...props} />
       </ComponentProvider>
     </ComponentRegistrySetup>
   );
 }
 
-const PageBuilder = forwardRef(PageBuilderComponent);
+const PageBuilder = forwardRef(PageBuilderComponent) as <C extends PageComponent<any, any> = BuiltInComponents>(
+  props: Props<C> & { ref?: React.ForwardedRef<PageBuilderHandle<C>> }
+) => React.ReactElement;
+
 
 export default PageBuilder;

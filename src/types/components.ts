@@ -140,7 +140,7 @@ export type BuiltInComponents =
   | AlertComponent
   | ParallaxComponent;
 
-export interface ComponentDefinition<C extends BuiltInComponents = BuiltInComponents> {
+export interface ComponentDefinition<C extends PageComponent<any, any> = PageComponent<any, any>> {
   type: C['type'];
   label?: string;
   icon?: React.ReactElement<{ className?: string }>;
