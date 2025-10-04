@@ -1,4 +1,4 @@
-// path: src/components/page-builder/components/blocks/Image/ImageSettings.tsx
+// path: src/components/blocks/Image/ImageSettings.tsx
 import { useState, useCallback } from 'react';
 import { useComponentContext } from '../../../hooks/useComponentContext';
 import { Accordion } from './Accordion';

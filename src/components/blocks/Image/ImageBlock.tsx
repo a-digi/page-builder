@@ -1,4 +1,4 @@
-// path: src/components/page-builder/components/blocks/Image/ImageBlock.tsx
+// path: src/components/blocks/Image/ImageBlock.tsx
 import React, { useState, useCallback, memo, useEffect, useRef } from 'react';
 import { useComponentContext } from '../../../hooks/useComponentContext';
 import { type ComponentDefinition, type ImageComponent, type ImageComponentProps } from '../../../types/components';

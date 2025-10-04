@@ -1,4 +1,4 @@
-// path: src/components/page-builder/components/blocks/Image/Accordion.tsx
+// path: src/components/blocks/Image/Accordion.tsx
 import React from 'react';
 
 interface AccordionProps {

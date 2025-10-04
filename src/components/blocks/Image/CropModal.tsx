@@ -1,4 +1,4 @@
-// path: src/components/page-builder/components/blocks/Image/CropModal.tsx
+// path: src/components/blocks/Image/CropModal.tsx
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { createPortal } from 'react-dom';
 
