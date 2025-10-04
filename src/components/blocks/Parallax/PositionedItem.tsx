@@ -1,4 +1,4 @@
-// path: src/components/page-builder/components/blocks/Parallax/PositionedItem.tsx
+// path: src/components/blocks/Parallax/PositionedItem.tsx
 import React, { useState, useCallback, useEffect, useRef } from 'react';
 import { useComponentContext } from '../../../hooks/useComponentContext';
 import type { PageComponent } from '../../../types/components';

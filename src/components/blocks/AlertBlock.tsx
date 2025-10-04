@@ -1,4 +1,4 @@
-// path: src/components/page-builder/components/blocks/AlertBlock.tsx
+// path: src/components/blocks/AlertBlock.tsx
 import React, { memo } from 'react';
 import { useComponentContext } from '../../hooks/useComponentContext';
 import type { AlertComponent } from '../../types/components';

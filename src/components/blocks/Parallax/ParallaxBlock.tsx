@@ -1,4 +1,4 @@
-// path: src/components/page-builder/components/blocks/Parallax/ParallaxBlock.tsx
+// path: src/components/blocks/Parallax/ParallaxBlock.tsx
 import React, { useCallback, useMemo, useRef } from 'react';
 import type { CSSProperties } from 'react';
 import { useComponentContext } from '../../../contexts/ComponentContext';

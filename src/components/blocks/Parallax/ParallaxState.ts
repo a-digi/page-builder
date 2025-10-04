@@ -1,4 +1,4 @@
-// path: src/components/page-builder/components/blocks/Parallax/ParallaxState.ts
+// path: src/components/blocks/Parallax/ParallaxState.ts
 import { useState, useEffect } from 'react';
 import type { ParallaxComponent } from '../../../types/components';
 

@@ -1,4 +1,4 @@
-// path: src/components/page-builder/components/blocks/Parallax/ParallaxSettings.tsx
+// path: src/components/blocks/Parallax/ParallaxSettings.tsx
 import React, { useState, useMemo } from 'react';
 import type { ParallaxComponent, ParallaxComponentProps, ParallaxPage } from '../../../types/components';
 import AccordionItem from '../../controls/AccordionItem';
