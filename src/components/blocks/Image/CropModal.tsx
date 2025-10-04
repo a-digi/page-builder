@@ -195,8 +195,12 @@ export const CropModal = ({ imageUrl, onClose, onCrop, initialShape = 'rect' }: 
   );
 
   return (
-    <div className="pb-fixed pb-inset-0 pb-z-[1000] pb-bg-white pb-flex pb-flex-col" onMouseDown={(e) => e.stopPropagation()}>
-      <div className="pb-px-4 pb-py-2 pb-flex pb-justify-between pb-items-center pb-border-b pb-flex-shrink-0">
+    <div
+      className="pb-fixed pb-z-[1000] pb-bg-white pb-flex pb-flex-col"
+      style={{ top: 0, left: 0, right: 0, bottom: 0 }}
+      onMouseDown={(e) => e.stopPropagation()}
+    >
+      <div className="pb-p-4 pb-flex pb-justify-between pb-items-center pb-border-b pb-flex-shrink-0">
         <h2 className="pb-text-xl pb-font-semibold pb-text-gray-800">Crop Image</h2>
         <div className="pb-flex pb-space-x-4">
           <button onClick={onClose} className="pb-px-5 pb-py-2 pb-rounded-md pb-bg-gray-200 pb-text-gray-800 pb-font-semibold pb-hover:bg-gray-300">
@@ -207,7 +211,7 @@ export const CropModal = ({ imageUrl, onClose, onCrop, initialShape = 'rect' }: 
           </button>
         </div>
       </div>
-      <div className="pb-flex-grow pb-flex pb-justify-center pb-items-center pb-overflow-auto pb-bg-white">
+      <div className="pb-flex-grow pb-p-4 pb-flex pb-justify-center pb-items-center pb-overflow-auto pb-bg-white">
         <div className="pb-relative pb-inline-block">
           <img ref={imageRef} src={imageUrl} alt="Crop preview" className="pb-max-w-full pb-max-h-full pb-block pb-select-none" />
           <div
@@ -230,7 +234,7 @@ export const CropModal = ({ imageUrl, onClose, onCrop, initialShape = 'rect' }: 
         </div>
       </div>
       <canvas ref={canvasRef} className="pb-hidden" />
-      <div className="pb-px-4 pb-py-2 pb-flex pb-justify-start pb-items-center pb-space-x-4 pb-border-t pb-bg-white pb-flex-shrink-0">
+      <div className="pb-p-4 pb-flex pb-justify-start pb-items-center pb-space-x-4 pb-border-t pb-bg-white pb-flex-shrink-0">
         <div ref={dropdownRef} className="pb-relative pb-inline-block pb-text-left">
           <div>
             <span className="pb-rounded-md pb-shadow-sm">
