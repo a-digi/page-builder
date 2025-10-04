@@ -47,6 +47,9 @@ export default defineConfig({
                     react: 'React',
                     'react-dom': 'ReactDOM',
                 },
+                // *** THIS IS THE CRUCIAL ADDITION ***
+                // This tells Rollup (used by Vite) to bundle all CSS imports into a single file named 'style.css'.
+                assetFileNames: 'style.css',
             },
         },
     },
