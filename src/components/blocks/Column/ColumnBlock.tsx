@@ -1,4 +1,4 @@
-// path: src/components/page-builder/components/blocks/Column/ColumnBlock.tsx
+// path: src/components/blocks/Column/ColumnBlock.tsx
 import React, { useState, useCallback, memo, Suspense, useRef, useEffect, useMemo, useContext, useLayoutEffect } from 'react';
 import type { ColumnComponent as ColumnComponent, PageComponent } from '../../../types/components';
 import { useComponentContext } from '../../../hooks/useComponentContext';

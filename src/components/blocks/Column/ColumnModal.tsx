@@ -1,4 +1,4 @@
-// path: src/components/page-builder/components/blocks/ColumnBlock/ColumnModal.tsx
+// path: src/components/blocks/ColumnBlock/ColumnModal.tsx
 import { useState } from "react";
 import type { ColumnComponent, ColumnComponentProps } from "../../../types/components";
 import ColumnSelector from "./ColumnSelector";

@@ -1,4 +1,4 @@
-// path: src/components/page-builder/components/blocks/Column/DraggableItem.tsx
+// path: src/components/blocks/Column/DraggableItem.tsx
 import type { CustomButton, PageComponent } from "../../../types/components";
 import { BlockWrapper, type BlockWrapperProps } from '../../BlockWrapper';
 import { ComponentRenderer } from "../../editor/ComponentRenderer";

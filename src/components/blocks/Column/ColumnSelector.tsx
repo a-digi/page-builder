@@ -1,4 +1,4 @@
-// path: src/components/page-builder/components/blocks/ColumnBlock/ColumnSelector.tsx
+// path: src/components/blocks/ColumnBlock/ColumnSelector.tsx
 const ColumnSelector: React.FC<{
   value: number;
   onChange: (value: number) => void;

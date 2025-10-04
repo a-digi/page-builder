@@ -1,4 +1,4 @@
-// path: src/components/page-builder/components/blocks/Column/ColumnSettings.tsx
+// path: src/components/blocks/Column/ColumnSettings.tsx
 import React, { useState, useMemo, useCallback } from 'react';
 import type { BaseComponentProps, ColumnComponent, ColumnComponentProps, PaddingProps, MarginProps, PageComponent } from '../../../types/components';
 import { SettingsPanel } from '../../controls/SettingsPanel';
