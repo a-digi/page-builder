@@ -195,84 +195,82 @@ export const CropModal = ({ imageUrl, onClose, onCrop, initialShape = 'rect' }: 
   );
 
   return (
-    <div className="pb-fixed pb-border-white pb-bg-white pb-inset-0 pb-top-0 pb-bottom-0 pb-left-0 pb-right-0 pb-z-[1000] pb-flex pb-items-center pb-justify-center">
-      <div className="pb-bg-white pb-rounded-lg pb-shadow-xl pb-flex pb-flex-col pb-w-full pb-h-full pb-max-w-6xl pb-max-h-[90vh]" onMouseDown={(e) => e.stopPropagation()}>
-        <div className="pb-p-4 pb-flex pb-justify-between pb-items-center pb-border-b pb-flex-shrink-0">
-          <h2 className="pb-text-xl pb-font-semibold pb-text-gray-800">Crop Image</h2>
-          <div className="pb-flex pb-space-x-4">
-            <button onClick={onClose} className="pb-px-5 pb-py-2 pb-rounded-md pb-bg-gray-200 pb-text-gray-800 pb-font-semibold pb-hover:bg-gray-300">
-              Cancel
-            </button>
-            <button onClick={handleApplyCrop} className="pb-px-5 pb-py-2 pb-rounded-md pb-bg-blue-500 pb-text-white pb-font-semibold pb-hover:bg-blue-600">
-              Apply Crop
-            </button>
+    <div className="pb-fixed pb-inset-0 pb-z-[1000] pb-bg-white pb-flex pb-flex-col" onMouseDown={(e) => e.stopPropagation()}>
+      <div className="pb-p-4 pb-flex pb-justify-between pb-items-center pb-border-b pb-flex-shrink-0">
+        <h2 className="pb-text-xl pb-font-semibold pb-text-gray-800">Crop Image</h2>
+        <div className="pb-flex pb-space-x-4">
+          <button onClick={onClose} className="pb-px-5 pb-py-2 pb-rounded-md pb-bg-gray-200 pb-text-gray-800 pb-font-semibold pb-hover:bg-gray-300">
+            Cancel
+          </button>
+          <button onClick={handleApplyCrop} className="pb-px-5 pb-py-2 pb-rounded-md pb-bg-blue-500 pb-text-white pb-font-semibold pb-hover:bg-blue-600">
+            Apply Crop
+          </button>
+        </div>
+      </div>
+      <div className="pb-flex-grow pb-p-4 pb-flex pb-justify-center pb-items-center pb-overflow-auto pb-bg-white">
+        <div className="pb-relative pb-inline-block">
+          <img ref={imageRef} src={imageUrl} alt="Crop preview" className="pb-max-w-full pb-max-h-full pb-block pb-select-none" />
+          <div
+            className="pb-absolute pb-border-2 pb-border-dashed pb-border-white pb-cursor-move"
+            style={{
+              left: `${crop.x}%`,
+              top: `${crop.y}%`,
+              width: `${crop.width}%`,
+              height: `${crop.height}%`,
+              boxShadow: '0 0 0 9999px rgba(255, 255, 255, 0.75)',
+              borderRadius: cropShape === 'circle' ? '50%' : '0%',
+            }}
+            onMouseDown={handleDragMouseDown}
+          >
+            <ResizeHandle handle="topLeft" cursor="pb-cursor-nwse-resize" />
+            <ResizeHandle handle="topRight" cursor="pb-cursor-nesw-resize" />
+            <ResizeHandle handle="bottomLeft" cursor="pb-cursor-nesw-resize" />
+            <ResizeHandle handle="bottomRight" cursor="pb-cursor-nwse-resize" />
           </div>
         </div>
-        <div className="pb-flex-grow pb-p-4 pb-flex pb-justify-center pb-items-center pb-overflow-auto pb-bg-gray-200">
-          <div className="pb-relative pb-inline-block">
-            <img ref={imageRef} src={imageUrl} alt="Crop preview" className="pb-max-w-full pb-max-h-full pb-block pb-select-none" />
-            <div
-              className="pb-absolute pb-border-2 pb-border-dashed pb-border-white pb-cursor-move"
-              style={{
-                left: `${crop.x}%`,
-                top: `${crop.y}%`,
-                width: `${crop.width}%`,
-                height: `${crop.height}%`,
-                boxShadow: '0 0 0 9999px rgba(0, 0, 0, 0.4)',
-                borderRadius: cropShape === 'circle' ? '50%' : '0%',
-              }}
-              onMouseDown={handleDragMouseDown}
-            >
-              <ResizeHandle handle="topLeft" cursor="pb-cursor-nwse-resize" />
-              <ResizeHandle handle="topRight" cursor="pb-cursor-nesw-resize" />
-              <ResizeHandle handle="bottomLeft" cursor="pb-cursor-nesw-resize" />
-              <ResizeHandle handle="bottomRight" cursor="pb-cursor-nwse-resize" />
-            </div>
+      </div>
+      <canvas ref={canvasRef} className="pb-hidden" />
+      <div className="pb-p-4 pb-flex pb-justify-start pb-items-center pb-space-x-4 pb-border-t pb-bg-white pb-flex-shrink-0">
+        <div ref={dropdownRef} className="pb-relative pb-inline-block pb-text-left">
+          <div>
+            <span className="pb-rounded-md pb-shadow-sm">
+              <button
+                type="button"
+                onClick={() => setIsShapeDropdownOpen(!isShapeDropdownOpen)}
+                className="pb-inline-flex pb-justify-center pb-w-full pb-rounded-md pb-border pb-border-gray-300 pb-px-4 pb-py-2 pb-bg-white pb-text-sm pb-font-medium pb-text-gray-700 pb-hover:bg-gray-50 focus:pb-outline-none focus:pb-ring-2 focus:pb-ring-offset-2 focus:pb-ring-offset-gray-100 focus:pb-ring-blue-500"
+                id="options-menu"
+                aria-haspopup="true"
+                aria-expanded="true"
+              >
+                {cropShape.charAt(0).toUpperCase() + cropShape.slice(1)}
+                <svg className="pb--mr-1 pb-ml-2 pb-h-5 pb-w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                  <path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRule="evenodd" />
+                </svg>
+              </button>
+            </span>
           </div>
-        </div>
-        <canvas ref={canvasRef} className="pb-hidden" />
-        <div className="pb-p-4 pb-flex pb-justify-start pb-items-center pb-space-x-4 pb-border-t pb-bg-gray-50 pb-flex-shrink-0">
-          <div ref={dropdownRef} className="pb-relative pb-inline-block pb-text-left">
-            <div>
-              <span className="pb-rounded-md pb-shadow-sm">
-                <button
-                  type="button"
-                  onClick={() => setIsShapeDropdownOpen(!isShapeDropdownOpen)}
-                  className="pb-inline-flex pb-justify-center pb-w-full pb-rounded-md pb-border pb-border-gray-300 pb-px-4 pb-py-2 pb-bg-white pb-text-sm pb-font-medium pb-text-gray-700 pb-hover:bg-gray-50 focus:pb-outline-none focus:pb-ring-2 focus:pb-ring-offset-2 focus:pb-ring-offset-gray-100 focus:pb-ring-blue-500"
-                  id="options-menu"
-                  aria-haspopup="true"
-                  aria-expanded="true"
+          {isShapeDropdownOpen && (
+            <div className="pb-origin-top-left pb-absolute pb-left-0 pb-mt-2 pb-w-40 pb-rounded-md pb-shadow-lg pb-bg-white pb-ring-1 pb-ring-black pb-ring-opacity-5" style={{ bottom: '100%' }}>
+              <div className="pb-py-1" role="menu" aria-orientation="vertical" aria-labelledby="options-menu">
+                <a
+                  href="#"
+                  onClick={(e) => { e.preventDefault(); handleShapeChange('rect'); }}
+                  className="pb-block pb-px-4 pb-py-2 pb-text-sm pb-text-gray-700 pb-hover:bg-gray-100 pb-hover:text-gray-900"
+                  role="menuitem"
                 >
-                  {cropShape.charAt(0).toUpperCase() + cropShape.slice(1)}
-                  <svg className="pb--mr-1 pb-ml-2 pb-h-5 pb-w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                    <path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRule="evenodd" />
-                  </svg>
-                </button>
-              </span>
-            </div>
-            {isShapeDropdownOpen && (
-              <div className="pb-origin-top-left pb-absolute pb-left-0 pb-mt-2 pb-w-40 pb-rounded-md pb-shadow-lg pb-bg-white pb-ring-1 pb-ring-black pb-ring-opacity-5" style={{ bottom: '100%' }}>
-                <div className="pb-py-1" role="menu" aria-orientation="vertical" aria-labelledby="options-menu">
-                  <a
-                    href="#"
-                    onClick={(e) => { e.preventDefault(); handleShapeChange('rect'); }}
-                    className="pb-block pb-px-4 pb-py-2 pb-text-sm pb-text-gray-700 pb-hover:bg-gray-100 pb-hover:text-gray-900"
-                    role="menuitem"
-                  >
-                    Rectangle
-                  </a>
-                  <a
-                    href="#"
-                    onClick={(e) => { e.preventDefault(); handleShapeChange('circle'); }}
-                    className="pb-block pb-px-4 pb-py-2 pb-text-sm pb-text-gray-700 pb-hover:bg-gray-100 pb-hover:text-gray-900"
-                    role="menuitem"
-                  >
-                    Circle
-                  </a>
-                </div>
+                  Rectangle
+                </a>
+                <a
+                  href="#"
+                  onClick={(e) => { e.preventDefault(); handleShapeChange('circle'); }}
+                  className="pb-block pb-px-4 pb-py-2 pb-text-sm pb-text-gray-700 pb-hover:bg-gray-100 pb-hover:text-gray-900"
+                  role="menuitem"
+                >
+                  Circle
+                </a>
               </div>
-            )}
-          </div>
+            </div>
+          )}
         </div>
       </div>
     </div>
