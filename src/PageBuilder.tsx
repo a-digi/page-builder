@@ -9,7 +9,6 @@ import type { PageComponent, BuiltInComponents, BuiltInComponentType, CustomButt
 import { ComponentDefinition } from './contexts/ComponentRegistry';
 import { generateIdString } from './generator/id';
 import { useDragAutoScroll } from './hooks/useDragAutoScroll';
-import './styles.css';
 
 export type Props<C extends PageComponent<any, any>> = {
   onSave: (data: string) => void;

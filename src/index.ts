@@ -1,4 +1,7 @@
 // path: src/index.ts
+// Import styles at the top of the main entry point to ensure they are always included.
+import './styles.css';
+
 // --- Components ---
 import PageBuilder from './PageBuilder';
 import TextColorPicker from './components/editor/toolbar/TextColorPicker';
