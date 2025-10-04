@@ -123,9 +123,7 @@ function PageBuilderComponent<C extends PageComponent<any, any> = BuiltInCompone
   );
 }
 
-const PageBuilder = forwardRef(PageBuilderComponent) as <C extends PageComponent<any, any> = BuiltInComponents>(
-  props: Props<C> & { ref?: React.ForwardedRef<PageBuilderHandle<C>> }
-) => React.ReactElement;
+const PageBuilder = forwardRef(PageBuilderComponent);
 
 
 export default PageBuilder;

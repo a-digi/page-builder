@@ -1,6 +1,5 @@
 // path: src/components/blocks/Image/CropModal.tsx
 import React, { useState, useRef, useEffect, useCallback } from 'react';
-import { createPortal } from 'react-dom';
 
 interface CropModalProps {
   imageUrl: string;
@@ -176,69 +175,64 @@ export const CropModal = ({ imageUrl, onClose, onCrop, initialShape = 'rect' }: 
     />
   );
 
-  const modalContent = (
-    <div className="pb-fixed pb-inset-0 pb-z-[1000] pb-flex pb-items-center pb-justify-center pb-bg-black pb-bg-opacity-75" onMouseDown={onClose}>
-      <div
-        className="pb-bg-white pb-rounded-lg pb-flex pb-flex-col pb-max-w-4xl pb-w-full pb-max-h-[90vh] pb-shadow-2xl"
-        onMouseDown={(e) => e.stopPropagation()}
-      >
-        <h2 className="pb-text-xl pb-font-semibold pb-p-4 pb-border-b">Crop Image</h2>
-        <div className="pb-flex-grow pb-p-4 pb-flex pb-justify-center pb-items-center pb-overflow-auto">
-          <div className="pb-relative pb-inline-block">
-            <img ref={imageRef} src={imageUrl} alt="Crop preview" className="pb-max-w-full pb-max-h-[65vh] pb-block pb-select-none" />
-            <div
-              className="pb-absolute pb-border-2 pb-border-dashed pb-border-white pb-cursor-move"
-              style={{
-                left: `${crop.x}%`,
-                top: `${crop.y}%`,
-                width: `${crop.width}%`,
-                height: `${crop.height}%`,
-                boxShadow: '0 0 0 9999px rgba(0, 0, 0, 0.6)',
-                borderRadius: cropShape === 'circle' ? '50%' : '0%',
-              }}
-              onMouseDown={handleDragMouseDown}
-            >
-              <ResizeHandle handle="topLeft" cursor="pb-cursor-nwse-resize" />
-              <ResizeHandle handle="topRight" cursor="pb-cursor-nesw-resize" />
-              <ResizeHandle handle="bottomLeft" cursor="pb-cursor-nesw-resize" />
-              <ResizeHandle handle="bottomRight" cursor="pb-cursor-nwse-resize" />
-            </div>
+  return (
+    <div className="pb-fixed pb-inset-0 pb-z-[1000] pb-bg-white pb-flex pb-flex-col pb-h-screen" onMouseDown={(e) => e.stopPropagation()}>
+      <div className="pb-p-4 pb-flex pb-justify-between pb-items-center pb-border-b pb-flex-shrink-0">
+        <h2 className="pb-text-xl pb-font-semibold pb-text-gray-800">Crop Image</h2>
+        <div className="pb-flex pb-space-x-4">
+          <button onClick={onClose} className="pb-px-5 pb-py-2 pb-rounded-md pb-bg-gray-200 pb-text-gray-800 pb-font-semibold pb-hover:bg-gray-300">
+            Cancel
+          </button>
+          <button onClick={handleApplyCrop} className="pb-px-5 pb-py-2 pb-rounded-md pb-bg-blue-500 pb-text-white pb-font-semibold pb-hover:bg-blue-600">
+            Apply Crop
+          </button>
+        </div>
+      </div>
+      <div className="pb-flex-grow pb-p-4 pb-flex pb-justify-center pb-items-center pb-overflow-auto pb-bg-gray-800">
+        <div className="pb-relative pb-inline-block">
+          <img ref={imageRef} src={imageUrl} alt="Crop preview" className="pb-max-w-full pb-max-h-full pb-block pb-select-none" style={{ maxHeight: 'calc(100vh - 180px)' }} />
+          <div
+            className="pb-absolute pb-border-2 pb-border-dashed pb-border-white pb-cursor-move"
+            style={{
+              left: `${crop.x}%`,
+              top: `${crop.y}%`,
+              width: `${crop.width}%`,
+              height: `${crop.height}%`,
+              boxShadow: '0 0 0 9999px rgba(0, 0, 0, 0.75)',
+              borderRadius: cropShape === 'circle' ? '50%' : '0%',
+            }}
+            onMouseDown={handleDragMouseDown}
+          >
+            <ResizeHandle handle="topLeft" cursor="pb-cursor-nwse-resize" />
+            <ResizeHandle handle="topRight" cursor="pb-cursor-nesw-resize" />
+            <ResizeHandle handle="bottomLeft" cursor="pb-cursor-nesw-resize" />
+            <ResizeHandle handle="bottomRight" cursor="pb-cursor-nwse-resize" />
           </div>
         </div>
-        <canvas ref={canvasRef} className="pb-hidden" />
-        <div className="pb-p-4 pb-flex pb-justify-between pb-items-center pb-space-x-4 pb-border-t pb-bg-gray-50 pb-rounded-b-lg">
-          <div className="pb-flex pb-items-center pb-p-1 pb-bg-gray-200 pb-rounded-lg">
-            <button
-              onClick={() => setCropShape('rect')}
-              className={`pb-px-3 pb-py-1 pb-text-sm pb-font-semibold pb-rounded-md pb-transition-colors ${cropShape === 'rect'
-                ? 'pb-bg-white pb-text-gray-800 pb-shadow-sm'
-                : 'pb-bg-transparent pb-text-gray-500 pb-hover:text-gray-700'
-                }`}
-            >
-              Rectangle
-            </button>
-            <button
-              onClick={() => setCropShape('circle')}
-              className={`pb-px-3 pb-py-1 pb-text-sm pb-font-semibold pb-rounded-md pb-transition-colors ${cropShape === 'circle'
-                ? 'pb-bg-white pb-text-gray-800 pb-shadow-sm'
-                : 'pb-bg-transparent pb-text-gray-500 pb-hover:text-gray-700'
-                }`}
-            >
-              Circle
-            </button>
-          </div>
-          <div className="pb-flex pb-space-x-4">
-            <button onClick={onClose} className="pb-px-5 pb-py-2 pb-rounded-md pb-bg-gray-200 pb-text-gray-800 pb-font-semibold pb-hover:bg-gray-300">
-              Cancel
-            </button>
-            <button onClick={handleApplyCrop} className="pb-px-5 pb-py-2 pb-rounded-md pb-bg-blue-500 pb-text-white pb-font-semibold pb-hover:bg-blue-600">
-              Apply Crop
-            </button>
-          </div>
+      </div>
+      <canvas ref={canvasRef} className="pb-hidden" />
+      <div className="pb-p-4 pb-flex pb-justify-start pb-items-center pb-space-x-4 pb-border-t pb-bg-gray-50 pb-flex-shrink-0">
+        <div className="pb-flex pb-items-center pb-p-1 pb-bg-gray-200 pb-rounded-lg">
+          <button
+            onClick={() => setCropShape('rect')}
+            className={`pb-px-3 pb-py-1 pb-text-sm pb-font-semibold pb-rounded-md pb-transition-colors ${cropShape === 'rect'
+              ? 'pb-bg-white pb-text-gray-800 pb-shadow-sm'
+              : 'pb-bg-transparent pb-text-gray-500 pb-hover:text-gray-700'
+              }`}
+          >
+            Rectangle
+          </button>
+          <button
+            onClick={() => setCropShape('circle')}
+            className={`pb-px-3 pb-py-1 pb-text-sm pb-font-semibold pb-rounded-md pb-transition-colors ${cropShape === 'circle'
+              ? 'pb-bg-white pb-text-gray-800 pb-shadow-sm'
+              : 'pb-bg-transparent pb-text-gray-500 pb-hover:text-gray-700'
+              }`}
+          >
+            Circle
+          </button>
         </div>
       </div>
     </div>
   );
-
-  return createPortal(modalContent, document.body);
 };
