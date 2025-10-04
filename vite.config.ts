@@ -32,23 +32,18 @@ export default defineConfig({
             // It solves your .cjs vs .js problem.
             fileName: (format) => {
                 if (format === 'es') {
-                    return `react-page-builder.es.js`; // ES Module file
+                    return `react-page-builder.es.js`;
                 }
-                // For the UMD format, we produce a .cjs file to be compliant with "type": "module"
-                return `react-page-builder.${format}.cjs`; // CommonJS file
+                return `react-page-builder.${format}.cjs`;
             },
         },
         rollupOptions: {
-            // These are peer dependencies. We shouldn't bundle them with our library.
             external: ['react', 'react-dom'],
             output: {
-                // Defines global variables for the external dependencies in the UMD build.
                 globals: {
                     react: 'React',
                     'react-dom': 'ReactDOM',
                 },
-                // *** THIS IS THE CRUCIAL ADDITION ***
-                // This tells Rollup (used by Vite) to bundle all CSS imports into a single file named 'style.css'.
                 assetFileNames: 'style.css',
             },
         },
