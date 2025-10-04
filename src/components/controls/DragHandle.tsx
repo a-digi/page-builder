@@ -1,4 +1,4 @@
-// path: src/components/page-builder/components/controls/DragHandle.tsx
+// path: src/components/controls/DragHandle.tsx
 import React from 'react';
 
 type Props = {

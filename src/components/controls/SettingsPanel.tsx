@@ -1,4 +1,4 @@
-// path: src/components/page-builder/components/controls/SettingsPanel.tsx
+// path: src/components/controls/SettingsPanel.tsx
 import React, { useState, useRef, useMemo, useLayoutEffect, useCallback, useEffect } from 'react';
 import { useComponentContext } from '../../hooks/useComponentContext';
 import { type PageComponent, type CustomButton, type BaseComponentProps } from '../../types/components';

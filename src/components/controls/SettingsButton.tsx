@@ -1,4 +1,4 @@
-// path: src/components/page-builder/components/controls/SettingsButton.tsx
+// path: src/components/controls/SettingsButton.tsx
 type Props = {
   onClick: () => void;
   className?: string;

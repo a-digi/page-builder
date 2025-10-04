@@ -1,4 +1,4 @@
-// path: src/components/page-builder/components/controls/ColumnButton.tsx
+// path: src/components/controls/ColumnButton.tsx
 import React from 'react';
 
 type Props = {

@@ -1,4 +1,4 @@
-// path: src/components/page-builder/components/controls/DeleteButton.tsx
+// path: src/components/controls/DeleteButton.tsx
 type Props = {
   onClick: () => void;
   className?: string;

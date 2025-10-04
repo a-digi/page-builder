@@ -1,4 +1,4 @@
-// path: src/components/page-builder/components/controls/AccordionItem.tsx
+// path: src/components/controls/AccordionItem.tsx
 import React from 'react';
 
 const AccordionItem: React.FC<{

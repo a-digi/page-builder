@@ -1,4 +1,4 @@
-// path: src/components/page-builder/components/controls/ButtonGroup.tsx
+// path: src/components/controls/ButtonGroup.tsx
 import React, { Children, cloneElement, isValidElement, type ReactNode } from 'react';
 
 interface ButtonGroupProps {
