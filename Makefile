@@ -55,12 +55,21 @@ login:
 
 run-watch: build-image
 	@echo "--> Starting background container to watch for file changes..."
-	@docker run -d --rm --name $(WATCH_CONTAINER_NAME) \
+	@docker run --rm --name $(WATCH_CONTAINER_NAME) \
 		-v "$(shell pwd):/pb/app" \
-		$(IMAGE_NAME):$(TAG) npm run dev
+		$(IMAGE_NAME):$(TAG) npm run build:watch
 	@echo "--> Watcher started. Container '$(WATCH_CONTAINER_NAME)' is running."
 	@echo "--> To view logs, run: docker logs -f $(WATCH_CONTAINER_NAME)"
 .PHONY: run-watch
+
+run-install: build-image
+	@echo "--> Starting background container to watch for file changes..."
+	@docker run --rm --name $(WATCH_CONTAINER_NAME) \
+		-v "$(shell pwd):/pb/app" \
+		$(IMAGE_NAME):$(TAG) npm install
+	@echo "--> Watcher started. Container '$(WATCH_CONTAINER_NAME)' is running."
+	@echo "--> To view logs, run: docker logs -f $(WATCH_CONTAINER_NAME)"
+.PHONY: run-install
 
 stop-watch:
 	@echo "--> Stopping background watcher container '$(WATCH_CONTAINER_NAME)'..."
