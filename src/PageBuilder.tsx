@@ -67,7 +67,6 @@ const PageBuilderLayout = <C extends PageComponent<any, any>>({
 }: Props<C>) => {
   const mainContainerRef = useRef<HTMLDivElement>(null);
   const { isDragging, isPreviewing } = useComponentContext();
-  console.log('amazing')
   useDragAutoScroll({
     isDragging,
     scrollContainerRef: mainContainerRef
@@ -79,7 +78,7 @@ const PageBuilderLayout = <C extends PageComponent<any, any>>({
   ].filter(Boolean).join(' ');
   return (
     <div ref={mainContainerRef} data-pb-id={generateIdString()} className={combinedClassName}>
-      <main className="pb-flex-1 pb-worked-amazing pb-min-h-screen pb-h-full pb-flex pb-flex-col">
+      <main className="pb-flex-1 pb-min-h-screen pb-h-full pb-flex pb-flex-col">
         <ComponentPageEditor
           customToolbarButtons={customToolbarButtons}
           customSettingsButtons={customSettingsButtons}
