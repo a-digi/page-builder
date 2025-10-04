@@ -1,4 +1,4 @@
-// path: src/components/page-builder/components/blocks/EditableText.tsx
+// path: src/components/blocks/EditableText.tsx
 import React, { useState, useRef, useEffect, useCallback, memo } from 'react';
 import { createPortal } from 'react-dom';
 import type { TextComponent, HeaderComponent, TextProps } from '../../types/components';

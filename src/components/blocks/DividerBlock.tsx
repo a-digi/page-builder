@@ -1,4 +1,4 @@
-// path: src/components/page-builder/components/blocks/DividerBlock.tsx
+// path: src/components/blocks/DividerBlock.tsx
 import { memo } from 'react';
 import type { DividerComponent } from '../../types/components';
 import { type ComponentDefinition } from '../../contexts/ComponentRegistry';

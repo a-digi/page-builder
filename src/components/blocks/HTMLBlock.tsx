@@ -1,4 +1,4 @@
-// path: src/components/page-builder/components/blocks/HTMLBlock.tsx
+// path: src/components/blocks/HTMLBlock.tsx
 import React, { useState, useCallback, memo } from 'react';
 import { type HTMLComponent } from '../../types/components';
 import { useComponentContext } from '../../hooks/useComponentContext';
