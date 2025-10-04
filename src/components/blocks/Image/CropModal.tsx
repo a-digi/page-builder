@@ -196,7 +196,7 @@ export const CropModal = ({ imageUrl, onClose, onCrop, initialShape = 'rect' }: 
 
   return (
     <div
-      className="pb-fixed pb-z-[1000] pb-bg-white pb-flex pb-flex-col"
+      className="pb-fixed pb-z-[1000] pb-bg-white pb-left-0 pb-top-0 pb-right-0 pb-bottom-0 pb-flex pb-flex-col"
       style={{ top: 0, left: 0, right: 0, bottom: 0 }}
       onMouseDown={(e) => e.stopPropagation()}
     >
