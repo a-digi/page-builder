@@ -32,11 +32,13 @@
             "import": "./dist/react-page-builder.es.js",
             "require": "./dist/react-page-builder.umd.cjs",
             "types": "./dist/index.d.ts"
-        }
+        },
+        "./dist/style.css": "./dist/style.css"
     },
     "scripts": {
         "dev": "vite",
         "build": "tsc && vite build",
+        "build:watch": "tsc && vite build --watch",
         "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
         "preview": "vite preview"
     },
