@@ -234,14 +234,14 @@ export const CropModal = ({ imageUrl, onClose, onCrop, initialShape = 'rect' }: 
         </div>
       </div>
       <canvas ref={canvasRef} className="pb-hidden" />
-      <div className="pb-p-4 pb-flex pb-justify-start pb-items-center pb-space-x-4 pb-border-t pb-bg-white pb-flex-shrink-0">
+      <div className="pb-p-4 pb-flex pb-justify-start pb-items-center pb-space-x-4 pb-bg-white pb-flex-shrink-0">
         <div ref={dropdownRef} className="pb-relative pb-inline-block pb-text-left">
           <div>
             <span className="pb-rounded-md pb-shadow-sm">
               <button
                 type="button"
                 onClick={() => setIsShapeDropdownOpen(!isShapeDropdownOpen)}
-                className="pb-inline-flex pb-justify-center pb-w-full pb-rounded-md pb-border pb-border-gray-300 pb-px-4 pb-py-2 pb-bg-white pb-text-sm pb-font-medium pb-text-gray-700 pb-hover:bg-gray-50 focus:pb-outline-none focus:pb-ring-2 focus:pb-ring-offset-2 focus:pb-ring-offset-gray-100 focus:pb-ring-blue-500"
+                className="pb-inline-flex pb-justify-center pb-w-full pb-rounded-md pb-px-4 pb-py-2 pb-bg-white pb-text-sm pb-font-medium pb-text-gray-700 pb-hover:bg-gray-50 focus:pb-outline-none focus:pb-ring-2 focus:pb-ring-offset-2 focus:pb-ring-offset-gray-100 focus:pb-ring-blue-500"
                 id="options-menu"
                 aria-haspopup="true"
                 aria-expanded="true"
