@@ -32,7 +32,8 @@
             "import": "./dist/react-page-builder.es.js",
             "require": "./dist/react-page-builder.umd.cjs",
             "types": "./dist/index.d.ts"
-        }
+        },
+        "./dist/style.css": "./dist/style.css"
     },
     "scripts": {
         "dev": "vite",
@@ -55,9 +56,10 @@
         "eslint": "^8.57.0",
         "eslint-plugin-react-hooks": "^4.6.0",
         "eslint-plugin-react-refresh": "^0.4.6",
+        "postcss": "^8.4.38",
+        "postcss-prefix-selector": "^1.16.1",
         "typescript": "^5.2.2",
         "vite": "^5.2.0",
-        "vite-plugin-css-injected-by-js": "^3.5.1",
         "vite-plugin-dts": "^3.8.3"
     }
 }
