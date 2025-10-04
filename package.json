@@ -1,7 +1,7 @@
 {
     "name": "@a-digi/page-builder",
     "private": false,
-    "version": "1.2.34",
+    "version": "1.2.35",
     "description": "A flexible page builder component for React.",
     "author": "Your Name <your.email@example.com>",
     "license": "MIT",
