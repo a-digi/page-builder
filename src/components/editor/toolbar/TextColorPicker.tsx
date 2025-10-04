@@ -1,4 +1,4 @@
-// path: src/components/page-builder/components/editor/toolbar/TextColorPicker.tsx
+// path: src/components/editor/toolbar/TextColorPicker.tsx
 import React, { useState, useRef, useCallback, useEffect, type RefObject } from 'react';
 import { PREDEFINED_COLORS } from './model/colors';
 

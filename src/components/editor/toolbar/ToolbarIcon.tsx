@@ -1,4 +1,4 @@
-// path: src/components/page-builder/components/editor/toolbar/ToolbarIcon.tsx
+// path: src/components/editor/toolbar/ToolbarIcon.tsx
 import React from 'react';
 
 type IconName = 'text-left' | 'text-center' | 'text-right' | 'text-justify';

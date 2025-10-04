@@ -1,4 +1,4 @@
-// path: src/components/page-builder/hooks/useDragAutoScroll.ts
+// path: src/hooks/useDragAutoScroll.ts
 import { useEffect, useRef } from 'react';
 
 const SCROLL_ZONE_SIZE = 80;

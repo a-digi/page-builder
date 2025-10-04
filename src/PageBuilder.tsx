@@ -1,4 +1,4 @@
-// path: src/components/page-builder/PageBuilder.tsx
+// path: src/PageBuilder.tsx
 import React, { forwardRef, useImperativeHandle, useState, useRef } from 'react';
 import { ComponentProvider } from './contexts/ComponentContext';
 import ComponentPageEditor from './components/editor/Editor';
@@ -36,9 +36,6 @@ export type PageBuilderHandle<C extends PageComponent<any, any>> = {
   getComponents: () => C[];
 };
 
-// --- MODIFIED ---
-// This component is now generic (`<C>`) and receives the `data` prop to correctly
-// construct the full data object on export, including `className` and `style`.
 function HandleBinderFn<C extends PageComponent<any, any>>(
   props: { data: Data<C> },
   ref: React.Ref<PageBuilderHandle<C>>
@@ -60,7 +57,6 @@ function HandleBinderFn<C extends PageComponent<any, any>>(
 }
 const HandleBinder = forwardRef(HandleBinderFn);
 
-
 const PageBuilderLayout = <C extends PageComponent<any, any>>({
   onSave,
   saveButtonClickable,
@@ -72,8 +68,7 @@ const PageBuilderLayout = <C extends PageComponent<any, any>>({
 }: Props<C>) => {
   const mainContainerRef = useRef<HTMLDivElement>(null);
   const { isDragging, isPreviewing } = useComponentContext();
-
-  // Activate the auto-scroll hook, passing it the dragging state and the container ref.
+  console.log('amazing')
   useDragAutoScroll({
     isDragging,
     scrollContainerRef: mainContainerRef
@@ -83,11 +78,9 @@ const PageBuilderLayout = <C extends PageComponent<any, any>>({
     'pb-w-full', 'pb-relative', 'pb-min-h-screen', 'pb-h-full', 'pb-font-sans', 'pb-bg-white', 'pb-text-gray-800',
     className
   ].filter(Boolean).join(' ');
-
   return (
-    // The ref is attached to the top-level container.
     <div ref={mainContainerRef} data-pb-id={generateIdString()} className={combinedClassName}>
-      <main className="pb-flex-1 pb-min-h-screen pb-h-full pb-flex pb-flex-col">
+      <main className="pb-flex-1 pb-worked-amazing pb-min-h-screen pb-h-full pb-flex pb-flex-col">
         <ComponentPageEditor
           customToolbarButtons={customToolbarButtons}
           customSettingsButtons={customSettingsButtons}
@@ -95,10 +88,6 @@ const PageBuilderLayout = <C extends PageComponent<any, any>>({
       </main>
 
       {!isPreviewing && (
-        // --- MODIFIED ---
-        // The cast `as Data<BuiltInComponents>` has been removed. This makes the
-        // component truly generic. The EditorMenu component must now
-        // also be generic to accept `Data<C>`.
         <EditorMenu
           displaySaveButton={displaySaveButton}
           data={data}
@@ -129,7 +118,6 @@ function PageBuilderComponent<C extends PageComponent<any, any> = BuiltInCompone
         setIsPreviewing={setIsPreviewing}
         allowComponentToBeAdded={allowComponentToBeAdded}
       >
-        {/* --- MODIFIED --- Pass `props.data` to the HandleBinder */}
         <HandleBinder data={props.data} ref={ref} />
         <PageBuilderLayout {...props} />
       </ComponentProvider>

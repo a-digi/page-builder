@@ -1,4 +1,4 @@
-// path: src/components/page-builder/components/editor/EditorMenu.tsx
+// path: src/components/editor/EditorMenu.tsx
 import React, { useEffect, useMemo, useState } from 'react';
 import { useComponentRegistry } from '../../contexts/ComponentRegistry';
 import { useComponentContext } from '../../hooks/useComponentContext';

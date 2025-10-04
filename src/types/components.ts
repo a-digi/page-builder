@@ -1,4 +1,4 @@
-// path: src/components/page-builder/types/components.ts
+// path: src/types/components.ts
 import { type FC } from 'react';
 
 export type CustomButton<C extends PageComponent<any, any>> = {

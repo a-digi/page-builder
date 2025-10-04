@@ -1,4 +1,4 @@
-// path: src/components/page-builder/components/editor/Editor.tsx
+// path: src/components/editor/Editor.tsx
 import React, { useState, useCallback, createContext } from 'react';
 import { useComponentContext } from '../../hooks/useComponentContext';
 import type { CustomButton, PageComponent } from '../../types/components';

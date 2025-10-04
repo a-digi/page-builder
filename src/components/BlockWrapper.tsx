@@ -1,4 +1,4 @@
-// path: src/components/page-builder/components/BlockWrapper.tsx
+// path: src/components/BlockWrapper.tsx
 import React, { useState, useMemo, useRef, useEffect, useLayoutEffect, useCallback } from 'react';
 import { createPortal } from 'react-dom';
 import { type PageComponent, type CustomButton } from '../types/components';

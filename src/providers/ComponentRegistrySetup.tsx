@@ -1,4 +1,4 @@
-// path: src/components/page-builder/providers/ComponentRegistrySetup.tsx
+// path: src/providers/ComponentRegistrySetup.tsx
 import React, { useMemo } from 'react';
 import { ComponentRegistryProvider, type ComponentDefinition } from '../contexts/ComponentRegistry';
 import type { PageComponent, BuiltInComponents, BuiltInComponentType } from '../types/components';

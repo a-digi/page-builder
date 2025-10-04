@@ -1,4 +1,4 @@
-// path: src/components/page-builder/components/editor/ComponentRenderer.tsx
+// path: src/components/editor/ComponentRenderer.tsx
 import React from 'react';
 import { useComponentRegistry } from '../../contexts/ComponentRegistry';
 import type { PageComponent } from '../../types/components';

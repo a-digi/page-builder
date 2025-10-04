@@ -1,4 +1,4 @@
-// path: src/components/page-builder/components/editor/toolbar/EditorToolbar.tsx
+// path: src/components/editor/toolbar/EditorToolbar.tsx
 import React, { memo, useState, useEffect } from 'react';
 import TextColorPicker from './TextColorPicker';
 
