@@ -453,7 +453,7 @@ export const SettingsPanel = React.forwardRef<HTMLDivElement, SettingsPanelProps
             </div>
           )}
           <div ref={scrollContainerRef} onScroll={handleScroll} className="pb-flex-grow pb-overflow-y-auto">
-            {hasComponentTab && (!showTabs || activeTab === 'component') && (<div className="pb-space-y-4 pb-text-sm pb-p-4">{children}</div>)}
+            {hasComponentTab && (!showTabs || activeTab === 'component') && (<div className="pb-text-sm pb-p-4">{children}</div>)}
             {hasContainerTab && (!showTabs || activeTab === 'container') && (<div className="pb-p-4">{containerSettingsNode}</div>)}
           </div>
           {isOverflowing && !isScrolledToBottom && (
