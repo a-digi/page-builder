@@ -1,9 +1,8 @@
-// path: ./vite.config.ts
-
 import { resolve } from 'path';
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import dts from 'vite-plugin-dts';
+import cssInjectedByJsPlugin from 'vite-plugin-css-injected-by-js';
 
 export default defineConfig({
     plugins: [
@@ -14,6 +13,8 @@ export default defineConfig({
             // at the root of the 'dist' folder, which is what your package.json expects.
             insertTypesEntry: true,
         }),
+        // This plugin injects your CSS into the JS bundle.
+        cssInjectedByJsPlugin(),
     ],
     build: {
         // This indicates we are building a library
@@ -44,7 +45,6 @@ export default defineConfig({
                     react: 'React',
                     'react-dom': 'ReactDOM',
                 },
-                assetFileNames: 'style.css',
             },
         },
     },
