@@ -6,8 +6,6 @@ const SCROLL_SPEED = 15;
 
 interface UseDragAutoScrollProps {
   isDragging: boolean;
-  // --- CHANGED ---
-  // The ref's current property can be null initially.
   scrollContainerRef: React.RefObject<HTMLElement | null>;
 }
 
@@ -21,7 +19,6 @@ export const useDragAutoScroll = ({ isDragging, scrollContainerRef }: UseDragAut
 
   useEffect(() => {
     const container = scrollContainerRef.current;
-    // This check already handles the null case, so the logic is safe.
     if (!container) return;
 
     const stopScrolling = () => {
