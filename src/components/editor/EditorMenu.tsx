@@ -84,6 +84,10 @@ const EditorMenu: React.FC<Props> = ({ onSave, saveButtonClickable, data, displa
   }, [data]);
 
   useEffect(() => {
+    setOpen(isOpen);
+  }, [isOpen]);
+
+  useEffect(() => {
     if (!importText.trim()) {
       return;
     }
