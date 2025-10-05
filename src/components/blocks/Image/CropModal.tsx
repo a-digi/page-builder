@@ -204,66 +204,11 @@ export const CropModal = ({ imageUrl, onClose, onCrop, initialShape = 'rect' }: 
 
   return (
     <div
-      className="pb-fixed pb-z-[1000] pb-bg-white pb-left-0 pb-top-0 pb-right-0 pb-bottom-0 pb-flex pb-flex-col"
+      className="pb-fixed pb-z-[1000] pb-left-0 pb-top-0 pb-right-0 pb-bottom-0 pb-flex"
       style={{ top: 0, left: 0, right: 0, bottom: 0 }}
       onMouseDown={(e) => e.stopPropagation()}
     >
-      <div className="pb-p-4 pb-flex pb-justify-between pb-items-center pb-border-b pb-flex-shrink-0">
-        <h2 className="pb-text-xl pb-font-semibold pb-text-gray-800">Crop Image</h2>
-        <div className="pb-flex pb-items-center pb-space-x-4">
-          <div className="pb-flex pb-items-center pb-space-x-2">
-            <label htmlFor="options-menu" className="pb-text-sm pb-font-medium pb-text-gray-700">Crop Shape:</label>
-            <div ref={dropdownRef} className="pb-relative pb-inline-block pb-text-left">
-              <div>
-                <span className="pb-rounded-md pb-shadow-sm">
-                  <button
-                    type="button"
-                    onClick={() => setIsShapeDropdownOpen(!isShapeDropdownOpen)}
-                    className="pb-inline-flex pb-justify-center pb-w-full pb-rounded-md pb-px-4 pb-py-2 pb-bg-white pb-text-sm pb-font-medium pb-text-gray-700 pb-hover:bg-gray-50 focus:pb-outline-none focus:pb-ring-2 focus:pb-ring-offset-2 focus:pb-ring-offset-gray-100 focus:pb-ring-blue-500"
-                    id="options-menu"
-                    aria-haspopup="true"
-                    aria-expanded="true"
-                  >
-                    {cropShape.charAt(0).toUpperCase() + cropShape.slice(1)}
-                    <svg className="pb--mr-1 pb-ml-2 pb-h-5 pb-w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                      <path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRule="evenodd" />
-                    </svg>
-                  </button>
-                </span>
-              </div>
-              {isShapeDropdownOpen && (
-                <div className="pb-origin-top-right pb-absolute pb-right-0 pb-mt-2 pb-w-40 pb-rounded-md pb-shadow-lg pb-bg-white pb-ring-1 pb-ring-black pb-ring-opacity-5 z-10">
-                  <div className="pb-py-1" role="menu" aria-orientation="vertical" aria-labelledby="options-menu">
-                    <a
-                      href="#"
-                      onClick={(e) => { e.preventDefault(); handleShapeChange('rect'); }}
-                      className="pb-block pb-px-4 pb-py-2 pb-text-sm pb-text-gray-700 pb-hover:bg-gray-100 pb-hover:text-gray-900"
-                      role="menuitem"
-                    >
-                      Rectangle
-                    </a>
-                    <a
-                      href="#"
-                      onClick={(e) => { e.preventDefault(); handleShapeChange('circle'); }}
-                      className="pb-block pb-px-4 pb-py-2 pb-text-sm pb-text-gray-700 pb-hover:bg-gray-100 pb-hover:text-gray-900"
-                      role="menuitem"
-                    >
-                      Circle
-                    </a>
-                  </div>
-                </div>
-              )}
-            </div>
-          </div>
-          <button onClick={onClose} className="pb-px-5 pb-py-2 pb-rounded-md pb-bg-gray-200 pb-text-gray-800 pb-font-semibold pb-hover:bg-gray-300">
-            Cancel
-          </button>
-          <button onClick={handleApplyCrop} className="pb-px-5 pb-py-2 pb-rounded-md pb-bg-blue-500 pb-text-white pb-font-semibold pb-hover:bg-blue-600">
-            Apply Crop
-          </button>
-        </div>
-      </div>
-      <div className="pb-flex-grow pb-p-4 pb-flex pb-justify-center pb-items-center pb-overflow-auto pb-bg-white">
+      <div className="pb-flex-grow pb-p-4 pb-flex pb-justify-center pb-items-center pb-overflow-auto pb-bg-gray-100">
         <div className="pb-relative pb-inline-flex pb-justify-center pb-items-center pb-h-full">
           <img ref={imageRef} src={imageUrl} alt="Crop preview" className="pb-max-w-full pb-max-h-full pb-block pb-select-none" />
           <div
@@ -273,7 +218,7 @@ export const CropModal = ({ imageUrl, onClose, onCrop, initialShape = 'rect' }: 
               top: `${crop.y}%`,
               width: `${crop.width}%`,
               height: `${crop.height}%`,
-              boxShadow: '0 0 0 9999px rgba(255, 255, 255, 0.75)',
+              boxShadow: '0 0 0 9999px rgba(0, 0, 0, 0.5)',
               borderRadius: cropShape === 'circle' ? '50%' : '0%',
             }}
             onMouseDown={handleDragMouseDown}
@@ -282,6 +227,66 @@ export const CropModal = ({ imageUrl, onClose, onCrop, initialShape = 'rect' }: 
             <ResizeHandle handle="topRight" cursor="pb-cursor-nesw-resize" />
             <ResizeHandle handle="bottomLeft" cursor="pb-cursor-nesw-resize" />
             <ResizeHandle handle="bottomRight" cursor="pb-cursor-nwse-resize" />
+          </div>
+        </div>
+      </div>
+
+      <div className="pb-w-80 pb-flex-shrink-0 pb-flex pb-flex-col pb-p-6 pb-bg-white pb-border-l pb-border-gray-200">
+        <h2 className="pb-text-xl pb-font-semibold pb-text-gray-800 pb-mb-8">Crop Image</h2>
+
+        <div className="pb-mb-6">
+          <label htmlFor="options-menu" className="pb-block pb-text-sm pb-font-medium pb-text-gray-700 pb-mb-2">Crop Shape:</label>
+          <div ref={dropdownRef} className="pb-relative pb-inline-block pb-text-left pb-w-full">
+            <div>
+              <span className="pb-rounded-md pb-shadow-sm">
+                <button
+                  type="button"
+                  onClick={() => setIsShapeDropdownOpen(!isShapeDropdownOpen)}
+                  className="pb-inline-flex pb-justify-between pb-items-center pb-w-full pb-rounded-md pb-px-4 pb-py-2 pb-bg-white pb-border pb-border-gray-300 pb-text-sm pb-font-medium pb-text-gray-700 pb-hover:bg-gray-50 focus:pb-outline-none focus:pb-ring-2 focus:pb-ring-offset-2 focus:pb-ring-offset-gray-100 focus:pb-ring-blue-500"
+                  id="options-menu"
+                  aria-haspopup="true"
+                  aria-expanded="true"
+                >
+                  {cropShape.charAt(0).toUpperCase() + cropShape.slice(1)}
+                  <svg className="pb-h-5 pb-w-5 pb-text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                    <path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRule="evenodd" />
+                  </svg>
+                </button>
+              </span>
+            </div>
+            {isShapeDropdownOpen && (
+              <div className="pb-origin-top-right pb-absolute pb-right-0 pb-mt-2 pb-w-full pb-rounded-md pb-shadow-lg pb-bg-white pb-ring-1 pb-ring-black pb-ring-opacity-5 z-10">
+                <div className="pb-py-1" role="menu" aria-orientation="vertical" aria-labelledby="options-menu">
+                  <a
+                    href="#"
+                    onClick={(e) => { e.preventDefault(); handleShapeChange('rect'); }}
+                    className="pb-block pb-px-4 pb-py-2 pb-text-sm pb-text-gray-700 pb-hover:bg-gray-100 pb-hover:text-gray-900"
+                    role="menuitem"
+                  >
+                    Rectangle
+                  </a>
+                  <a
+                    href="#"
+                    onClick={(e) => { e.preventDefault(); handleShapeChange('circle'); }}
+                    className="pb-block pb-px-4 pb-py-2 pb-text-sm pb-text-gray-700 pb-hover:bg-gray-100 pb-hover:text-gray-900"
+                    role="menuitem"
+                  >
+                    Circle
+                  </a>
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+
+        <div className="pb-mt-auto">
+          <div className="pb-flex pb-flex-col pb-space-y-3">
+            <button onClick={handleApplyCrop} className="pb-w-full pb-px-5 pb-py-2 pb-rounded-md pb-bg-blue-500 pb-text-white pb-font-semibold pb-hover:bg-blue-600">
+              Apply Crop
+            </button>
+            <button onClick={onClose} className="pb-w-full pb-px-5 pb-py-2 pb-rounded-md pb-bg-gray-200 pb-text-gray-800 pb-font-semibold pb-hover:bg-gray-300">
+              Cancel
+            </button>
           </div>
         </div>
       </div>
