@@ -46,16 +46,16 @@ type Props = {
   displaySaveButton: boolean;
   data: Data<BuiltInComponents>;
   isOpen?: boolean;
+  onToggle?: () => void;
 }
 
-const EditorMenu: React.FC<Props> = ({ onSave, saveButtonClickable, data, displaySaveButton, isOpen = false }) => {
+const EditorMenu: React.FC<Props> = ({ onSave, saveButtonClickable, data, displaySaveButton, isOpen = false, onToggle }) => {
 
   const { listDefinitions } = useComponentRegistry();
   const definitions = listDefinitions();
   const ctx: any = useComponentContext();
   const { readOnly, setIsDragging } = useComponentContext();
 
-  const [open, setOpen] = useState(isOpen);
   const [hoveredDef, setHoveredDef] = useState<ComponentDefinition | null>(null);
 
   const components = readComponentsFromContext(ctx);
@@ -82,10 +82,6 @@ const EditorMenu: React.FC<Props> = ({ onSave, saveButtonClickable, data, displa
 
     setImportText(JSON.stringify(data.components));
   }, [data]);
-
-  useEffect(() => {
-    setOpen(isOpen);
-  }, [isOpen]);
 
   useEffect(() => {
     if (!importText.trim()) {
@@ -148,23 +144,23 @@ const EditorMenu: React.FC<Props> = ({ onSave, saveButtonClickable, data, displa
     <div className="pb-fixed pb-inset-y-0 pb-right-0 pb-z-40 pb-pointer-events-none">
       <button
         type="button"
-        onClick={() => setOpen(o => !o)}
-        style={{ right: open ? PANEL_WIDTH : 0, transform: 'translateY(-50%)' }}
+        onClick={onToggle}
+        style={{ right: isOpen ? PANEL_WIDTH : 0, transform: 'translateY(-50%)' }}
         className="pb-pointer-events-auto pb-fixed pb-top-1/2 pb-bg-white pb-border pb-border-gray-200 pb-shadow-lg pb-rounded-l-md pb-px-2 pb-py-2 pb-text-gray-600 pb-hover:text-blue-600 pb-hover:border-blue-400"
-        aria-expanded={open}
-        aria-label={open ? 'Close editor menu' : 'Open editor menu'}
-        title={open ? 'Close menu' : 'Open menu'}
+        aria-expanded={isOpen}
+        aria-label={isOpen ? 'Close editor menu' : 'Open editor menu'}
+        title={isOpen ? 'Close menu' : 'Open menu'}
       >
-        <Caret dir={open ? 'right' : 'left'} />
+        <Caret dir={isOpen ? 'right' : 'left'} />
       </button>
-      {open && (
+      {isOpen && (
         <div className="pb-pointer-events-auto pb-fixed pb-right-0 pb-top-0 pb-h-screen" style={{ width: PANEL_WIDTH }}>
           <aside className="pb-h-screen pb-w-full pb-bg-white pb-border-l pb-border-gray-200 pb-shadow-2xl pb-flex pb-flex-col pb-overflow-y-auto">
             <div className="pb-px-4 pb-py-3 pb-border-b pb-border-gray-100 pb-flex pb-items-center pb-justify-between pb-shrink-0 pb-sticky pb-top-0 pb-bg-white pb-z-10">
               <div className="pb-text-sm pb-font-semibold pb-text-gray-700">Editor Menu</div>
               <button
                 type="button"
-                onClick={() => setOpen(false)}
+                onClick={onToggle}
                 className="pb-p-2 pb-text-gray-500 pb-hover:text-blue-600"
                 title="Close"
                 aria-label="Close"

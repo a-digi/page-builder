@@ -23,6 +23,7 @@ export type Props<C extends PageComponent<any, any>> = {
   readOnly?: boolean;
   isEditorMenuOpen?: boolean;
   allowComponentToBeAdded?: (componentTypeToAdd: string, destinationContainerType: string | null) => boolean;
+  onMenuStateChange?: () => void;
 };
 
 export type Data<C extends PageComponent<any, any>> = {
@@ -65,7 +66,8 @@ const PageBuilderLayout = <C extends PageComponent<any, any>>({
   customToolbarButtons,
   customSettingsButtons,
   className,
-  isEditorMenuOpen = false
+  isEditorMenuOpen = false,
+  onMenuStateChange,
 }: Props<C>) => {
   const mainContainerRef = useRef<HTMLDivElement>(null);
   const { isDragging, isPreviewing } = useComponentContext();
@@ -93,6 +95,7 @@ const PageBuilderLayout = <C extends PageComponent<any, any>>({
           data={data}
           onSave={onSave}
           isOpen={isEditorMenuOpen}
+          onToggle={onMenuStateChange}
           saveButtonClickable={saveButtonClickable}
         />
       )}
