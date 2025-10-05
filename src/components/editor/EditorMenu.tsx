@@ -52,9 +52,13 @@ type Props = {
 const EditorMenu: React.FC<Props> = ({ onSave, saveButtonClickable, data, displaySaveButton, isOpen = false, onToggle }) => {
 
   const { listDefinitions } = useComponentRegistry();
-  const definitions = listDefinitions();
+  const allDefinitions = listDefinitions();
   const ctx: any = useComponentContext();
-  const { readOnly, setIsDragging } = useComponentContext();
+  const { readOnly, setIsDragging, allowComponentToBeAdded } = useComponentContext();
+
+  const definitions = useMemo(() => {
+    return allDefinitions.filter(def => allowComponentToBeAdded(def.type, null));
+  }, [allDefinitions, allowComponentToBeAdded]);
 
   const [hoveredDef, setHoveredDef] = useState<ComponentDefinition | null>(null);
 
