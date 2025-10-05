@@ -1,5 +1,5 @@
-// path: src/contexts/ComponentContext.tsx
-import React, { useState, useCallback, createContext, type ReactNode } from 'react';
+// path: src/components/page-builder/contexts/ComponentContext.tsx
+import React, { useState, useCallback, createContext, type ReactNode, useContext } from 'react';
 import { type PageComponent, type BuiltInComponents, type ParallaxPage } from '../types/components';
 import { useComponentRegistry } from './ComponentRegistry';
 
@@ -195,4 +195,12 @@ export const ComponentProvider = ({ children, readOnly = false, initialComponent
   };
 
   return <ComponentContext.Provider value={value}>{children}</ComponentContext.Provider>;
+};
+
+export const useComponentContext = () => {
+  const context = useContext(ComponentContext);
+  if (!context) {
+    throw new Error('useComponentContext must be used inside a ComponentProvider');
+  }
+  return context;
 };
