@@ -166,13 +166,12 @@ export const CropModal = ({ imageUrl, onClose, onCrop, initialShape = 'rect' }: 
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
 
-    const scaleX = image.naturalWidth / (image.width / zoom);
-    const scaleY = image.naturalHeight / (image.height / zoom);
-
-    const cropX = (crop.x / 100) * (image.width / zoom) * scaleX;
-    const cropY = (crop.y / 100) * (image.height / zoom) * scaleY;
-    const cropWidth = (crop.width / 100) * (image.width / zoom) * scaleX;
-    const cropHeight = (crop.height / 100) * (image.height / zoom) * scaleY;
+    // The crop state is in percentages of the image's bounding box.
+    // We can directly map these percentages to the natural dimensions of the image.
+    const cropX = (crop.x / 100) * image.naturalWidth;
+    const cropY = (crop.y / 100) * image.naturalHeight;
+    const cropWidth = (crop.width / 100) * image.naturalWidth;
+    const cropHeight = (crop.height / 100) * image.naturalHeight;
 
     if (cropShape === 'circle') {
       const size = Math.min(cropWidth, cropHeight);
@@ -219,29 +218,37 @@ export const CropModal = ({ imageUrl, onClose, onCrop, initialShape = 'rect' }: 
       onMouseDown={(e) => e.stopPropagation()}
     >
       <div className="pb-flex-grow pb-p-4 pb-flex pb-justify-center pb-items-center pb-overflow-auto pb-bg-gray-100">
-        <div className="pb-relative pb-inline-flex pb-justify-center pb-items-center pb-max-w-lg" style={{ zoom: zoom }}>
-          <img ref={imageRef} src={imageUrl} alt="Crop preview" className="pb-max-w-full pb-max-h-full pb-block pb-select-none" />
-          <div
-            className="pb-absolute pb-border-2 pb-border-dashed pb-border-white pb-cursor-move"
-            style={{
-              left: `${crop.x}%`,
-              top: `${crop.y}%`,
-              width: `${crop.width}%`,
-              height: `${crop.height}%`,
-              boxShadow: '0 0 0 9999px rgba(0, 0, 0, 0.5)',
-              borderRadius: cropShape === 'circle' ? '50%' : '0%',
-            }}
-            onMouseDown={handleDragMouseDown}
-          >
-            <ResizeHandle handle="topLeft" cursor="pb-cursor-nwse-resize" />
-            <ResizeHandle handle="topRight" cursor="pb-cursor-nesw-resize" />
-            <ResizeHandle handle="bottomLeft" cursor="pb-cursor-nesw-resize" />
-            <ResizeHandle handle="bottomRight" cursor="pb-cursor-nwse-resize" />
+        <div
+          className="pb-relative pb-inline-flex pb-justify-center pb-items-center"
+          style={{
+            width: `${100 * zoom}%`,
+            height: `${100 * zoom}%`,
+          }}
+        >
+          <div className="pb-relative pb-max-w-lg" >
+            <img ref={imageRef} src={imageUrl} alt="Crop preview" className="pb-max-w-full pb-max-h-full pb-block pb-select-none" />
+            <div
+              className="pb-absolute pb-border-2 pb-border-dashed pb-border-white pb-cursor-move"
+              style={{
+                left: `${crop.x}%`,
+                top: `${crop.y}%`,
+                width: `${crop.width}%`,
+                height: `${crop.height}%`,
+                boxShadow: '0 0 0 9999px rgba(0, 0, 0, 0.5)',
+                borderRadius: cropShape === 'circle' ? '50%' : '0%',
+              }}
+              onMouseDown={handleDragMouseDown}
+            >
+              <ResizeHandle handle="topLeft" cursor="pb-cursor-nwse-resize" />
+              <ResizeHandle handle="topRight" cursor="pb-cursor-nesw-resize" />
+              <ResizeHandle handle="bottomLeft" cursor="pb-cursor-nesw-resize" />
+              <ResizeHandle handle="bottomRight" cursor="pb-cursor-nwse-resize" />
+            </div>
           </div>
         </div>
       </div>
 
-      <div className="pb-w-80 pb-flex-shrink-0 pb-flex pb-flex-col pb-p-6 pb-bg-white pb-border-l pb-border-gray-200">
+      <div className="pb-w-96 pb-flex-shrink-0 pb-flex pb-flex-col pb-p-6 pb-bg-white pb-border-l pb-border-gray-200">
         <h2 className="pb-text-xl pb-font-semibold pb-text-gray-800 pb-mb-8">Crop Image</h2>
 
         <div className="pb-mb-6">
