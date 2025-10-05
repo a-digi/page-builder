@@ -21,6 +21,7 @@ export type Props<C extends PageComponent<any, any>> = {
   customToolbarButtons?: CustomButton<C>[];
   customSettingsButtons?: CustomButton<C>[];
   readOnly?: boolean;
+  isEditorMenuOpen?: boolean;
   allowComponentToBeAdded?: (componentTypeToAdd: string, destinationContainerType: string | null) => boolean;
 };
 
@@ -63,7 +64,8 @@ const PageBuilderLayout = <C extends PageComponent<any, any>>({
   data,
   customToolbarButtons,
   customSettingsButtons,
-  className
+  className,
+  isEditorMenuOpen = false
 }: Props<C>) => {
   const mainContainerRef = useRef<HTMLDivElement>(null);
   const { isDragging, isPreviewing } = useComponentContext();
@@ -90,6 +92,7 @@ const PageBuilderLayout = <C extends PageComponent<any, any>>({
           displaySaveButton={displaySaveButton}
           data={data}
           onSave={onSave}
+          isOpen={isEditorMenuOpen}
           saveButtonClickable={saveButtonClickable}
         />
       )}

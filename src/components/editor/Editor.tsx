@@ -118,7 +118,6 @@ function ComponentPageEditor<C extends PageComponent<any, any>>({
           onDragLeave={handleDragLeave}
         >
           {components.length === 0 ? (
-            // Case 1: Editor is empty
             <div className={`${emptyDropZoneBaseClasses} ${isDragging && dragOverIndex === 0
               ? emptyDropZoneActiveClasses
               : emptyDropZoneInactiveClasses
@@ -131,7 +130,6 @@ function ComponentPageEditor<C extends PageComponent<any, any>>({
               </p>
             </div>
           ) : (
-            // Case 2: Editor has components, show an expanding drop zone at the end
             <div className={`pb-relative pb-w-full pb-transition-all pb-duration-300 pb-ease-in-out ${isDragging && dragOverIndex === components.length ? 'pb-h-40' : 'pb-h-10'
               }`}>
               {isDragging && dragOverIndex === components.length && (

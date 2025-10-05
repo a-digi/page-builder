@@ -44,17 +44,18 @@ type Props = {
   onSave: (data: any) => void;
   saveButtonClickable: boolean;
   displaySaveButton: boolean;
-  data: Data<BuiltInComponents>
+  data: Data<BuiltInComponents>;
+  isOpen?: boolean;
 }
 
-const EditorMenu: React.FC<Props> = ({ onSave, saveButtonClickable, data, displaySaveButton }) => {
+const EditorMenu: React.FC<Props> = ({ onSave, saveButtonClickable, data, displaySaveButton, isOpen = false }) => {
 
   const { listDefinitions } = useComponentRegistry();
   const definitions = listDefinitions();
   const ctx: any = useComponentContext();
   const { readOnly, setIsDragging } = useComponentContext();
 
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(isOpen);
   const [hoveredDef, setHoveredDef] = useState<ComponentDefinition | null>(null);
 
   const components = readComponentsFromContext(ctx);
