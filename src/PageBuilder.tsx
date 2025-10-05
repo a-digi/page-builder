@@ -125,5 +125,4 @@ function PageBuilderComponent<C extends PageComponent<any, any> = BuiltInCompone
 
 const PageBuilder = forwardRef(PageBuilderComponent);
 
-
 export default PageBuilder;
