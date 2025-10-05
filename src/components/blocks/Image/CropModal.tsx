@@ -166,13 +166,13 @@ export const CropModal = ({ imageUrl, onClose, onCrop, initialShape = 'rect' }: 
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
 
-    const scaleX = image.naturalWidth / image.width;
-    const scaleY = image.naturalHeight / image.height;
+    const scaleX = image.naturalWidth / (image.width / zoom);
+    const scaleY = image.naturalHeight / (image.height / zoom);
 
-    const cropX = (crop.x / 100) * image.width * scaleX;
-    const cropY = (crop.y / 100) * image.height * scaleY;
-    const cropWidth = (crop.width / 100) * image.width * scaleX;
-    const cropHeight = (crop.height / 100) * image.height * scaleY;
+    const cropX = (crop.x / 100) * (image.width / zoom) * scaleX;
+    const cropY = (crop.y / 100) * (image.height / zoom) * scaleY;
+    const cropWidth = (crop.width / 100) * (image.width / zoom) * scaleX;
+    const cropHeight = (crop.height / 100) * (image.height / zoom) * scaleY;
 
     if (cropShape === 'circle') {
       const size = Math.min(cropWidth, cropHeight);
@@ -219,7 +219,7 @@ export const CropModal = ({ imageUrl, onClose, onCrop, initialShape = 'rect' }: 
       onMouseDown={(e) => e.stopPropagation()}
     >
       <div className="pb-flex-grow pb-p-4 pb-flex pb-justify-center pb-items-center pb-overflow-auto pb-bg-gray-100">
-        <div className="pb-relative pb-inline-flex pb-justify-center pb-items-center pb-h-full pb-w-full pb-max-w-[400px]" style={{ transform: `scale(${zoom})` }}>
+        <div className="pb-relative pb-inline-flex pb-justify-center pb-items-center pb-max-w-lg" style={{ zoom: zoom }}>
           <img ref={imageRef} src={imageUrl} alt="Crop preview" className="pb-max-w-full pb-max-h-full pb-block pb-select-none" />
           <div
             className="pb-absolute pb-border-2 pb-border-dashed pb-border-white pb-cursor-move"
