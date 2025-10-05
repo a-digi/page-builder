@@ -27,10 +27,20 @@ export const CropModal = ({ imageUrl, onClose, onCrop, initialShape = 'rect' }: 
 
   const [isDragging, setIsDragging] = useState(false);
   const [isResizing, setIsResizing] = useState(false);
+  const [zoom, setZoom] = useState(1);
 
   const [dragStart, setDragStart] = useState({ x: 0, y: 0, cropX: 0, cropY: 0 });
   const [resizeStart, setResizeStart] = useState<{ x: number, y: number, crop: CropArea, handle: ResizeHandle } | null>(null);
   const [, forceUpdate] = useReducer((x) => x + 1, 0);
+
+  const handleZoomIn = useCallback(() => {
+    setZoom(prev => Math.min(prev + 0.1, 3));
+  }, []);
+
+  const handleZoomOut = useCallback(() => {
+    setZoom(prev => Math.max(prev - 0.1, 0.5));
+  }, []);
+
 
   const handleDragMouseDown = (e: React.MouseEvent<HTMLDivElement>) => {
     // Prevent dragging when a resize handle is clicked
@@ -209,7 +219,7 @@ export const CropModal = ({ imageUrl, onClose, onCrop, initialShape = 'rect' }: 
       onMouseDown={(e) => e.stopPropagation()}
     >
       <div className="pb-flex-grow pb-p-4 pb-flex pb-justify-center pb-items-center pb-overflow-auto pb-bg-gray-100">
-        <div className="pb-relative pb-inline-flex pb-justify-center pb-items-center pb-h-full">
+        <div className="pb-relative pb-inline-flex pb-justify-center pb-items-center pb-h-full pb-w-full pb-max-w-[400px]" style={{ transform: `scale(${zoom})` }}>
           <img ref={imageRef} src={imageUrl} alt="Crop preview" className="pb-max-w-full pb-max-h-full pb-block pb-select-none" />
           <div
             className="pb-absolute pb-border-2 pb-border-dashed pb-border-white pb-cursor-move"
@@ -276,6 +286,18 @@ export const CropModal = ({ imageUrl, onClose, onCrop, initialShape = 'rect' }: 
                 </div>
               </div>
             )}
+          </div>
+        </div>
+
+        <div className="pb-mb-6">
+          <label className="pb-block pb-text-sm pb-font-medium pb-text-gray-700 pb-mb-2">Zoom</label>
+          <div className="pb-flex pb-items-center pb-space-x-2">
+            <button onClick={handleZoomOut} className="pb-p-2 pb-rounded-md pb-bg-gray-200 pb-hover:bg-gray-300">
+              <svg className="pb-w-5 pb-h-5 pb-text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M20 12H4"></path></svg>
+            </button>
+            <button onClick={handleZoomIn} className="pb-p-2 pb-rounded-md pb-bg-gray-200 pb-hover:bg-gray-300">
+              <svg className="pb-w-5 pb-h-5 pb-text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 4v16m8-8H4"></path></svg>
+            </button>
           </div>
         </div>
 
