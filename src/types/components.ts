@@ -114,8 +114,6 @@ export interface ParallaxComponentProps extends BaseComponentProps {
   is3DEnabled?: boolean;
 }
 
-// --- Component Type Aliases ---
-
 export type GenericComponent = PageComponent<'generic', GenericComponentProps>;
 export type DividerComponent = PageComponent<'divider', GenericComponentProps>;
 export type TextComponent = PageComponent<'text', TextProps>;
@@ -126,7 +124,6 @@ export type TextareaComponent = PageComponent<'textarea', TextareaComponentProps
 export type AlertComponent = PageComponent<'alert', AlertProps>;
 export type ImageComponent = PageComponent<'image', ImageComponentProps>;
 export type ParallaxComponent = PageComponent<'parallax', ParallaxComponentProps>;
-
 
 export type BuiltInComponents =
   | GenericComponent
