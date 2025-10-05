@@ -1,6 +1,6 @@
 // path: src/components/blocks/Column/ColumnBlock.tsx
 import React, { useState, useCallback, memo, Suspense, useRef, useEffect, useMemo, useContext, useLayoutEffect } from 'react';
-import type { ColumnComponent as ColumnComponent, PageComponent } from '../../../types/components';
+import type { ColumnComponent as ColumnComponentType, PageComponent, ColumnComponentProps, CustomButton } from '../../../types/components';
 import { useComponentContext } from '../../../hooks/useComponentContext';
 import { useComponentRegistry, type ComponentDefinition } from '../../../contexts/ComponentRegistry';
 import { CustomButtonsContext as EditorCustomButtonsContext } from '../../editor/Editor';
@@ -44,7 +44,147 @@ type ResizingState = {
   liveTemplate: string;
 };
 
-const ColumnBlock = memo(({ component }: { component: ColumnComponent }) => {
+const ColumnCell = memo(({
+  parentContext,
+  componentId,
+  componentProps,
+  colIndex,
+  rowIndex,
+  dragOverState,
+  handleDragLeave,
+  handleDragOver,
+  handleDrop,
+  handleDragStartInternal,
+  customToolbarButtons,
+  itemRefs,
+}: {
+  parentContext: ReturnType<typeof useComponentContext>;
+  componentId: number;
+  componentProps: ColumnComponentProps;
+  colIndex: number;
+  rowIndex: number;
+  dragOverState: { cellIndex: number; itemIndex: number } | null;
+  handleDragLeave: () => void;
+  handleDragOver: (e: React.DragEvent, cellIndex: number, itemIndex: number) => void;
+  handleDrop: (e: React.DragEvent, destCellIndex: number, destItemIndexParam: number) => void;
+  handleDragStartInternal: (e: React.DragEvent, sourceCellIndex: number, component: PageComponent<any, any>) => void;
+  customToolbarButtons?: CustomButton<PageComponent<any, any>>[];
+  itemRefs: React.MutableRefObject<Map<number, React.RefObject<HTMLDivElement | null>>>;
+}) => {
+  const { readOnly, updateComponent } = parentContext;
+  const { numCols, gridContents, colPaddings, colMargins, colFullHeight, colTextColors, colStyles, colColors, colClasses } = componentProps;
+  const cellIndex = rowIndex * numCols + colIndex;
+  const contents = (gridContents as Record<number, PageComponent<any, any>[]>)[cellIndex] || [];
+  const isCellDragOverTarget = dragOverState?.cellIndex === cellIndex;
+
+  const colPadding = colPaddings?.[colIndex] || {};
+  const colMargin = colMargins?.[colIndex] || {};
+
+  const isColFullHeight = colFullHeight?.[colIndex] || false;
+  const colTextColor = colTextColors?.[colIndex];
+
+  const columnStyle: React.CSSProperties = {
+    ...parseStyles(colStyles?.[colIndex] || ''),
+    backgroundColor: colColors?.[colIndex] || 'transparent',
+    position: 'relative'
+  };
+
+  const columnClasses = ['pb-relative', 'pb-items-stretch', 'pb-flex', 'pb-flex-col', colClasses?.[colIndex] || ''];
+
+  if (isColFullHeight) {
+    columnClasses.push('pb-h-full');
+  }
+  if (colTextColor) {
+    columnStyle.color = colTextColor;
+  }
+  if (colPadding.paddingTop) columnStyle.paddingTop = `${colPadding.paddingTop}rem`;
+  if (colPadding.paddingRight) columnStyle.paddingRight = `${colPadding.paddingRight}rem`;
+  if (colPadding.paddingBottom) columnStyle.paddingBottom = `${colPadding.paddingBottom}rem`;
+  if (colPadding.paddingLeft) columnStyle.paddingLeft = `${colPadding.paddingLeft}rem`;
+  if (colMargin.marginTop) columnStyle.marginTop = `${colMargin.marginTop}rem`;
+  if (colMargin.marginRight) columnStyle.marginRight = `${colMargin.marginRight}rem`;
+  if (colMargin.marginBottom) columnStyle.marginBottom = `${colMargin.marginBottom}rem`;
+  if (colMargin.marginLeft) columnStyle.marginLeft = `${colMargin.marginLeft}rem`;
+
+  // Create a scoped context for components within this column cell
+  const scopedContextValue = useMemo(() => {
+    const scopedUpdateComponent = (updatedComponentId: number, newProps: Partial<PageComponent<any, any>['props']>) => {
+      const newGridContents = { ...gridContents };
+      const cellContents = [...(newGridContents[cellIndex] || [])];
+      const compIndex = cellContents.findIndex(c => c.id === updatedComponentId);
+      if (compIndex !== -1) {
+        cellContents[compIndex] = {
+          ...cellContents[compIndex],
+          props: { ...cellContents[compIndex].props, ...newProps }
+        };
+        newGridContents[cellIndex] = cellContents;
+        updateComponent(componentId, { gridContents: newGridContents });
+      }
+    };
+
+    const scopedDeleteComponent = (deletedComponentId: number) => {
+      const newGridContents = { ...gridContents };
+      const cellContents = newGridContents[cellIndex] || [];
+      newGridContents[cellIndex] = cellContents.filter(c => c.id !== deletedComponentId);
+      updateComponent(componentId, { gridContents: newGridContents });
+    };
+
+    return {
+      ...parentContext,
+      updateComponent: scopedUpdateComponent,
+      deleteComponent: scopedDeleteComponent,
+      isNested: true,
+    };
+
+  }, [parentContext, cellIndex, gridContents, updateComponent, componentId]);
+
+  return (
+    <div
+      data-column-index={colIndex}
+      className={columnClasses.join(' ')}
+      style={columnStyle}
+    >
+      <ComponentContext.Provider value={scopedContextValue}>
+        {contents.length > 0 ? (
+          <div className="column-content pb-space-y-2 pb-group/item-list" onDragLeave={!readOnly ? handleDragLeave : undefined}>
+            {contents.map((comp, itemIndex) => {
+              if (!itemRefs.current.has(comp.id)) {
+                itemRefs.current.set(comp.id, React.createRef<HTMLDivElement>());
+              }
+              const itemRef = itemRefs.current.get(comp.id)!;
+              return (
+                <DraggableItem
+                  key={comp.id}
+                  itemRef={itemRef as React.RefObject<HTMLDivElement>}
+                  component={comp}
+                  cellIndex={cellIndex}
+                  itemIndex={itemIndex}
+                  onDragStart={!readOnly ? (e) => handleDragStartInternal(e, cellIndex, comp) : () => { }}
+                  onDragOver={!readOnly ? (e) => handleDragOver(e, cellIndex, itemIndex) : () => { }}
+                  onDrop={!readOnly ? (e) => handleDrop(e, cellIndex, itemIndex) : () => { }}
+                  isDragOver={!readOnly && isCellDragOverTarget && dragOverState?.itemIndex === itemIndex}
+                  customToolbarButtons={customToolbarButtons}
+                />
+              );
+            })}
+            {!readOnly && <div className={`pb-w-full pb-relative ${isCellDragOverTarget && dragOverState?.itemIndex === contents.length ? 'pb-min-h-[4rem]' : 'pb-min-h-[8px]'}`} onDragOver={e => handleDragOver(e, cellIndex, contents.length)} onDrop={e => handleDrop(e, cellIndex, contents.length)}>
+              {isCellDragOverTarget && dragOverState?.itemIndex === contents.length && <div className="pb-border-t-2 pb-border-blue-500 pb-h-1 pb-animate-pulse" />}
+            </div>}
+          </div>
+        ) : (
+          !readOnly ? (
+            <div onDragOver={e => handleDragOver(e, cellIndex, 0)} onDragLeave={handleDragLeave} onDrop={e => handleDrop(e, cellIndex, 0)} className={`pb-h-full pb-min-h-[50px] pb-rounded-md pb-border pb-border-dashed pb-flex pb-items-center pb-justify-center pb-text-xs pb-text-gray-400 pb-transition-colors ${isCellDragOverTarget ? 'pb-bg-blue-100/50 pb-border-blue-400' : 'pb-bg-transparent pb-border-gray-300/70'}`}>
+              Drop here
+            </div>
+          ) : <div className="pb-h-full pb-min-h-[50px]"></div>
+        )}
+      </ComponentContext.Provider>
+    </div>
+  );
+});
+
+
+const ColumnBlock = memo(({ component }: { component: ColumnComponentType }) => {
   const parentContext = useComponentContext();
   const { createComponent } = useComponentRegistry();
   const { customToolbarButtons } = useContext(EditorCustomButtonsContext);
@@ -335,115 +475,22 @@ const ColumnBlock = memo(({ component }: { component: ColumnComponent }) => {
           <div key={rowIndex} ref={el => { gridRefs.current[rowIndex] = el; }} className="pb-grid pb-relative pb-items-stretch" style={gridStyle}>
             {Array.from({ length: props.numCols }).map((_, colIndex) => {
               const cellIndex = rowIndex * props.numCols + colIndex;
-              const contents = (props.gridContents as Record<number, PageComponent<any, any>[]>)[cellIndex] || [];
-              const isCellDragOverTarget = dragOverState?.cellIndex === cellIndex;
-
-              const colPadding = props.colPaddings?.[colIndex] || {};
-              const colMargin = props.colMargins?.[colIndex] || {};
-
-              const isColFullHeight = props.colFullHeight?.[colIndex] || false;
-              const colTextColor = props.colTextColors?.[colIndex];
-
-              const columnStyle: React.CSSProperties = {
-                ...parseStyles(props.colStyles?.[colIndex] || ''),
-                backgroundColor: props.colColors?.[colIndex] || 'transparent',
-                position: 'relative'
-              };
-
-              const columnClasses = ['pb-relative', 'pb-items-stretch', 'pb-flex', 'pb-flex-col', props.colClasses?.[colIndex] || ''];
-
-              if (isColFullHeight) {
-                columnClasses.push('pb-h-full');
-              }
-              if (colTextColor) {
-                columnStyle.color = colTextColor;
-              }
-              if (colPadding.paddingTop) columnStyle.paddingTop = `${colPadding.paddingTop}rem`;
-              if (colPadding.paddingRight) columnStyle.paddingRight = `${colPadding.paddingRight}rem`;
-              if (colPadding.paddingBottom) columnStyle.paddingBottom = `${colPadding.paddingBottom}rem`;
-              if (colPadding.paddingLeft) columnStyle.paddingLeft = `${colPadding.paddingLeft}rem`;
-              if (colMargin.marginTop) columnStyle.marginTop = `${colMargin.marginTop}rem`;
-              if (colMargin.marginRight) columnStyle.marginRight = `${colMargin.marginRight}rem`;
-              if (colMargin.marginBottom) columnStyle.marginBottom = `${colMargin.marginBottom}rem`;
-              if (colMargin.marginLeft) columnStyle.marginLeft = `${colMargin.marginLeft}rem`;
-
-
-              // Create a scoped context for components within this column cell
-              const scopedContextValue = useMemo(() => {
-                const scopedUpdateComponent = (componentId: number, newProps: Partial<PageComponent<any, any>['props']>) => {
-                  const newGridContents = { ...props.gridContents };
-                  const cellContents = [...(newGridContents[cellIndex] || [])];
-                  const compIndex = cellContents.findIndex(c => c.id === componentId);
-                  if (compIndex !== -1) {
-                    cellContents[compIndex] = {
-                      ...cellContents[compIndex],
-                      props: { ...cellContents[compIndex].props, ...newProps }
-                    };
-                    newGridContents[cellIndex] = cellContents;
-                    updateComponent(id, { gridContents: newGridContents });
-                  }
-                };
-
-                const scopedDeleteComponent = (componentId: number) => {
-                  const newGridContents = { ...props.gridContents };
-                  const cellContents = newGridContents[cellIndex] || [];
-                  newGridContents[cellIndex] = cellContents.filter(c => c.id !== componentId);
-                  updateComponent(id, { gridContents: newGridContents });
-                };
-
-                return {
-                  ...parentContext,
-                  updateComponent: scopedUpdateComponent,
-                  deleteComponent: scopedDeleteComponent,
-                  isNested: true,
-                };
-
-              }, [parentContext, cellIndex, props.gridContents, updateComponent, id]);
-
-
               return (
-                <div
+                <ColumnCell
                   key={`col-${cellIndex}`}
-                  data-column-index={colIndex}
-                  className={columnClasses.join(' ')}
-                  style={columnStyle}
-                >
-                  <ComponentContext.Provider value={scopedContextValue}>
-                    {contents.length > 0 ? (
-                      <div className="column-content pb-space-y-2 pb-group/item-list" onDragLeave={!readOnly ? handleDragLeave : undefined}>
-                        {contents.map((comp, itemIndex) => {
-                          if (!itemRefs.current.has(comp.id)) {
-                            itemRefs.current.set(comp.id, React.createRef<HTMLDivElement>());
-                          }
-                          const itemRef = itemRefs.current.get(comp.id)!;
-                          return (
-                            <DraggableItem
-                              key={comp.id}
-                              itemRef={itemRef as React.RefObject<HTMLDivElement>}
-                              component={comp}
-                              cellIndex={cellIndex}
-                              itemIndex={itemIndex}
-                              onDragStart={!readOnly ? handleDragStartInternal : () => { }}
-                              onDragOver={!readOnly ? (e) => handleDragOver(e, cellIndex, itemIndex) : () => { }}
-                              onDrop={!readOnly ? (e) => handleDrop(e, cellIndex, itemIndex) : () => { }}
-                              isDragOver={!readOnly && isCellDragOverTarget && dragOverState?.itemIndex === itemIndex}
-                              customToolbarButtons={customToolbarButtons}
-                            />
-                          );
-                        })}
-                        {!readOnly && <div className={`pb-w-full pb-relative ${isCellDragOverTarget && dragOverState?.itemIndex === contents.length ? 'pb-min-h-[4rem]' : 'pb-min-h-[8px]'}`} onDragOver={e => handleDragOver(e, cellIndex, contents.length)} onDrop={e => handleDrop(e, cellIndex, contents.length)}>
-                          {isCellDragOverTarget && dragOverState?.itemIndex === contents.length && <div className="pb-border-t-2 pb-border-blue-500 pb-h-1 pb-animate-pulse" />}
-                        </div>}
-                      </div>
-                    ) : (
-                      !readOnly ? (
-                        <div onDragOver={e => handleDragOver(e, cellIndex, 0)} onDragLeave={handleDragLeave} onDrop={e => handleDrop(e, cellIndex, 0)} className={`pb-h-full pb-min-h-[50px] pb-rounded-md pb-border pb-border-dashed pb-flex pb-items-center pb-justify-center pb-text-xs pb-text-gray-400 pb-transition-colors ${isCellDragOverTarget ? 'pb-bg-blue-100/50 pb-border-blue-400' : 'pb-bg-transparent pb-border-gray-300/70'}`}>
-                          Drop here
-                        </div>
-                      ) : <div className="pb-h-full pb-min-h-[50px]"></div>
-                    )}
-                  </ComponentContext.Provider>
-                </div>
+                  parentContext={parentContext}
+                  componentId={id}
+                  componentProps={props}
+                  colIndex={colIndex}
+                  rowIndex={rowIndex}
+                  dragOverState={dragOverState}
+                  handleDragLeave={handleDragLeave}
+                  handleDragOver={handleDragOver}
+                  handleDrop={handleDrop}
+                  handleDragStartInternal={handleDragStartInternal}
+                  customToolbarButtons={customToolbarButtons}
+                  itemRefs={itemRefs}
+                />
               );
             })}
 
@@ -471,7 +518,7 @@ export const overlayBlockDefinition: ComponentDefinition = {
   type: 'column',
   label: 'Column block',
   icon: icon,
-  create: (): ColumnComponent => {
+  create: (): ColumnComponentType => {
     const numRows = 1;
     const numCols = 2;
     return {
@@ -495,5 +542,5 @@ export const overlayBlockDefinition: ComponentDefinition = {
     }
   },
   Renderer: ColumnBlock as any,
-  renderSettings: ({ component, updateComponent }) => <ColumnBlockSettings component={component as ColumnComponent} updateComponent={updateComponent as any} />,
+  renderSettings: ({ component, updateComponent }) => <ColumnBlockSettings component={component as ColumnComponentType} updateComponent={updateComponent as any} />,
 };
