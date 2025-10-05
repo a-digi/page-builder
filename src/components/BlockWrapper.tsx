@@ -8,22 +8,7 @@ import { SettingsButton } from './controls/SettingsButton';
 import { DeleteButton } from './controls/DeleteButton';
 import { SettingsPanel } from './controls/SettingsPanel';
 import { useComponentRegistry } from '../contexts/ComponentRegistry';
-
-const parseStyles = (styleString: string): React.CSSProperties => {
-  try {
-    const style: React.CSSProperties = {};
-    styleString.split(';').forEach(rule => {
-      const [key, value] = rule.split(':');
-      if (key && value) {
-        const camelCaseKey = key.trim().replace(/-([a-z])/g, g => g[1].toUpperCase());
-        style[camelCaseKey as keyof React.CSSProperties] = value.trim() as any;
-      }
-    });
-    return style;
-  } catch (error) {
-    return {};
-  }
-};
+import { blockWrapperStyleBuilder } from './builder/styleBuilder';
 
 export const dataBlockIdAttr = 'data-block-id';
 
@@ -80,25 +65,7 @@ export function BlockWrapper<C extends PageComponent<any, any>>({
   const renderSettings = definition?.renderSettings;
 
   const containerStyle = useMemo(() => {
-    const newStyle: React.CSSProperties = parseStyles(component.props.containerStyles || '');
-    const {
-      paddingTop, paddingRight, paddingBottom, paddingLeft,
-      marginTop, marginRight, marginBottom, marginLeft,
-      containerBackgroundColor, textColor
-    } = component.props;
-
-    if (paddingTop) newStyle.paddingTop = `${paddingTop}rem`;
-    if (paddingRight) newStyle.paddingRight = `${paddingRight}rem`;
-    if (paddingBottom) newStyle.paddingBottom = `${paddingBottom}rem`;
-    if (paddingLeft) newStyle.paddingLeft = `${paddingLeft}rem`;
-    if (marginTop) newStyle.marginTop = `${marginTop}rem`;
-    if (marginRight) newStyle.marginRight = `${marginRight}rem`;
-    if (marginBottom) newStyle.marginBottom = `${marginBottom}rem`;
-    if (marginLeft) newStyle.marginLeft = `${marginLeft}rem`;
-    if (containerBackgroundColor) newStyle.backgroundColor = containerBackgroundColor;
-    if (textColor) newStyle.color = textColor;
-
-    return newStyle;
+    return blockWrapperStyleBuilder(component);
   }, [
     component.props.containerStyles,
     component.props.paddingTop, component.props.paddingRight, component.props.paddingBottom, component.props.paddingLeft,
