@@ -78,6 +78,8 @@ const ImageBlock = memo(({ component }: { component: ImageComponent }) => {
       return;
     }
 
+    const urlToFetch = props.externalImageUrl;
+
     const fetchAndConvertImage = async () => {
       setIsFetchingUrl(true);
       setIsUploading(true);
@@ -90,7 +92,7 @@ const ImageBlock = memo(({ component }: { component: ImageComponent }) => {
       };
 
       try {
-        const response = await fetch(props.externalImageUrl);
+        const response = await fetch(urlToFetch);
         if (!response.ok) {
           throw new Error(`Failed to fetch image. Status: ${response.status}`);
         }
@@ -229,7 +231,7 @@ const ImageBlock = memo(({ component }: { component: ImageComponent }) => {
     };
   }, [isResizing, isDragging, handleMouseMove, handleMouseUp]);
 
-  const displayUrl = props.externalImageUrl || props.url;
+  const displayUrl = props.url;
 
   const containerStyles: React.CSSProperties = isNested
     ? {
