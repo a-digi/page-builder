@@ -36,6 +36,7 @@ const ImageBlock = memo(({ component }: { component: ImageComponent }) => {
 
   const [manualUrl, setManualUrl] = useState('');
   const [isUploading, setIsUploading] = useState(false);
+  const [isFetchingUrl, setIsFetchingUrl] = useState(false);
   const [isResizing, setIsResizing] = useState(false);
   const [isDragging, setIsDragging] = useState(false);
   const [dragStart, setDragStart] = useState<{ startX: number; startY: number; initialX: number; initialY: number; } | null>(null);
@@ -43,6 +44,76 @@ const ImageBlock = memo(({ component }: { component: ImageComponent }) => {
 
   const containerRef = useRef<HTMLDivElement>(null);
   const inputId = `image-upload-${id}`;
+
+  const processImageResult = useCallback((result: string) => {
+    const img = new Image();
+    img.onload = () => {
+      const MAX_DIMENSION = 500;
+      let initialWidth = img.width;
+      let initialHeight = img.height;
+
+      if (initialWidth > MAX_DIMENSION || initialHeight > MAX_DIMENSION) {
+        if (img.width > img.height) {
+          initialWidth = MAX_DIMENSION;
+          initialHeight = (img.height / img.width) * MAX_DIMENSION;
+        } else {
+          initialHeight = MAX_DIMENSION;
+          initialWidth = (img.width / img.height) * MAX_DIMENSION;
+        }
+      }
+
+      updateComponent(id, { url: result, width: initialWidth, height: initialHeight, x: 0, y: 0, externalImageUrl: '' });
+      setIsUploading(false);
+    };
+    img.onerror = () => {
+      console.error("Error loading image from data URL.");
+      setIsUploading(false);
+      updateComponent(id, { url: '', externalImageUrl: '' });
+    };
+    img.src = result;
+  }, [id, updateComponent]);
+
+  useEffect(() => {
+    if (!props.externalImageUrl || isFetchingUrl) {
+      return;
+    }
+
+    const fetchAndConvertImage = async () => {
+      setIsFetchingUrl(true);
+      setIsUploading(true);
+
+      const handleError = (error: any) => {
+        console.error("Error processing image from URL:", error);
+        updateComponent(id, { externalImageUrl: '' });
+        setIsUploading(false);
+        setIsFetchingUrl(false);
+      };
+
+      try {
+        const response = await fetch(props.externalImageUrl);
+        if (!response.ok) {
+          throw new Error(`Failed to fetch image. Status: ${response.status}`);
+        }
+        const blob = await response.blob();
+        if (!blob.type.startsWith('image/')) {
+          throw new Error('Fetched file is not an image');
+        }
+
+        const reader = new FileReader();
+        reader.onloadend = () => {
+          const result = reader.result as string;
+          processImageResult(result);
+          setIsFetchingUrl(false);
+        };
+        reader.onerror = () => handleError('FileReader failed to read blob.');
+        reader.readAsDataURL(blob);
+      } catch (error) {
+        handleError(error);
+      }
+    };
+
+    fetchAndConvertImage();
+  }, [props.externalImageUrl, isFetchingUrl, id, updateComponent, processImageResult]);
 
   const processFile = useCallback(async (file: File) => {
     if (!file || !file.type.startsWith('image/')) return;
@@ -54,37 +125,21 @@ const ImageBlock = memo(({ component }: { component: ImageComponent }) => {
         updateComponent(id, { externalImageUrl: newUrl, url: '' });
       } catch (error) {
         console.error("External image upload failed:", error);
-      } finally {
         setIsUploading(false);
       }
     } else {
       const reader = new FileReader();
       reader.onloadend = () => {
         const result = reader.result as string;
-        const img = new Image();
-        img.onload = () => {
-          const MAX_DIMENSION = 500;
-          let initialWidth = img.width;
-          let initialHeight = img.height;
-
-          if (initialWidth > MAX_DIMENSION || initialHeight > MAX_DIMENSION) {
-            if (img.width > img.height) {
-              initialWidth = MAX_DIMENSION;
-              initialHeight = (img.height / img.width) * MAX_DIMENSION;
-            } else {
-              initialHeight = MAX_DIMENSION;
-              initialWidth = (img.width / img.height) * MAX_DIMENSION;
-            }
-          }
-
-          updateComponent(id, { url: result, width: initialWidth, height: initialHeight, x: 0, y: 0, externalImageUrl: '' });
-          setIsUploading(false);
-        };
-        img.src = result;
+        processImageResult(result);
+      };
+      reader.onerror = () => {
+        console.error('FileReader failed to read file.');
+        setIsUploading(false);
       };
       reader.readAsDataURL(file);
     }
-  }, [id, updateComponent, onImageSelect]);
+  }, [id, updateComponent, onImageSelect, processImageResult]);
 
   const handleSetManualUrl = () => {
     if (manualUrl.trim() && (manualUrl.startsWith('http') || manualUrl.startsWith('/'))) {
