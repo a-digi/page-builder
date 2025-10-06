@@ -48,21 +48,38 @@ const ImageBlock = memo(({ component }: { component: ImageComponent }) => {
   const processImageResult = useCallback((result: string) => {
     const img = new Image();
     img.onload = () => {
-      const MAX_DIMENSION = 500;
-      let initialWidth = img.width;
-      let initialHeight = img.height;
+      const MAX_DIMENSION = 300;
+      let { width, height } = img;
 
-      if (initialWidth > MAX_DIMENSION || initialHeight > MAX_DIMENSION) {
-        if (img.width > img.height) {
-          initialWidth = MAX_DIMENSION;
-          initialHeight = (img.height / img.width) * MAX_DIMENSION;
+      if (width > MAX_DIMENSION || height > MAX_DIMENSION) {
+        if (width > height) {
+          height = (height / width) * MAX_DIMENSION;
+          width = MAX_DIMENSION;
         } else {
-          initialHeight = MAX_DIMENSION;
-          initialWidth = (img.width / img.height) * MAX_DIMENSION;
+          width = (width / height) * MAX_DIMENSION;
+          height = MAX_DIMENSION;
         }
       }
 
-      updateComponent(id, { url: result, width: initialWidth, height: initialHeight, x: 0, y: 0, externalImageUrl: '' });
+      const canvasWidth = Math.round(width);
+      const canvasHeight = Math.round(height);
+
+      const canvas = document.createElement('canvas');
+      canvas.width = canvasWidth;
+      canvas.height = canvasHeight;
+      const ctx = canvas.getContext('2d');
+
+      if (!ctx) {
+        console.error("Could not get canvas context for image resizing.");
+        setIsUploading(false);
+        return;
+      }
+
+      ctx.drawImage(img, 0, 0, canvasWidth, canvasHeight);
+
+      const resizedDataUrl = canvas.toDataURL('image/jpeg', 1.0);
+
+      updateComponent(id, { url: resizedDataUrl, width: canvasWidth, height: canvasHeight, x: 0, y: 0, externalImageUrl: '' });
       setIsUploading(false);
     };
     img.onerror = () => {
