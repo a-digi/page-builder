@@ -27,7 +27,7 @@ const DraggableItem: React.FC<{
       >
         {isDragOver && <div className="pb-border-t-2 pb-border-blue-500 pb-h-1 pb-animate-pulse" />}
       </div>
-      <div ref={itemRef as React.RefObject<HTMLDivElement>} className="pb-relative pb-group/component">
+      <div ref={itemRef as React.RefObject<HTMLDivElement>} className="pb-relative pb-group/component" data-att-type={component.type}>
         <BlockWrapper
           component={component}
           onDragStart={(e) => {
