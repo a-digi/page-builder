@@ -120,11 +120,13 @@ export const ComponentProvider = ({ children, readOnly = false, initialComponent
   }, []);
 
   const addComponent = useCallback((type: string, dropIndex?: number) => {
-    // If not allowed, do nothing and keep existing components
-    if (!allowComponentToBeAdded(type, null)) {
-      console.warn(`Adding component of type "${type}" to the root container is not allowed.`);
+    const allowed = allowComponentToBeAdded(type, null);
+    console.log('[addComponent] type:', type, 'allowed:', allowed);
+    if (!allowed) {
+      // Do nothing, keep existing components
       return;
     }
+
     const newComponent = createComponentFromRegistry(type);
     if (!newComponent) {
       console.error(`Failed to create component of type: ${type}`);
