@@ -120,6 +120,7 @@ export const ComponentProvider = ({ children, readOnly = false, initialComponent
   }, []);
 
   const addComponent = useCallback((type: string, dropIndex?: number) => {
+    // If not allowed, do nothing and keep existing components
     if (!allowComponentToBeAdded(type, null)) {
       console.warn(`Adding component of type "${type}" to the root container is not allowed.`);
       return;
@@ -129,8 +130,8 @@ export const ComponentProvider = ({ children, readOnly = false, initialComponent
       console.error(`Failed to create component of type: ${type}`);
       return;
     }
-
     setComponents(prev => {
+      if (!newComponent) return prev; // Extra guard
       const newArray = [...prev];
       if (dropIndex !== undefined) {
         newArray.splice(dropIndex, 0, newComponent);
@@ -160,17 +161,20 @@ export const ComponentProvider = ({ children, readOnly = false, initialComponent
     setComponents(sanitized);
   }, [ensureUniqueIds]);
 
+  // --- PATCH START: Only move if allowed ---
   const moveComponentToRoot = useCallback((component: PageComponent<any, any>, dropIndex: number) => {
     if (!allowComponentToBeAdded(component.type, null)) {
       console.warn(`Moving component of type "${component.type}" to root is not allowed.`);
       return;
     }
+
     setComponents(prev => {
       const afterDelete = deepDelete(prev, component.id);
       afterDelete.splice(dropIndex, 0, component);
       return afterDelete;
     });
   }, [deepDelete, allowComponentToBeAdded]);
+  // --- PATCH END ---
 
   const value: ComponentContextType<any> = {
     components,
