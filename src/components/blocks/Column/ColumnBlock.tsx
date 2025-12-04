@@ -414,9 +414,12 @@ const ColumnBlock = memo(({ component }: { component: ColumnComponentType }) => 
       return;
     }
 
+    // Check before any mutation or deletion
     if (!allowComponentToBeAdded(componentType, component.type)) {
       console.warn(`Adding component of type "${componentType}" to a "${component.type}" component is not allowed.`);
       e.dataTransfer.dropEffect = 'none';
+      // Explicitly set gridContents to current state to preserve existing components
+      updateComponent(id, { gridContents: props.gridContents });
       return;
     }
 
