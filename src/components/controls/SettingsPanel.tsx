@@ -339,7 +339,7 @@ export const SettingsPanel = React.forwardRef<HTMLDivElement, SettingsPanelProps
                   <IndividualSpacingInput label="Top" value={component.props.paddingTop ?? legacyPadding} onChange={(e) => handleUpdate({ paddingTop: parseFloat(e.target.value) || 0 })} />
                   <IndividualSpacingInput label="Bottom" value={component.props.paddingBottom ?? legacyPadding} onChange={(e) => handleUpdate({ paddingBottom: parseFloat(e.target.value) || 0 })} />
                   <IndividualSpacingInput label="Left" value={component.props.paddingLeft ?? legacyPadding} onChange={(e) => handleUpdate({ paddingLeft: parseFloat(e.target.value) || 0 })} />
-                  <IndividualSpacingInput label="Right" value={component.props.paddingRight ?? legacyPadding} onChange={(e) => handleUpdate({ marginRight: parseFloat(e.target.value) || 0 })} />
+                  <IndividualSpacingInput label="Right" value={component.props.paddingRight ?? legacyPadding} onChange={(e) => handleUpdate({ paddingRight: parseFloat(e.target.value) || 0 })} />
                 </div>}
               </div>
             </div>
