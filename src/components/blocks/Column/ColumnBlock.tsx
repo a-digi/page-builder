@@ -167,7 +167,7 @@ const ColumnCell = memo(({
                 />
               );
             })}
-            {!readOnly && <div className={`pb-w-full pb-relative ${isCellDragOverTarget && dragOverState?.itemIndex === contents.length ? 'pb-min-h-[4rem]' : 'pb-min-h-[8px]'}`} onDragOver={e => handleDragOver(e, cellIndex, contents.length)} onDrop={e => handleDrop(e, cellIndex, contents.length)}>
+            {!readOnly && <div data-drop-index={dragOverState?.itemIndex} className={`pb-w-full pb-relative ${isCellDragOverTarget && dragOverState?.itemIndex === contents.length ? 'pb-min-h-[4rem]' : 'pb-min-h-[8px]'}`} onDragOver={e => handleDragOver(e, cellIndex, contents.length)} onDrop={e => handleDrop(e, cellIndex, contents.length)}>
               {isCellDragOverTarget && dragOverState?.itemIndex === contents.length && <div className="pb-border-t-2 pb-border-blue-500 pb-h-1 pb-animate-pulse" />}
             </div>}
           </div>
