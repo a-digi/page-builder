@@ -24,6 +24,7 @@ export type Props<C extends PageComponent<any, any>> = {
   isEditorMenuOpen?: boolean;
   allowComponentToBeAdded?: (componentTypeToAdd: string, destinationContainerType: string | null) => boolean;
   onMenuStateChange?: () => void;
+  showDropZone?: boolean; // New prop to control drop zone visibility
 };
 
 export type Data<C extends PageComponent<any, any>> = {
@@ -68,6 +69,7 @@ const PageBuilderLayout = <C extends PageComponent<any, any>>({
   className,
   isEditorMenuOpen = false,
   onMenuStateChange,
+  showDropZone = true, // Default to true
 }: Props<C>) => {
   const mainContainerRef = useRef<HTMLDivElement>(null);
   const { isDragging, isPreviewing } = useComponentContext();
@@ -86,6 +88,7 @@ const PageBuilderLayout = <C extends PageComponent<any, any>>({
         <ComponentPageEditor
           customToolbarButtons={customToolbarButtons}
           customSettingsButtons={customSettingsButtons}
+          showDropZone={showDropZone} // Pass prop down
         />
       </main>
 
@@ -132,3 +135,4 @@ function PageBuilderComponent<C extends PageComponent<any, any> = BuiltInCompone
 const PageBuilder = forwardRef(PageBuilderComponent);
 
 export default PageBuilder;
+

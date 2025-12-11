@@ -9,6 +9,7 @@ import { SettingsPanelProvider } from '../../contexts/SettingsPanelContext';
 type ComponentPageEditorProps<C extends PageComponent<any, any>> = {
   customToolbarButtons?: CustomButton<C>[];
   customSettingsButtons?: CustomButton<C>[];
+  showDropZone?: boolean; // New prop to control drop zone visibility
 };
 
 export const CustomButtonsContext = createContext<{ customToolbarButtons?: CustomButton<PageComponent<any, any>>[] }>({});
@@ -16,6 +17,7 @@ export const CustomButtonsContext = createContext<{ customToolbarButtons?: Custo
 function ComponentPageEditor<C extends PageComponent<any, any>>({
   customToolbarButtons,
   customSettingsButtons,
+  showDropZone = true, // Default to true
 }: ComponentPageEditorProps<C>) {
   const { components, setComponents, addComponent, isDragging, setIsDragging, moveComponentToRoot } = useComponentContext<C>();
 
@@ -111,36 +113,38 @@ function ComponentPageEditor<C extends PageComponent<any, any>>({
           })}
         </CustomButtonsContext.Provider>
 
-        <div
-          data-drop-index={dragOverIndex}
-          className="pb-w-full pb-relative"
-          onDragOver={e => handleDragOver(e, components.length)}
-          onDrop={e => handleDrop(e, components.length)}
-          onDragLeave={handleDragLeave}
-        >
-          {components.length === 0 ? (
-            <div className={`${emptyDropZoneBaseClasses} ${isDragging && dragOverIndex === 0
-              ? emptyDropZoneActiveClasses
-              : emptyDropZoneInactiveClasses
-              }`}>
-              <p className={`${emptyTextBaseClasses} ${isDragging && dragOverIndex === 0
-                ? emptyTextActiveClasses
-                : emptyTextInactiveClasses
+        {showDropZone && (
+          <div
+            data-drop-index={dragOverIndex}
+            className="pb-w-full pb-relative"
+            onDragOver={e => handleDragOver(e, components.length)}
+            onDrop={e => handleDrop(e, components.length)}
+            onDragLeave={handleDragLeave}
+          >
+            {components.length === 0 ? (
+              <div className={`${emptyDropZoneBaseClasses} ${isDragging && dragOverIndex === 0
+                ? emptyDropZoneActiveClasses
+                : emptyDropZoneInactiveClasses
                 }`}>
-                Drag components here to start building your page.
-              </p>
-            </div>
-          ) : (
-            <div className={`pb-relative pb-w-full pb-transition-all pb-duration-300 pb-ease-in-out ${isDragging && dragOverIndex === components.length ? 'pb-h-40' : 'pb-h-10'
-              }`}>
-              {isDragging && dragOverIndex === components.length && (
-                <div className="pb-absolute pb-inset-2 pb-border-2 pb-border-dashed pb-border-blue-500 pb-rounded-lg pb-bg-blue-50 pb-flex pb-items-center pb-justify-center">
-                  <p className="pb-font-medium pb-text-blue-600">Drop here</p>
-                </div>
-              )}
-            </div>
-          )}
-        </div>
+                <p className={`${emptyTextBaseClasses} ${isDragging && dragOverIndex === 0
+                  ? emptyTextActiveClasses
+                  : emptyTextInactiveClasses
+                  }`}>
+                  Drag components here to start building your page.
+                </p>
+              </div>
+            ) : (
+              <div className={`pb-relative pb-w-full pb-transition-all pb-duration-300 pb-ease-in-out ${isDragging && dragOverIndex === components.length ? 'pb-h-40' : 'pb-h-10'
+                }`}>
+                {isDragging && dragOverIndex === components.length && (
+                  <div className="pb-absolute pb-inset-2 pb-border-2 pb-border-dashed pb-border-blue-500 pb-rounded-lg pb-bg-blue-50 pb-flex pb-items-center pb-justify-center">
+                    <p className="pb-font-medium pb-text-blue-600">Drop here</p>
+                  </div>
+                )}
+              </div>
+            )}
+          </div>
+        )}
       </div>
     </SettingsPanelProvider>
   );
