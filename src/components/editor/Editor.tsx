@@ -112,6 +112,7 @@ function ComponentPageEditor<C extends PageComponent<any, any>>({
         </CustomButtonsContext.Provider>
 
         <div
+          data-drop-index={dragOverIndex}
           className="pb-w-full pb-relative"
           onDragOver={e => handleDragOver(e, components.length)}
           onDrop={e => handleDrop(e, components.length)}
@@ -130,7 +131,7 @@ function ComponentPageEditor<C extends PageComponent<any, any>>({
               </p>
             </div>
           ) : (
-            <div data-drop-index={dragOverIndex} className={`pb-relative pb-w-full pb-transition-all pb-duration-300 pb-ease-in-out ${isDragging && dragOverIndex === components.length ? 'pb-h-40' : 'pb-h-10'
+            <div className={`pb-relative pb-w-full pb-transition-all pb-duration-300 pb-ease-in-out ${isDragging && dragOverIndex === components.length ? 'pb-h-40' : 'pb-h-10'
               }`}>
               {isDragging && dragOverIndex === components.length && (
                 <div className="pb-absolute pb-inset-2 pb-border-2 pb-border-dashed pb-border-blue-500 pb-rounded-lg pb-bg-blue-50 pb-flex pb-items-center pb-justify-center">
